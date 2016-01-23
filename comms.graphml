@@ -425,7 +425,6 @@
     </node>
     <node id="n13" yfiles.foldertype="group">
       <data key="d4"/>
-      <data key="d5"/>
       <data key="d6">
         <y:ProxyAutoBoundsNode>
           <y:Realizers active="0">
@@ -525,7 +524,6 @@
     </node>
     <node id="n14" yfiles.foldertype="group">
       <data key="d4"/>
-      <data key="d5"/>
       <data key="d6">
         <y:ProxyAutoBoundsNode>
           <y:Realizers active="0">
@@ -1110,7 +1108,6 @@
       </data>
     </edge>
     <edge id="e19" source="n3" target="n11">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="40.0" tx="0.0" ty="-32.75"/>
@@ -1121,7 +1118,6 @@
       </data>
     </edge>
     <edge id="e20" source="n7" target="n14::n1">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="32.75" tx="0.0" ty="-19.76332199546482"/>
@@ -1132,7 +1128,6 @@
       </data>
     </edge>
     <edge id="n14::e3" source="n14::n1" target="n14::n0">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="19.76332199546482" tx="0.0" ty="-15.0">
@@ -1146,7 +1141,6 @@
       </data>
     </edge>
     <edge id="e21" source="n8" target="n13::n3">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="32.75" tx="0.0" ty="-15.0"/>
@@ -1157,7 +1151,6 @@
       </data>
     </edge>
     <edge id="e22" source="n6" target="n13::n2">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="32.75" tx="0.0" ty="-15.0"/>
@@ -1168,7 +1161,6 @@
       </data>
     </edge>
     <edge id="e23" source="n5" target="n13::n1">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="32.75" tx="0.0" ty="-15.0"/>
@@ -1179,7 +1171,6 @@
       </data>
     </edge>
     <edge id="e24" source="n7" target="n13::n0">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="32.75" tx="0.0" ty="-15.0">
