@@ -1,6 +1,7 @@
 #+TITLE: Pending Technical Requirements for Rotational Analysis
 #+AUTHOR: T. Spoon
 #+DATE: 17 Aug 2016
+#+VERSION: 1.2
 #+STARTUP: showall
 
 * Overview
@@ -364,8 +365,8 @@ designed and added in a fairly organic manner rather than following a
 specific methodology like Test Driven Development: functionality is
 implemented and experimented with "live" in the Clojure Read Evaluate
 Print Loop (REPL).  This allows for rapid development and easy
-creation of useful regression tests (often times output is copied
-verbatim from the output).
+creation of useful regression tests (often times test cases are copied
+verbatim from the REPL output).
 
 There are benefits to approaching testing more systematically.  We can
 do so with tests that are designed a-priori, with a focus on testing a
