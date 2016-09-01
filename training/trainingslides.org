@@ -271,11 +271,11 @@ AFORGEN is a system for managing =readiness= - the ability for units to deploy t
 ** ARFORGEN Policy Example 
 #+NAME:   fig:policy
 #+ATTR_LATEX: :float wrap :width 0.5\textwidth  
-     [[./ac9-15.png]]
+     [[./images/ac9-15.png]]
 #+ATTR_LATEX: :float wrap :width 0.7\textwidth 
-     [[./ac12-36.png]]
+     [[./images/ac12-36.png]]
 #+ATTR_LATEX: :float wrap :width \textwidth 
-     [[./rc12-48.png]]
+     [[./images/rc12-48.png]]
 ** ARFORGEN Lifecycle Idealized
 After the Available phase, units begin a new lifecycle
 - lose equipment, personnel, and readiness as they transition to the Reset phase.
@@ -287,7 +287,7 @@ In theory, distributing units uniformly across ARFORGEN lifecycles – =an ideal
 ** Ideal ARFORGEN
 #+CAPTION: Static Rotational Analysis and Ideal ARFORGEN 
 #+NAME:   fig:SED-HR4049
-     [[./staticanalysis.png]]
+     [[./images/staticanalysis.png]]
 
 ** Static Rotational Analysis 
 Given idealized assumptions:
@@ -340,7 +340,7 @@ theoretical capacity =RotationalDiscount * total rotational supply
 ** Real ARFORGEN
 #+CAPTION: Dynamic Rotational Analysis and Real ARFORGEN 
 #+NAME:   fig:SED-HR4049
-     [[./dynamic.png]]
+     [[./images/dynamic.png]]
 
 ** Dynamic Rotational Analysis 
 - Ideal ARFORGEN has yet to be achieved , let alone maintained
@@ -364,7 +364,7 @@ generate multiple sequentially-dependent states of the rotational system.
 ** Dynamic Rotational Analysis Workflow
 #+CAPTION: A possible workflow for dynamic analysis.
 #+NAME:   fig:SED-HR4049
-     [[./dynamicworkflow.png]]
+     [[./images/dynamicworkflow.png]]
 
 * MARATHON (Modeling Army Rotation at Home or Not)
 ** What is MARATHON?
@@ -457,7 +457,7 @@ we can perform different classes of analysis by treating the elements as unknown
 ** Dynamic Rotational Analysis Overview
 #+CAPTION: Dynamic Rotational Analysis
 #+NAME:   fig:SED-HR4049
-     [[./marover.png]]
+     [[./images/marover.png]]
 ** Requirements Analysis
 - Requirements Analysis treats supply as an unknown
   - searches the space of force structure allocations that result in a minimum feasible supply 
@@ -467,7 +467,7 @@ we can perform different classes of analysis by treating the elements as unknown
 ** RA Example
 #+CAPTION: Requirements Analysis Algorithm
 #+NAME:   fig:SED-HR4049
-     [[./requirementsalgo.png]]
+     [[./images/requirementsalgo.png]]
 ** Capacity Analysis 
 Capacity Analysis treats supply, demand, and policy as known.  
 - unknown variable is the performance of the rotational supply
@@ -479,7 +479,7 @@ Capacity Analysis treats supply, demand, and policy as known.
 ** CA Example
 #+CAPTION: Dwell Before Deployment
 #+NAME:   fig:SED-HR4049
-     [[./dwellplot.png]]
+     [[./images/dwellplot.png]]
 ** Portfolio Analysis
 Portfolio Analysis is higher-order form of analysis
 - uses Requirements Analysis and Capacity Analysis
@@ -492,7 +492,7 @@ Portfolio Analysis is higher-order form of analysis
 ** PA Example
 #+CAPTION: Capacity Analysis
 #+NAME:   fig:SED-HR4049
-     [[./portfolioalgo.png]]
+     [[./images/portfolioalgo.png]]
 
 * Using MARATHON
 ** MARATHON Interface 
