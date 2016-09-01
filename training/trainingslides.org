@@ -48,6 +48,7 @@
 #+LaTeX_HEADER:\usepackage{etoolbox}
 #+LaTeX_HEADER:\BeforeBeginEnvironment{minted}{\begin{tcolorbox}[colback=black!5!white]}%
 #+LaTeX_HEADER:\AfterEndEnvironment{minted}{\end{tcolorbox}}%
+#+LaTeX_HEADER:\setbeamertemplate{navigation symbols}{}%remove navigation symbols
 
 
 # Source code template
@@ -137,30 +138,28 @@ materials based on interest, with the desire of
 * Day 1 - Background Concepts, Data, Typical Analysis
 * Background Concepts
 ** Army Force Structure  (Background)
-   =Army force structure=:
+***  Army force structure
    - the set of equipment, personnel, and skills that define the US Army
    - consists of a daunting set of interacting problems. 
    - How do you build an army?
-   To handle this fairly complicated process, the US Army regularly 
+*** Designing an Army force structure 
+ - consists of a daunting set of interacting problems. 
+ - To handle this fairly complicated process, the US Army regularly 
    analyzes the shape and size of its force structure.
 
 ** Army Force Structure Analysis
-Designing an Army force structure consists of a daunting set of interacting problems. 
-
-Such analyses must deal with a wide range of force structure decisions, 
+Analyses must deal with a wide range of force structure decisions, 
 uncertainty about the future, and account for dynamics between force structure
 decisions. 
-
-The fundamental questions in force structure analysis are:
+*** fundamental questions
    - “What capabilities should the Army have?”
    - “How should the Army allocate resources across capabilities?” 
-
-These questions are dependent on a legion of contextual assumptions:
+*** Depend on a legion of contextual assumptions:
    - budget constraints
    - end-strength constraints
    - National Security Strategy (NSS)
    - regional stability 
-       
+   - many more...       
 ** Force Structure Analysis Components (Demand, Supply, Policy)
 There are a number of practical concerns that will be addressed in any force structure analysis. 
    - Demand 
@@ -236,9 +235,8 @@ The policies for managing the force generation process have historically varied:
 Primary policies of note:
 - Army Force Generation (ARFORGEN)
   - Predominant policy for the last decade 
-- Sustainable Readiness 
-  - Upcoming policy, replacement for ARFORGEN
-
+- Sustainable Readiness Model (SRM)
+  - Upcoming policy, replacement for ARFORGEN 
 ** Army Force Generation (ARFORGEN)
 AFORGEN is a system for managing =readiness= - the ability for units to deploy to meet contingencies.
 - contemporary cyclical force generation process
@@ -247,16 +245,15 @@ AFORGEN is a system for managing =readiness= - the ability for units to deploy t
   - prepared for operational deployment 
   - support of civil authorities or combatant commander requirements.  
 - MARATHON was initially designed to analyze ARFORGEN
-  - Capable of examining arbitrary policies.
+  - Capable of examining arbitrary policies (like SRM).
 
 ** ARFORGEN Intent
-ARFORGEN seeks to 
-- synchronize individual sourcing, manning, equipping, and training processes 
-- ensure a continuous supply of forces
-- transition the Army from a system focused on surging forces to war to a system for sustained operations. 
-
-*The goal of ARFORGEN is to provide a consistent and predictable supply of 
-units ready to deploy to meet contingencies.*
+*** ARFORGEN seeks to 
+  - synchronize individual sourcing, manning, equipping, and training processes 
+  - ensure a continuous supply of forces
+  - transition the Army from a system focused on surging forces to war to a system for sustained operations. 
+*** The goal of ARFORGEN
+    - Provide a consistent and predictable supply of  units ready to deploy to meet contingencies.
 
 ** ARFORGEN Lifecycle
 - Units accumulate resources and training as they accumulate time in the lifecycle,
@@ -272,10 +269,13 @@ units ready to deploy to meet contingencies.*
   - best suited to deploy
 
 ** ARFORGEN Policy Example 
-#+CAPTION: Static Rotational Analysis and Ideal ARFORGEN 
-#+NAME:   fig:SED-HR4049
-     [[./policyexample.png]]
-
+#+NAME:   fig:policy
+#+ATTR_LATEX: :float wrap :width 0.5\textwidth  
+     [[./ac9-15.png]]
+#+ATTR_LATEX: :float wrap :width 0.7\textwidth 
+     [[./ac12-36.png]]
+#+ATTR_LATEX: :float wrap :width \textwidth 
+     [[./rc12-48.png]]
 ** ARFORGEN Lifecycle Idealized
 After the Available phase, units begin a new lifecycle
 - lose equipment, personnel, and readiness as they transition to the Reset phase.
@@ -320,15 +320,13 @@ RotationalDiscount= (available time - overlap) / lifecycle
 \begin{equation}
 theoretical capacity =RotationalDiscount * total rotational supply
 \end{equation}
-
-** Drawbacks of Static 
-- built upon ideal assumptions 
+*** Drawbacks 
+  - built upon ideal assumptions 
   - perfect availability
-  - ignores complexities of unit histories
+*** ignores complexities of unit histories
   - unit transformation periods
   - changes to rotational policy
   - lifecycle sequencing
-
 ** Static Analysis Summary 
 - Closed Form (Typically Algebraic)
 - Ignores dynamics (i.e. temporal effects).
@@ -356,9 +354,9 @@ theoretical capacity =RotationalDiscount * total rotational supply
 
 ** Dynamic Rotational Analysis Ctd. 
 Dynamic analysis utilizes some form of simulation, optimization, or difference equations to
- generate multiple sequentially-dependent states of the rotational system.  
+generate multiple sequentially-dependent states of the rotational system.  
 
-- System history is the primary output
+*** System history is the primary output
  - The sequence of states resulting from the application of a transition function
    to an initial state.
  - serves as the basis for multiple forms of focused analysis.
@@ -369,18 +367,15 @@ Dynamic analysis utilizes some form of simulation, optimization, or difference e
      [[./dynamicworkflow.png]]
 
 * MARATHON (Modeling Army Rotation at Home or Not)
-
 ** What is MARATHON?
-- a mechanism for analyzing the effects of Army supply, demand, and policy variations, where
+*** A mechanism for Dynamic Rotational Analysis where
   - supply is a set of potentially deployable units
   - demand is a set of activities requiring a unit
   - policy is a collection of rules or constraints that determine a unit’s ability to fill a demand. 
-
-- MARATHON seeks to: 
-  - validly simulate the physics of Army supply and demand
+*** MARATHON seeks to: 
+  - validly simulate the "physics" of Army supply and demand
   - governed by policy
-  - analyze the general behavior of such systems
-  - analyze the specific effects relative to changes in supply,  demand, or policy.  
+  - analyze the  effects of changes in supply,  demand, or policy.  
 
 Ultimately, MARATHON is an analytic sandbox for evaluating courses of action relative to Army Force Structure 
 and Force Generation.
@@ -448,7 +443,7 @@ Decoupling behavior and policy allows for
 The potential for unique entities allows flexibly account for
 the legion of subtleties and corner-cases in rotational analysis. 
 
-** How is MARATHON Used?
+** Dynamic Rotational Analysis with MARATHON
 CAA uses Marathon to perform distinct classes of dynamic analysis:
 
 - Requirements Analysis
@@ -459,12 +454,20 @@ Given the three primary elements in any rotational analysis – supply, demand, 
 we can perform different classes of analysis by treating the elements as unknowns (i.e. variables) 
 - determined through experimentation or calculation.
 
+** Dynamic Rotational Analysis Overview
+#+CAPTION: Dynamic Rotational Analysis
+#+NAME:   fig:SED-HR4049
+     [[./marover.png]]
 ** Requirements Analysis
 - Requirements Analysis treats supply as an unknown
   - searches the space of force structure allocations that result in a minimum feasible supply 
   - relative to a known demand and policy.  
   - minimum feasible supply is capable of meeting the entirety of the demand.  
   - answers the question: “How large a force does the Army need in this context? ”
+** RA Example
+#+CAPTION: Requirements Analysis Algorithm
+#+NAME:   fig:SED-HR4049
+     [[./requirementsalgo.png]]
 ** Capacity Analysis 
 Capacity Analysis treats supply, demand, and policy as known.  
 - unknown variable is the performance of the rotational supply
@@ -473,6 +476,10 @@ Capacity Analysis treats supply, demand, and policy as known.
   - unit dwell 
   - demand fill. 
 - answers the question “How much can the Army do with a particular force?”
+** CA Example
+#+CAPTION: Dwell Before Deployment
+#+NAME:   fig:SED-HR4049
+     [[./dwellplot.png]]
 ** Portfolio Analysis
 Portfolio Analysis is higher-order form of analysis
 - uses Requirements Analysis and Capacity Analysis
@@ -482,6 +489,10 @@ Portfolio Analysis is higher-order form of analysis
 - answers the question: 
   - “Given a plethora of possible demand inputs, 
      what kind of force structure would have robust performance across the inputs?”
+** PA Example
+#+CAPTION: Capacity Analysis
+#+NAME:   fig:SED-HR4049
+     [[./portfolioalgo.png]]
 
 * Using MARATHON
 ** MARATHON Interface 
@@ -526,34 +537,29 @@ This analytic pipeline serves as a mechanism for composing processes - primarily
 - Wargaming 
 
 ** Representing Demand
-The majority of the pipeline exists to build a valid =demand future=: 
+*** The majority of the pipeline exists to build a valid =demand future=: 
 - a set of force structure requirements defined over time.
 - distills high-fidelity, large-scale, and complex campaign analysis
 - produces  a relatively simple set of time-varying demands for force structure.
-
-=Surge= demand signal(s) are the primary modeling effort:
+*** =Surge= demand signal(s) are the primary modeling effort:
 - Driven by Army doctrine, combat models, and Rules of Allocation for support structure, etc.
 - Conveys the assumptions, constraints, and findings of the entire pipeline.
-- Typically large-scale, important "surge" events.
-
+- Typically large-scale, important contingency events.
 ** Demand ctd.
-Smaller demands, aka =vignettes=, also show up:
+*** Smaller demands, aka =vignettes=, also show up:
 - vignettes manifest as force structure lists
 - typically developed by wargaming vs. modeling.
 - derived from the Support to Strategic Analysis (SSA) process.
-
-Aforementioned demands are selected and arranged according to timing:
+*** Demands are selected and arranged according to timing:
 - Demands are building blocks, the timing arranges them.
 - Resulting arrangement is assumed to be a valid representation of expected 
   force structure demand
-
 ** TAA Supply 
-Supply is typically provided by the sponsor.
+*** Supply is typically provided by the sponsor.
 - Derived from projected force structure.
 - Typically multiple supply excursions.
-
 ** TAA Policy 
-Policy is typically provided by the sponsor.
+*** Policy is typically provided by the sponsor.
 - Historically MaxUtilization and variants.
 
 * Day 2 - Clojure Orientation and Experimentation
@@ -578,20 +584,48 @@ Policy is typically provided by the sponsor.
 ** Parsing 
 ** Copy and Paste Easily
 ** Working With Excel
-** Practical Example: Excel
+** Practical Example: Excel IO
 
-** Drawing
+** Custom Drawing
 ** Incanter
-** Scatter plots 
-** Area plots
-
+** Simple plots
 * Day 3 - Extending MARATHON using Clojure
 ** Day 3 - Extending MARATHON using Clojure
 * Git Workflow / Version Control
+** Git and Version Control
+** Init 
+- git init path/to/my/repository
+  - git init repo
+  - git init c:/blah/somerepo
 ** Clone
+-  git clone path/to/repository
+  -  git clone blah.git 
+  -  git clone v:/repos/marathon.git
+  -  git clone v:/repos/proc.git 
+** Adding files
+-  git add path/to/the/file
+   - git add myfile.txt
+   - git add /src
+** Status 
+- git status
+- git log
+- git gui
 ** Commit 
+- git commit -a -m "Insert Brilliant Message Here!"
 ** Push
-** Git Workflow / Version Control
+- git push target-repo branch 
+- 99% use-case:
+  - git push origin master 
+** Simple and Effective Workflow
+- Make changes
+  - alter file (and save!) 
+  - create a new file.
+- check status
+  - git status 
+  - may see "untracked files", "modified files" 
+  - use "git add" to watch untracked files...  
+- git commit -a -m "Useful commit message here"
+- Repeat
 * Hacking MARATHON
 ** Introductory Scripting
 ** Useful Namespaces
