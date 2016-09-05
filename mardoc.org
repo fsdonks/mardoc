@@ -1,0 +1,626 @@
+#+TITLE: Pending Technical Requirements for Rotational Analysis
+#+AUTHOR: T. Spoon
+#+DATE: 17 Aug 2016
+#+VERSION: 1.2
+#+STARTUP: showall
+
+* Overview
+  This is a working document designed to outline the development 
+  efforts for MARATHON, specifically for the associated libraries, 
+  applications, and tooling that either implement or support 
+  MARATHON.  Where possible, specific tasks and goals will be 
+  categorized and enumerated, with some contextual information
+  regarding possible priority of effort and an estimated timeline. 
+  Unless otherwise listed, features present in separate categories
+  are functionally independent, and are amenable to concurrent 
+  development / implementation.
+
+* Front End
+
+** Project Management
+   Project management includes the facilities that aid users and 
+   developers in defining, validating, and consuming input data 
+   (a project) for various processing schemes.  This presents a 
+   large surface area for initiatives to improve quality control 
+   and general user happiness.  
+
+*** Run Configuration / Definition
+
+    MARATHON projects require a significant amount of input across
+    multiple domains.  MARATHON has a fairly mature data model, which
+    covers most of the data requirements for studies spanning the last
+    decade.  Still, the analyst must manage a relatively bulky set of
+    data.  Even with some pre-run data validation, human errors are
+    prevalent.
+
+    Making it simpler to define and configure MARATHON runs, to
+    include deriving new runs from old, and version controlling runs,
+    would reduce human error significantly and improve the
+    quality of life for analysts.
+
+    Version control, and "diffing", is particularly important going 
+    forward, given the explosion of run-cases due to new methodologies
+    the require multiple runs.  Git (and its Java implementation, JGit) 
+    provide an easy solution for the data version control problem.  Since
+    MARATHON code no longer "lives" colocated with the data, we can 
+    devote effort to managing "just" the data, to include version control.
+    I envision users pulling run data from a shared git repository, likely 
+    associated with a specific study.  With datasets stored and version
+    controlled in a distributed fashion, clients would be able to take 
+    advantage of established git workflows:
+
+    1. Create new datasets and have them mirrored as git repositories.
+    2. Clone existing datasets.
+    3. Derive new datasets from old, with an auditable data pedigree.
+    4. Define experimental branches.
+    5. Commit changes to the origin repository, which may propogate to 
+       other clients automatically.
+
+    Git already serves as the basis for versioning MARATHON 4.x, and will
+    remain the version control system going forward.
+    
+** Pre-Run Verification / Input Data Validation
+
+    There are certain structural properties that the input must
+    maintain before MARATHON can compute a result from input.
+    MARATHON currently examines a subset of these properties and
+    reports them to the user prior to running.  
+
+    Scoping rules (matching supply to demand) are one example.  
+    MARATHON will try to detect which elements of supply cannot be
+    used and which demand cannot be filled, reporting the results
+    as "out of scope."  Often times the scoping is unintentional and
+    the result of data errors, which the analyst can fix when they
+    are made aware.
+
+    Similar errors were rife in recent analysis for TAA.  Anecdotal
+    evidence indicates that copy/paste errors created problems in many
+    of the TAA runs. Having some automated structural verification
+    will help prevent these classes of errors in the future.
+
+    With the recent SRM-driven expansion of the MARATHON data model, 
+    there are more contextual fields to handle for data setup.  Users 
+    already have to "dot their i's and cross their t's" across 12 tables 
+    and dozens of fields.  We need the equivalent of compilation-time 
+    static verification for the data, to try to help the users out.
+    Additionally, providing some form of interaction documentation for 
+    the data model would go a long way to allowing MARATHON projects to 
+    be self-documenting.      
+
+** Runtime Simulation Environment
+   MARATHON is fundamentally a Clojure application, and consequently is
+   designed in - and designed to be used from - the Clojure REPL.  This 
+   technique is a common development and deployment mechanism, since the 
+   REPL already provides an interface for MARATHON.  Thus, MARATHON - the 
+   simulation engine - is already scriptable and extensible via Clojure and 
+   the REPL.
+
+   Further, the simulation engine is designed to propagate information via
+   event listeners.  As the simulation progresses, over 40 different types of 
+   contextual event-specific information channels are active.  This plethora
+   of sensory data provides a robust interface for collecting derivative 
+   data - such as deployment history - in a flexible, decoupled fashion.  
+   Perhaps more importantly, MARATHON the "model" is decoupled from MARATHON
+   the "view", and can run either ain a headless state, or be composed with 
+   functions that map topical event histories onto arbitrary outputs - like 
+   log files, visual representations, or simple aggregate statistics.
+
+*** Reusable Visual Components (Widgets)
+
+   However, MARATHON also provides several amenties that provide visual
+   components of simulation information, which help in both verification
+   and data visualization.  
+   - Simulation state visualization aka. the HUD (more later)
+   - EntityStore interactive tree-view.
+   - Arbitrary interactive visual tables for entity queries and project data.
+   - Visual representations of the graph data in MARATHON, including substitutions,
+     SRC scoping views, event subscriptions.
+   - (TBD) A visual timeline of events aka. the trackchart.
+
+   These elements - while defined and invoked from the REPL - are trivially
+   collated and presented as components of a Graphical User Interface.  The 
+   GUI either presents the graphical widget, or provides a "dumb graphical facade",
+   [a button] that executes a simple scripting task, or opens a new - typically 
+   workflow-specific - dialog.
+
+*** HUD
+   The simulation HUD is dual-purposed.  Implemented as a Zoomable User Interace, 
+   it provides a synchronized view of the simulation state across representations of 
+   space and time.  Elements of the hud present themselves differently according to 
+   the level of zoom through a feature known as Semantic Zooming. This provides the 
+   analyst (or sponsor) with an interactive, potentially infinite display of data 
+   that can be customized to provide both summary and detailed views of local or 
+   global phenomenon, all while providing an interactive, exploratory feel.
+
+   Default elements of the HUD include:
+   - A world map detailing unit location and status.
+   - An embedded CONUS map, that when zoomed, provides state-by-state displays 
+     of units and their status.
+   - (TBD) Embedded stationing maps that provide station-specific information local 
+     to a particular home-station.
+   - Animated area charts and scatter plots for various entity statistics:
+     - Demand Fill Over Time      [trended by unit status | missed demand]
+     - Unit Disposition Over Time [trended by unit status]
+     - Dwell Before Deployment    [trended by Component]
+   - Animated heat map with transparent "trails", aka. "trail plot"
+     - Depicts entities progressing through policy space horizontally, 
+       with vertical movement indicating deployment/employment.  
+     - "Trails", faded colored dots, are left behind periodically when 
+       entities deploy/employ.
+     - Provideds a density plot of the entity employment history.
+   - Animated "patch chart" depicting entity status every quarter.
+     - Derived from the organizing visual for SRM.
+     - Also available as a post-processed, Excel-compatible output.
+   - Current simulation time.    
+   
+   The HUD serves as an interactive display that provides a rich, meanigingful
+   representation of the evolving simulation history.  It also allows analysts 
+   to demonstrate simulation business rules "live" with sponsors via animation.
+   
+   Any visual element may be captured in an animation, either .mp4 or .gif, to
+   allow easy publishing.
+
+   I have explored hardware-accelerated, 3-dimensional visual elements 
+   via OpenGL.  Some candidates for interactive 3D displays include a 
+   3D global vs. the 2D map presentation, and 3d spatial containers for 
+   unit entities vs. the 2D layout.  This is a possible area of future 
+   development, if visualizations prove compelling.  
+
+** Post-Run Analysis Platform
+
+  We typically have multiple workflows after a "run" has been executed.
+  When presented with the results of a run, the simulation history, the
+  user will either choose from a pre-determined set of tasks or competent
+  users may process the data using any means of computation.
+
+  The current implementation is called "proc" for lack of a better name,
+  and is again based in Clojure.
+** Simulation Run Aggregation / Post Processing
+
+Collecting, processing, and generally munging all of the data from a
+MARATHON run is no small matter.  There are event-stepped records and
+events for every entity's history in the simulation, as well as demand
+history deployment history, policy history, cycle history, and many
+other temporal data sets.  Sampling intervals are inconsistent across
+the data, due to the sparse event-driven sampling, so the underlying
+continuous signal must be reconstructed from multiple discrete
+signals.
+
+The current Clojure-based post processor does this and more, in a
+more-or-less efficient fashion.  However, the architecture is far from
+elegant, and the different processing workflows are not clear to the
+average user.  We also have no defined way to aggregate multiple run
+cases.  Results are currently post-processed relative to a case.
+Scaling up the ability to do things like stochastic runs, or
+aggregating results from a large set of runs, will require extending
+or supplanting the current post processor.
+
+** Static Analysis
+   Not all forms of analysis require simulation runs.  In fact, many studies
+   are amenable to algebraic, closed-form analysis.  In rotational analysis 
+   terms, this is /static/ versus /dynamic/ analysis.  Static analysis examples
+   include:
+   - Computing the expected size of deployable force structure relative to a parametric
+     model of unit rotation (aka. ARFORGEN algebra).
+   - Basic summary statics, such as profiles of force structure demand over time.
+   - Comparing static quantities of supply against specified samples from the demand
+     profile (peak analysis).
+
+   Providing easy access to static analysis functions would facilitate much of the 
+   redundant work that analysts perform prior to simulation, work that happens 
+   largely in Excel. 
+   
+** UI
+   The current post-processing user interface is a Clojure REPL 
+   (read-evaluate-print-loop) with a library of scripts and commands
+   pre-loaded.  It typically comes bundled as part of an IDE (Integated 
+   Development Environment) for Clojure, called Nightcode.  Users effectively
+   launch a customized Clojure development environment, and use pre-made 
+   libraries of functions to execute post-processing workflows. 
+
+   The burden on the user is to acquire familiarity with 
+   the functions that correspond to workflows, upon which the user
+   invokes them from the REPL.  While some may see this as an apparently
+   low-level interface to the post processor (requiring the user to 
+   gain the barest of familiarity with invoking Clojure functions), it 
+   carries significant advantages:
+   - Users are provided with a powerful, portable computational and analysis 
+     environment, and have access to the entire Clojure language and supporting
+     libraries.
+   - Developing and deploying custom scripts is trivial, since the post-processor 
+     is synchronized with a network git repository.
+   - Mature developers are able to add new workflows to the pre-loaded environment, 
+     so that the cognitive surface area for users is minimal.
+
+   On top of this environment, it would be nice to have an interface that appeals
+   to folks who live in GUI bubbles.  Such an interface should be:
+   - ORSA-Friendly  
+   - Likely Linked to Excel
+   - Provide Structured Workflows
+
+   I currently have a simple workflow that allows the user to edit a
+   project in an excel file, and set the file /within clojure/ as a
+   linked project.  When runs are requested, the linked project is
+   checked for changes, and if there are changes the tables in the
+   project (workbook sheets) are reloaded.  This currently gives a decent
+   approximation of the edit/run feedback loop analysts were familiar
+   with, with a level of Excel integration.
+   
+   We could do a lot more with this though, and I know the analysts would
+   appreciate it.  Targeting a client/server implementation, with the client
+   being browser-based, would be desirable. As we target distributed computing,
+   or even interacting with a server like the CAA cluster, allowing users to 
+   interact with a remote MARATHON server via a browser-based interface would 
+   make MARATHON even more portable and open up additional distributed computing
+   foundations.    
+   
+** Data Visualization
+Graphics and charts are the medium through which we tell the story of
+a Rotational Analysis case.  Currently, we use a variety of tools to
+accomplish this:
+
+    - an integrated set of charting and custom graphics built around
+      the Incanter/JFreeChart libraries,
+    - the custom spork.sketch library,
+    - the Piccolo2D scenegraph library,
+    - R, and
+    - Excel.
+
+These are desktop, client-side solutions.  There a plethora of
+advanced data visualization solutions in other domains, such as
+Javascript, that can be leveraged to provide useful visualizations and
+compelling animation.  Dedicating research toward developing and
+enhancing our visualization capability would directly enhance our
+ability to communicate with -- and for -- sponsors.  Specifically, the
+domain of animated visualizations tied to simulation has been a topic
+of intense interest due to resonance with sponsors.
+
+
+* Back End
+The "back end" of MARATHON consists of infrastructure that 
+users typically never face.  Architecting and verifying the 
+simulation engine is the primary focus of the backend.
+
+** Simulation Engine
+At the high level, the engine is merely a function that computes a
+resulting MARATHON simulation state from an input state -- in other
+words a state transition function. The simulation, then, is the
+repeated application of this state transition function, using
+successive computed states as input for the next application.  Since
+we are using persistent data structures by default, we actually retain
+a stream of all previously computed states, or the simulation history,
+which are indexed by the time of the event that "caused" the
+transition to be invoked.  Computing a successive state is equivalent
+to taking an "event step" in a discrete event simulation, and we do
+indeed maintain a persistent queue of pending events as part of the
+state.  The state transition function uses the next pending event, and
+the initial state, to "handle" the event in simulation parlance.  The
+vast majority of the architecture follows the functional programming
+paradigm.
+
+** Simulation State - Entity Component System Architecture
+The architecture for MARATHON is based on two primary concepts: an
+Entity Component System (or Entity Store), and the notion of Behavior
+Trees for entity behavior. The ECS allows us to store our entity
+information in something akin to a normalized database, that makes it
+easy to query entities by property, and modify them in the small.
+  
+We compose functional "systems" on top of the entity store to compute
+domain-specific state transitions.  For instance, we have a supply
+system that computes changes in entities in the supply, such as
+movement and policy changes.  The demand system activates and
+deactivates demand entities.  While there are several systems, they
+are all composed -- via function composition -- into the "engine"
+state transition function.
+
+** Entity Behavior - Behavior Trees
+Complex entity behaviors are implemented using Behavior Trees.
+Behaviors are simple functions that can be evaluated in the context of
+a behavior environment.  When evaluated, they return a resulting
+behavior environment -- either success or failure.  Behaviors can
+be composed using higher-order behavior functions, such as =->and=,
+=->or=, =->if=, to define a sophisticated behavior from smaller,
+simpler behaviors.  As with any other behavior, this behavior can
+provided as input, along with a behavior context, to the behavior
+evaluation function, and will return success or failure.  Behaviors
+let us define small, composeable elements of entity behavior that
+apply to one or many entities.  Behavior Trees are an alternate way to
+implement the functionality of Hierarchical Finite State Machines.
+
+** Persistent Data
+The current design promotes the use of persistent data structures and
+functional-programming design to make testing easier, hopefully
+simplify the design, illuminate functional dependencies, and exploit
+persistent values.  For instance, if we retain the entire simulation
+history from a preceding time step [cheaply and efficiently due to the
+magic of persistent data structures] we can implement backtracking and
+revisit the past.  This opens up the ability to easily "look ahead"
+and additional forms of search.
+
+Additionally, retaining a compressed differential form of simulation 
+history - that is the moving "snapshots" of the simulation state 
+on eventful periods - provides an robust means for post-processing 
+statistics and graphics after the fact, on-demand.  It also provides
+an invaluable mechanism for debugging and verification, since 
+history is - by default - retained vs. being ephemeral.
+
+** Functionally Specified
+The functional design also makes certain elements obvious (if not
+easy) candidates for parallelization.  Since we know the data
+dependencies, we can -- in theory -- farm out the work efficiently and
+possibly reap performance rewards.
+
+** Verification / Test Design
+
+Verification is organized around the following tasks:
+1. Define invariants that form the basis for testing.  
+2. Expand the existing test suite to incorporate new invariants.  
+3. Strengthen confidence in the current implementation.  
+4. Find errors / Break MARATHON. 
+5. goto 1.
+
+MARATHON currently uses the built-in testing platform =clojure.test=
+to perform automated regression testing.  Currently, tests are
+designed and added in a fairly organic manner rather than following a
+specific methodology like Test Driven Development: functionality is
+implemented and experimented with "live" in the Clojure Read Evaluate
+Print Loop (REPL).  This allows for rapid development and easy
+creation of useful regression tests (often times test cases are copied
+verbatim from the REPL output).
+
+There are benefits to approaching testing more systematically.  We can
+do so with tests that are designed a-priori, with a focus on testing a
+set of invariants.
+
+Another approach is property-based or generative testing, using
+libraries like =clojure.quickcheck=.  The libraries generate random
+data to test supposed invariants rather than using -- typically --
+single points of test data.  They also stress the system across a more
+chaotic set of inputs and typically lead to stronger systems (see
+Netflix's Chaos Monkey for an example).
+
+Expanding MARATHON's test suite in either of these directions would be
+a boon toward verification and continued development.
+* Documentation 
+** Design Document 
+   MARATHON has an existing design document, and a high-level primer.  
+** Literate Program (MARATHONomicon)
+   The source for MARATHON is heavily commented and designed to be 
+   composed into a "literate program" via automated tooling.  In short,
+   MARATHON is self-documenting for users, power-users, and developers. 
+   The interactive bundle of documentation is called the MARATHONomicon.
+** Examples 
+   MARATHON includes several demonstration namespaces and examples.  
+   Additionally, the testing namespace provides a littany of documented 
+   tests that exercise various apsects of the platform, and provide further 
+   example code for readers and scripters.
+** User Guide
+   Currently, MARATHON has no user guide.
+* Rotational Analysis Capabilities 
+MARATHON serves as a pivotal component in multiple forms of 
+rotational analyses. The following section details these analyses 
+and the technical requirements to perform them. 
+
+** Capacity Analysis
+Capacity analysis is the fundamental form of rotational analysis, 
+and serves as a building block for other forms of analysis.  In 
+a capacity analysis, we use MARATHON to compute performance data 
+detailing the capacity of a supply to fill a demand under a readiness 
+policy.  The resulting data is used to highlight shortfalls and surpluses 
+in supply, unit types that may be stressed or underutilized, and a 
+plethora of dynamic phenomena relative to the dynamics of suppply 
+filling demand over time.  Capacity analysis serves as an analytic 
+sand-box for exploring the relation between supply, demand, and policy.
+
+MARATHON, as implemented, is the mechanism for capacity analysis.
+** Requirements Analysis
+Requirements analysis is a higher-order form of 
+capacity analysis that performs multiple capacity 
+experiments to try to converge on a minimum feasible 
+required force structure for a given demand/policy context.
+
+Requirements analysis allows us to "solve" for the unknown 
+supply, given a known policy and demand.  There are various 
+means for estimated supply, but the canonical heuristic is 
+to grow supply incrementally, starting with no supply, and 
+utilize missed-demand - as represented by "ghost" or just-in-time
+entities - to estimate a growth step for the supply.  The growth 
+is added to the supply for the next iteration.  Growth continues 
+until no demand is missed.
+
+Requirements analysis also comes in unconstrained  [the default]
+and constrained flavors.  To date, constrained versions limit the 
+possible supply solution to specific end-strength allocations, and 
+other side-constraints.  Unconstrained is the canonical implementation.
+
+Requirements analysis is typically implemented as a small script that invokes 
+capacity analysis until a fixed point is reached. 
+
+** Portfolio Analysis
+Portfolio Analysis is a higher-order analysis that combines some form 
+of demand-generation, supply-generation, and supply evaluation to 
+compute a performance portfolio.  
+
+Typically, demand-generation is implemented as either a set of known 
+demand futures, or generated stochastically using the Helmet stochastic
+demand generator.
+
+Supply-generation is usually unconstrained requirements analysis.
+Supply-evaluation is capacity analysis.
+
+The Stoke framework composes a demand-generator, a supply-generator, and 
+a supply-evaluator into a portfolio generation function that can 
+generate and evaluate supply portfolios of arbitrary sizes against arbitrary 
+sets of demand futures.
+
+** Force Structure Design of Experiment
+For the TMAS study, capacity analysis was used to compute supply-evaluations
+for a 17-level, 351-factor nearly-orthogonal, latin-hypercubde design.  The 
+DOE script - in Clojure - determined the experimental design from source data,
+and generated the requisite supplies for 17 runs.  Runs were then performed 
+manually and capacity analysis results - dwell performance - collected in 
+a database.
+
+** Sustainable Readiness Rules
+Sustainable Readiness modeling introduces a host of features necessary to 
+capture the assumed force management process under SRM.
+*** Local Demand Effects
+When an element of supply (a unit entity) deploys 
+to a demand, the demand may exert control over the
+entity's behavior.  Each demand has a different entry 
+level of readiness and an different effect on the unit's 
+readiness, leading to effectively different "state routing"
+for each unit.  This significantly complicates unit behavior 
+because units don't necessarily follow predictible rotational
+policies.  Rather, the unit's engagement with a demand will 
+determine its lifecycle, and could lead to significant variance
+in unit lifecycles.
+
+*** Meta relations 
+Due to the acid trip of opaque unit sourcing business 
+rules that is SRM, we are forced to account for an explosion 
+of possible ad-hoc relationships.  Unlike ARFORGEN, where we 
+have a consistent, predictible set of relations between 
+supply and demand - via readiness, substitution rules - 
+SRM forces us to acknowledge a potentially unbounded array 
+of relations.  A small sample of the relations now under consideration
+when choosing suitable units includes:
+- Supply/Demand - demand prefers specific supply
+- Supply/Location - supply may have a location of origin
+- Supply/Command - supply may be related to a command(s)
+- Supply/Supply  - certain supply may substitute at varying efficiencies
+- Demand/Location  - demand may be related to a location
+- Demand/Command  - demand may be related to a command
+- Demand/Demand  - demand may have relations with other demand
+
+These facts are arbitrarily combined and interpreted into 
+rules that determine the suitability of a unit to fill a demand.
+Further, the ruleset is open by design....so we have to be able 
+to not only capture or infer all the potential relations, we also 
+have to be able to add previously undefined relations to the ruleset 
+if the sponsor wishes it.  Since SRM is poorly defined in policy, 
+and is designed to be "maximally flexible", we have effectively an 
+volatile set of assumptions.
+
+MARATHON currently maintains these facts in a niche graph database 
+that allows limited querying and traversal of relations.  This 
+approach is tied to the legacy implementation of meta-data and 
+relations, and stands to be improved.  The seemingly best 
+alternative is shifting to either a formal graph-database, or 
+an RDF triple-store (a logic database), upon which sophisticated 
+queries and inferences may be performed across arbitray facts.  
+
+* Capabilities by Study
+** TAA 
+TAA historically leverages both
+- Requirements Analysis
+- Capacity Analysis 
+Additionally, recent TAA studies have increased the amount of 
+cases to examine.  As case numbers increase, simulation runtime affects
+throughput.  Also, case-definition or run-setup can take significant 
+time, and could benefit from automation.
+
+** OA / NCFA / Support to G357
+Typically capacity analysis. 
+** FMCA 
+Portfolio analysis.  Stochastic demand generation. 
+Approximate supply-generation, approximate supply-evaluation.
+Future efforts will use Marathon 4.x for both supply-generation and 
+supply-evaluation.
+
+** TMAS 
+Design of Experiment.
+Capacity Analysis.
+
+** SRM 
+To date, the vast majority of MARATHON development and change has targeted
+the pending shift from ARFORGEN to SRM.  SRM requires 
+- Capacity Analysis 
+- Sustainable Readiness Rules
+- Animation
+
+It is unclear - at this time - how Requirements Analysis or 
+higher-order analyses may employ SRM-based capacity analysis.  
+
+* Completed Lines of Effort
+** TODO Copy all of the FY15-16 efforts here, potentially an appendix
+
+* Lines of Effort (Priority Order)
+** TODO Portable Animation Output
+** TODO Primitive Graphical User Interface For FrontEnd Users
+** TODO Requirements Analysis Verification
+** TODO Post Processor "proc" Integration Verification 
+** TODO Integrate "proc" with FrontEnd GUI
+** TODO Composite Policy Verification 
+** TODO Additional scripting facilities for automating multiple runs
+** TODO Data collation scripts for multiple runs
+** TODO Allow users to modify HUD interactively
+** TODO Extend GUI to project-creation and management tooling
+** TODO Enhance input data validation routines for pre-run project validation
+** TODO Look-ahead Implementation
+
+** TODO Engine Optimizations / Improvements
+There are many opportunities for revising the current architecture.
+For instance, we may implement a strategy for using mutable data
+structures in cases where persistence is no longer useful
+(particularly where more performance may be reaped).  Providing a
+mutable "backend" for MARATHON shouldn't be too hard to accomplish,
+given that the entirety of the data lives in the entity store.  
+
+We may also prefer to formalize the concurrency model that is currently being
+simulated: Entities are scheduled across multiple abstract threads of
+computation, and are "woken" during behavior evaluation.  MARATHON
+currently schedules everything and creates the facade of entities
+updating concurrently, when in reality, everything is synchronized and
+computations are performed on a single thread.  There are formal
+concurrency models -- the Actor model from Erlang / Akka and
+Communicating Sequential Processes from Go and =clojure.core.async= --
+which may provide a more elegant solution than the current
+implementation.  Additionally, embracing a concurrency model may ease
+the transition to distributed simulation going forward.  This is an
+area that could use significant research and development.
+** TODO Distributed Simulation
+
+Some methodologies, such as designing force structure experiments and
+Portfolio Analysis, require setting up, computing, and aggregating
+results from a sizeable number of simulation runs.  Our previous
+bottleneck was the limitation of running MARATHON v3 in Excel.  Due to
+dependence on Office, and the way automation worked with VBA
+(including a proclivity for memory leaks), distributing runs required
+manual interaction.  With the move to Clojure in MARATHON v4, we
+specifically intend for MARATHON to run "headless", without the need
+for user interaction, directed by a script or other processing harness.
+The only requirement is host support for the Java Virtual Machine.
+
+MARATHON would benefit from dedicated research and development in
+determining how to leverage the advantages of Clojure and the JVM to
+support executing and processing distributed runs.  Currently, we can
+trivially perform multiple MARATHON runs in parallel on the same
+machine -- thanks to Clojure -- but MARATHON has yet to be adapted to
+run on a cluster.  We should actively target the CAA Cluster and the
+Army HPC labs clusters to expand the scope of our rotational analyses.
+Clojure provides a host of distributed computing libraries that we could 
+leverage.
+
+** TODO Force Structure Search / Design of Experiment
+
+Develop a library around MARATHON v4 to perform higher-order analyses
+based on automated experimentation and / or search.  Ex. utilize
+classical and other search techniques to perform Portfolio Analysis,
+searching for force structure mixtures that are robust across a range
+of force structure demand cases (i.e. demand futures).  Leverage or
+replace the work done in building the existing Stoke library (a
+prototype implementation of Portfolio Analysis with stochastic demand
+futures).  Expand on the DOE infrastructure built for data farming, in
+collaboration with the Naval Post Graduate School, for the TMAS study.
+
+This is an area rife with opportunity for publishable research and
+extending the state-of-the-art for Rotational Analysis. It also may
+make future analysis "easier" on the analyst, since we may be able to
+shift away from specifying exact force structure mixtures and move
+toward specifying desirable properties of force structure mixtures and
+letting the computer find them for us.
+
+This topic deserves more space than I have time to dedicate to it.
+
+** TODO Browser-based FrontEnd
