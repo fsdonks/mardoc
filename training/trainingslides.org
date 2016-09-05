@@ -129,7 +129,7 @@ materials based on interest, with the desire of
     https://github.com/ClojureBridge/getting-started/blob/master/nightcode.md
 - Clojure 
   - Clojure Cheat Sheet http://grimoire.arrdem.com/
-  - ClojureBridge http://clojurebridge.github.io/curriculum/#/
+  - ClojureBridge http://clojurebridge.github.io/curriculum/
   - Clojure Distilled http://yogthos.github.io/ClojureDistilled.html
   - Clojure for the Brave and True  http://www.braveclojure.com/
   
@@ -564,21 +564,235 @@ This analytic pipeline serves as a mechanism for composing processes - primarily
 
 * Day 2 - Clojure Orientation and Experimentation
 ** Day 2 - Clojure Orientation and Experimentation
-* Rudimentals 
+- We're going to get familiar with clojure.
+- Enough to make you "dangerous," ideally able to continue on your own.
+  - Teach someone to fish...
+- Goal is to cement familiarity, not expertise.
+  - Core concepts, big ideas
+  - Most importantly, things you will/can use in day-to-day tasks
+  - View clojure as a force multiplier
+- Aim to build incrementally, starting with primitive topics
+  - Crawl, walk, run.
+- We will ditch a lot of really cool, beautiful topics out of 
+  pragmatism.
+  - Macros, homoiconicity, dynamic scope, domain-specific-languages
+  - Ask for references if you're interested in pursuing this.
+* Rudimentals - Crawling
+
+** Development Environment
+*** NightCode
+- Should already be loaded and rolling.
+- Holler if you're having problems.
+- Simple interface
+  -Syntax highlighting  / parenthesis balancing (really helpful)
+  -Portable (implemeneted in Java/Clojure) 
+- Not the only IDE, but preferred for this class
+  - Emacs is superior of course 
+  - Vim is a heretical alternative
+  - Cursive Clojure, Eclipse also have market share
+    - People seem to really like Cursive. 
+** Companion Clojure Project 
+*** REPL
+- This is our new home for today  
+- (doc ...) is your friend. 
+*** Clojure project called "training"
+- pre-loaded 
+- contains all dependencies
+- expounds upon slides / conversation 
+- Designed for REPL-based learning.
+*** Questions are good
+- Ask anytime   
 ** Expression
+*** Clojure is a language, like English
+- where we - hopefully - can 
+  easily express useful bits of information 
+- elegantly and efficiently. 
+*** Interaction with the REPL is a conversation.
+- Other side speaks / reads Clojure.
+- Our goal is to learn to express ourselves (or our problems) 
+- Ideally in terms humans can understand without too much trouble.
 ** Primitives
-** Collections
+Booleans
+#+BEGIN_SRC clojure
+true, false
+;nil
+nil
+#+END_SRC 
+Characters
+#+BEGIN_SRC clojure
+\a, \b, \c, \d, \e, \f, \g
+#+END_SRC 
+Strings
+#+BEGIN_SRC clojure
+"I am a string"
+(seq "I contain characters")
+;=>
+'(\I \space \c \o \n \t \a \i \n 
+  \space \c \h \a \r \a \c \t \e \r \s)
+#+END_SRC
+** Primitives ctd.
+*** 								      :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+Integers
+#+BEGIN_SRC clojure 
+1, 2, 3
+100000000000
+#+END_SRC 
+Floats
+#+BEGIN_SRC clojure
+1000.2
+42.42
+#+END_SRC 
+Ratios
+#+BEGIN_SRC clojure
+42/5
+33/2
+#+END_SRC 
+
+*** 								      :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+Keywords
+#+BEGIN_SRC clojure 
+:a
+:b
+:this-is-a-keyword
+:THISisALSOaKEYWORD
+#+END_SRC
+Quoted Symbols
+#+BEGIN_SRC clojure 
+'2
+'"three"
+'x
+'this-is-a-symbol
+#+END_SRC
+** Complex Expressions
+Lists are fundamental means of expression.
+- Denoted by outer parenthesis ()
+#+BEGIN_SRC clojure 
+(this is a list)
+#+END_SRC 
+Quoted Lists are data.
+#+BEGIN_SRC clojure 
+'(+ 2 3)
+#+END_SRC 
+Unquoted Lists passed to the REPL are 
+evaluated as "forms", clojure expressions.
+- First element is evaluated
+- Applied to the remaining evaluated elements.
+#+BEGIN_SRC clojure 
+(+ 2 3)
+;=>5
+(list 1 2)
+;=> (1 2)
+#+END_SRC 
+** Vars 
+Symbols must be defined, i.e. bound, to 
+some value.  
+ - Bound symbols are called vars.
+ - Use the =def= form to define global vars.
+ - Use the =let= form to establish local 
+   bindings.
+ - vars evaluate to the value they were 
+   associated with at definition time.
+#+BEGIN_SRC clojure 
+(def x 2) 
+(let [y 10]
+  (+ x y))
+;=> 12
+#+END_SRC 
+** Vectors Indicate Bindings
+Vectors provide another way to collect things:
+- Denoted by []
+- Provide numerous benefits as a data structure
+Never intepreted as forms, always treated as data.
+- Used instead of quoted lists.
+- Required by core libraries to indicate var bindings.
+#+BEGIN_SRC clojure 
+[0 1 2 3 4]
+;=> [0 1 2 3 4]
+[:a 2]
+;=> [:a 2]
+(vector "build" "me")
+;=>["build" "me"]
+(let [x 2] x)
+;=>2
+#+END_SRC 
+** Lexical Scope
+Vars are lexically scoped.
+- Only visible within the body of 
+  the context in which they're bound (lexical environment).
+- Undefined vars (i.e. unquoted symbols) trigger exceptions.
+- Inner bindings can "shadow", or override outer bindings in 
+  the lexical scope of the inner binding.
+- Dynamic scope (deferred).
+#+BEGIN_SRC clojure 
+(def state "Texas") 
+(let [state "Virginia"]
+  state)
+;=> "Virginia"       
+#+END_SRC 
 ** Functions 
-** Practical Example: FizzBuzz 
+Functions are the bread-and-butter of 
+getting stuff done in clojure.
+- Along with lists (forms).
+Define anonymous functions with (fn [& args] body) form.
+#+BEGIN_SRC clojure 
+((fn [x] (+ x 2)) 2)
+;=> 4
+#+END_SRC 
+Define named functions
+#+BEGIN_SRC clojure 
+(def add-two (fn [x] (+ x 2))) 
+;;same result, with a docstring..
+(defn add-two "Add two to the input" 
+  [x] (+ x 2))
+#+END_SRC 
 ** Practical Example: Guess The Number
+Given a simple prompt, msg
+- prompts the user enter y or n
+- parses the result into a keyword :yes or :no, or exception.
+#+BEGIN_SRC clojure
+(defn read-yes-no
+  [msg]
+  (println (str msg ", answer y|n"))
+  (case  (keyword (read))
+    :y :yes
+    :n :no
+    (throw (Exception.  (str "bad-input!")))))              
+#+END_SRC 
+** Guess The Number Ctd.
+Given a lower and upper bound
+- Repeatedly tries to guess the number using binary search.  
+- Recursively calls itself
+#+BEGIN_SRC clojure
+(defn pick-number-recursive [lower upper]
+  (let [distance (quot (- upper lower)  2) 
+        guess    (+ lower distance)]
+    (case (read-yes-no  
+              (str "is your number " guess " ?"))
+      :yes  (println "Thanks for playing!")
+      :no   
+      (case (read-yes-no 
+              (str "Is your number less than? "
+                 guess))
+         :yes  (pick-number lower (dec guess))
+         (pick-number  (inc guess) upper)))))
+#+END_SRC 
+* Walking
+** Sequences
 ** Useful built-ins
+** Practical Example: FizzBuzz 
 ** Practical Example: Simple statistics
 ** IO (Input/Output)
 ** Practical Example: Turtles
 ** Practical Example: Project Euler
-
+   
 * Simple Scripting
-** Using Libraries
+** Leveraging Libraries
 ** SPORK (Spoon's Operations Research Kit)
 ** Tables 
 ** Parsing 
