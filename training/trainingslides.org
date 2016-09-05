@@ -573,12 +573,12 @@ This analytic pipeline serves as a mechanism for composing processes - primarily
   - View clojure as a force multiplier
 - Aim to build incrementally, starting with primitive topics
   - Crawl, walk, run.
-- We will ditch a lot of really cool, beautiful topics out of 
+- We will short-change a lot of really cool, beautiful topics out of 
   pragmatism.
-  - Macros, homoiconicity, dynamic scope, domain-specific-languages
+  - Macros, homoiconicity, dynamic scope, domain-specific-languages, 
+    communicating sequential processes, software transactional memory, more.
   - Ask for references if you're interested in pursuing this.
 * Rudimentals - Crawling
-
 ** Development Environment
 *** NightCode
 - Should already be loaded and rolling.
@@ -586,11 +586,12 @@ This analytic pipeline serves as a mechanism for composing processes - primarily
 - Simple interface
   -Syntax highlighting  / parenthesis balancing (really helpful)
   -Portable (implemeneted in Java/Clojure) 
-- Not the only IDE, but preferred for this class
-  - Emacs is superior of course 
+*** Not the only way to go
+  - Emacs is superior of course    
   - Vim is a heretical alternative
   - Cursive Clojure, Eclipse also have market share
-    - People seem to really like Cursive. 
+    - People seem to really like Cursive, based on IntelliJ Idea
+
 ** Companion Clojure Project 
 *** REPL
 - This is our new home for today  
@@ -644,6 +645,7 @@ Floats
 #+BEGIN_SRC clojure
 1000.2
 42.42
+10.1e100
 #+END_SRC 
 Ratios
 #+BEGIN_SRC clojure
@@ -684,10 +686,8 @@ evaluated as "forms", clojure expressions.
 - First element is evaluated
 - Applied to the remaining evaluated elements.
 #+BEGIN_SRC clojure 
-(+ 2 3)
-;=>5
-(list 1 2)
-;=> (1 2)
+(+ 2 3)  ;=>5
+(list 1 2) ;=> (1 2)
 #+END_SRC 
 ** Vars 
 Symbols must be defined, i.e. bound, to 
@@ -728,12 +728,11 @@ Vars are lexically scoped.
 - Undefined vars (i.e. unquoted symbols) trigger exceptions.
 - Inner bindings can "shadow", or override outer bindings in 
   the lexical scope of the inner binding.
-- Dynamic scope (deferred).
 #+BEGIN_SRC clojure 
 (def state "Texas") 
 (let [state "Virginia"]
-  state)
-;=> "Virginia"       
+  state) ;=> "Virginia"       
+state ;=> "Texas"       
 #+END_SRC 
 ** Functions 
 Functions are the bread-and-butter of 
@@ -751,6 +750,232 @@ Define named functions
 (defn add-two "Add two to the input" 
   [x] (+ x 2))
 #+END_SRC 
+** Function Arity 
+Functions can have multiple "arities", or argument bindings.
+- Use a list of ([bindings] body) for each arity.
+- Denote "list" of arguments with [& something]
+  - Tells clojure to collect the items after & and dump them into a list
+    bound to "something"
+  - Example of destructuring, more on this later.
+#+BEGIN_SRC clojure 
+(defn variadic 
+  ([x] 
+     (println (str "you called me with one arg, " x)))
+  ([x y] 
+     (println (str "you called me with two args: " [x y])))
+  ([x y & more] 
+     (println (str "you called me with >2 args: " (into [x y] more)))))
+(variadic 1) ;=> you called me with 1 args: 1
+(variadic 1 2) ;=> you called me with 2 args: [1 2]
+(variadic 1 2 3 4 5 6) ;=> you called me with >2 args: [1 2 3 4]
+#+END_SRC 
+** Function Composition
+Functions are a useful abstraction because they
+compose easily.
+- Style of programming called "functional programming"
+- Underlying philosophy in clojure.
+- Define complex functions by composing simple functions.
+#+BEGIN_SRC clojure
+(defn square [x] (* x x))
+(defn distance [[x1 y1] [x2 y2]] 
+ (Math/sqrt (square (- x2 x1)) 
+            (square (- y2 y1))))
+(defn normal [[x y]] 
+ (let [d (distance [0 0] [x y])]
+   [(/ x d) (/ y d)]))
+#+END_SRC 
+** Application with =apply=
+We can use the =apply= form to apply a function to a 
+sequence of arguments 
+- as if the function were invoked with the arguments.
+#+BEGIN_SRC clojure
+(apply + [1 2])
+;3
+(apply * [2 4 6 8])
+;384
+(apply * '(0.5 0.5 0.5))
+;0.125
+(apply list [1 2 3 4 5 6])
+;(1 2 3 4 5 6)
+#+END_SRC
+** Logical forms, =and=, =or=, =not=
+Logical operations are "short-circuting"
+- evaluation will return if any sufficient criteria are met
+- remaining clauses are not evaluated
+#+BEGIN_SRC clojure
+(and true false) ;false
+(and false
+     (fn [] (println "launch!") true)) ;false
+
+(or  true false) ;true
+(or  true (fn [] (println "eject!") false)) ;true 
+(not true) ;false
+(not false) ;true
+#+END_SRC 
+** "Truthiness"
+Clojure allows things that don't look like =true= or =false= 
+to denote =true= and =false=.
+- Eliminates a surprising amount of boiler plate since we 
+  don't bother to explicitly check for =true= or =false=
+- Any expression that evaluates to a value "other" than 
+  false or =nil= is considered logically equivalent to =true=
+#+BEGIN_SRC clojure
+(and true [1]) ;[1] => true 
+(and true nil) ;nil => false
+(and nil)      ;nil => false
+(and 2 :a)     ;:a  => true
+(or false nil :B false) ;:B => true
+(and [1 2 3] false) ;false 
+(or [1 2 3] [4 5 6]) ;[1 2 3] => true
+#+END_SRC 
+
+** Conditional Control, =if=, =cond=, =case=
+The =if= form takes a predicate, and two alternate 
+bodies to evaluate depending on the truth of the predicate.
+#+BEGIN_SRC clojure
+(println
+ (if true "it was true" "it was false"))
+;it was true
+(println
+ (if false "it was true" "it was false"))
+;it was false
+(println
+ (if nil  "it was true" "it was false"))
+;it was false
+#+END_SRC
+** =if= Examples
+#+BEGIN_SRC clojure
+(defn between? [lower upper x]
+  (and (> x lower)
+       (< x upper)))
+(if (between? 0 20 10)
+    (println "all-clear!")
+    (println "launch the missles!"))
+(if (first [nil 1 2])    
+    :first-exists
+    :first-is-nil)
+;:first-is-nil 
+(if-let [x (first [1 2])]
+    x
+    :first-is-nil)
+;1
+#+END_SRC
+** =cond=, =case= 
+=cond= and =case= are usefal variants of =if=
+- =cond= allows multiple conditions to be sequentially 
+  checked, and if true, evaluates the adjacent body.
+- =case= allows us to condition based on a specific value 
+  and set of defined cases
+#+BEGIN_SRC clojure
+(cond (between? 20 40 10) :a
+      (between? 40 42 10) :b
+      (= 10 10)      :ten
+      :else (println "launch the missiles!"))
+(case 42
+  0  :zero
+  10 :ten
+  42 :forty-two
+  :dunno)
+#+END_SRC
+** Iteration with =loop/recur=
+Clojure provides us with the loop/recur idiom.
+- Inside of a (loop [& bindings] & body) form, we can re-enter
+  the loop 
+- using the (recur & bindings) form.
+#+BEGIN_SRC clojure
+;;Count to ten...
+(loop [idx 0]
+  (if (= idx 10) [:done idx]
+      (recur (+ id 1))))
+#+END_SRC
+** Iteration Example
+Loops tend to be primitive, but they 
+are extremely useful.  
+- We will revisit this example using a 
+ much cleaner method based on functions.
+*** Find the 10th odd number after 0
+#+BEGIN_SRC clojure
+(loop [idx   0
+       n     0
+       acc   0]
+  (if (= n 10)    acc ;return the number     
+      (recur (inc idx)  
+             (if (odd? idx) (inc n) n)
+             (if (odd? idx) idx acc))))
+;19 
+#+END_SRC
+** =do= things
+The =do= form allows us to evaluate a sequence of forms
+- ignores intermediate results
+- returns the last evaluated result 
+- useful for performing spooky "side effects" like printing
+*** 								      :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+#+BEGIN_SRC clojure
+(defn spooky-add-4 [x]
+  (let [_ (println "s")
+        _ (println "p")
+        _ (println "o")
+        _ (println "o")
+        _ (println "k")
+        _ (println "y")]
+    (+ x 4)))
+#+END_SRC
+*** 								      :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+#+BEGIN_SRC clojure
+(defn spooky-add-2 [x]
+  (do (println "s")
+      (println "p")
+      (println "o")
+      (println "o")
+      (println "k")
+      (println "y")
+      (+ x 2)))
+#+END_SRC
+
+** =eval= expressions
+The =eval= form allows you to evaluate arbitrary expressions.
+- the /E/ in REPL
+- interprets clojure forms, returning a result
+- this mechanism is very powerful
+#+BEGIN_SRC clojure
+(eval 2)
+;2
+(eval '(+ 2 3))
+;;5
+(eval (list 'list 2 3 4 ''x))
+;;(2 3 4 x)
+(eval (list 'def 'x 2))
+;;#'training.expression/x
+x
+;;2
+#+END_SRC
+** Simple Input/Output Via =read=, =println=
+Clojure provides full access to the same functionality that
+the REPL uses to read input and coerce it into clojure expressions.
+=read= lets us collect a line of input from the user:
+#+BEGIN_SRC clojure
+(read)
+#+END_SRC 
+=println= evaluates the expression, and prints the result with a new line.
+#+BEGIN_SRC clojure
+(println (+ 2 3))
+#+END_SRC
+Build your own repl...
+#+BEGIN_SRC clojure
+(defn repl [n] 
+  (loop [remaining n]
+    (if (zero? remaining) :done  
+    (do (println (eval (read)))
+        (recur (dec remaining))))))
+(repl 2)
+#+END_SRC
+
 ** Practical Example: Guess The Number
 Given a simple prompt, msg
 - prompts the user enter y or n
@@ -783,6 +1008,65 @@ Given a lower and upper bound
          (pick-number  (inc guess) upper)))))
 #+END_SRC 
 * Walking
+** More Function Composition
+#+BEGIN_SRC clojure
+  (let [f (fn [x] (+ x 2))
+        g (fn [x] (* x 4))
+        h (fn [x] (Math/sqrt x))
+        i #(Math/pow % 3) ;fn syntax sugar
+        ihgf (compose i h g f)]
+    ;direct composition
+    (i (h (g (f 10)))) 
+    ;using a composed function
+    (ihgf 10) 
+    ;using the -> threading macro
+    (-> 10   
+        (f)
+        (g) 
+        (h)
+        (i)))  
+#+END_SRC
+** Threading Macros for Functional Pipelines
+thread-first, -> 
+- threads the result of each preceding form as 
+  the second argument of the next.
+  - f(x) = 2 * x^2 + 2  
+  - f(4) = ?
+*** 								      :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: .5
+    :END:
+#+BEGIN_SRC clojure
+  (defn plus2 [x] (+ x 2))
+  (defn double [x] (* x 2))
+  (defn square [x] (* x x))
+  (plus2 
+   (double 
+    (square 4)))
+#+END_SRC
+*** 								      :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: .5
+    :END:
+#+BEGIN_SRC clojure
+  ;;equivalently
+  (-> 4
+      (square)
+      (double)
+      (plus2))
+#+END_SRC
+** Threading Macros for Functional Pipelines Ctd.
+thread-last, ->> 
+- threads the result of each preceding form as 
+  the last argument of the next form.
+#+BEGIN_SRC clojure    
+((fn [x]   
+     (->>  x
+        (* x)
+        (* 2)
+        (+ 2)))
+   4)
+#+END_SRC
 ** Sequences
 ** Useful built-ins
 ** Practical Example: FizzBuzz 
