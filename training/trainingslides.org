@@ -1337,6 +1337,17 @@ resulting value.
      (reduce +))
 ;2500000.0
 #+END_SRC
+** Practical Example: FizzBuzz 
+Tell the REPL how to do the following:
+- Print all the numbers from 0..100 (including 100)
+- Except...
+  - For every number that is a multiple of 3
+    - Print "Fizz" instead of the number 
+  - For every number that is a multiple of 5
+    - Print "Buzz" instead of the number.
+  - For evey number that is a multiple of 
+    3 AND 5
+    - Print "FizzBuzz"
 ** Maps and Sets 
 Clojure provides implementations of data structures 
 that represent sorted/unsorted associative maps and sets.
@@ -1468,7 +1479,13 @@ examples
 
 ** IO (Input/Output)
 ** Practical Example: Turtles Redux
-** Practical Example: FizzBuzz 
+We'll revisit the turtles project in training/turtles/example.clj
+- This time, we have some additional commands
+  - (trace-path xys),  (face [x y]), ...
+  - Instead of using commands, the turtle now can interpret 
+    sequences of instructions.
+  - Use the sequence functions to have the turtle perform 
+    more complex behavior.
 ** Practical Example: Simple statistics
 ** Practical Example: Project Euler
    
