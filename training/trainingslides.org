@@ -312,7 +312,7 @@ Static rotational analysis examines force generation through
 *available time*
    - factors that increase available time (e.g. time in the available phase) 
 *overlap*
-   - factors decreasing available days (e.g. time required to mobilize, overlap)
+   - factors decreasing available days (e.g. time for rip/toa)
 ** Algebraic Form
 \begin{equation}
 RotationalDiscount= (available time - overlap) / lifecycle
@@ -627,9 +627,8 @@ Strings
 #+BEGIN_SRC clojure
 "I am a string"
 (seq "I contain characters")
-;=>
-'(\I \space \c \o \n \t \a \i \n 
-  \space \c \h \a \r \a \c \t \e \r \s)
+;(\I \space \c \o \n \t \a \i \n 
+;  \space \c \h \a \r \a \c \t \e \r \s)
 #+END_SRC
 ** Primitives ctd.
 *** 								      :BMCOL:
@@ -1037,6 +1036,37 @@ clojure provides, namely for working with sequences.
 - Spend the rest of the time working examples.
 - Do some mental "road work"
 - Build up to scripting exercises
+** Common Mathematical Functions
+*** 								      :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+#+BEGIN_SRC clojure
+(+ 2 3) ;5
+(* 2 3) ;6 
+(/ 2.0 3.0) ;0.666666...
+(/ 2 3) ;2/3 
+(Math/pow 2 3); 8.0
+(Math/sin Math/PI) 
+;1.2246467991473532E-16
+(Math/cos Math/PI) ;-1.0 
+#+END_SRC 
+*** 								      :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+#+BEGIN_SRC clojure
+;;compute remainder 
+;;using mod
+(mod  10 3) ;1 
+;;or use quot and rem 
+(quot 10 3) ;3  
+(rem  10 3)  ;1 
+(defn divides-by? [x n]
+ (zero? (rem x n)))
+(divides-by? 10 2) ;true 
+(divides-by? 10 3) ;false
+#+END_SRC 
 ** More Function Composition
 #+BEGIN_SRC clojure
   (let [f (fn [x] (+ x 2))
@@ -1136,16 +1166,13 @@ A sequence is a "lazily" computed stream of values
 ;;get the last element
 (last numbers)
 ;;get a seq over a collection
-(seq [1 2 3])
-;;(1 2 3)
+(seq [1 2 3]) ;(1 2 3)
 #+END_SRC
 ** Deriving New Sequences
 #+BEGIN_SRC clojure
-;;return a lazy sequence that draws
-;; the first 10 elements and stops
+;;draws the first 10 elements and stops
 (take 10 numbers)
-;;return a lazy sequence that drops
-;;the first 10 numbers, starting at 10
+;;drops the first 10 elements
 (drop 10 numbers)
 ;;Clump the sequence into pairs
 (partition 2 numbers)
@@ -1243,10 +1270,9 @@ Use =nth= for indexed access into vectors and sequences
 #+END_SRC
 ** =map=, =filter=, =reduce=
 *** The three musketeers of functional programming.
-- Using these three functions, 
-  - we can build sophisticated, composeable, computational pipelines 
-  - without using goofy loop code 
-    - (avoid toilet-bowl programming)
+- we can build sophisticated, composeable, computational pipelines 
+- without using goofy loop code 
+  - (avoid toilet-bowl programming)
 *** Befriend them
 - =map=, =filter=, and =reduce= are invaluable
 ** =map=
