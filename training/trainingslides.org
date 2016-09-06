@@ -50,7 +50,6 @@
 #+LaTeX_HEADER:\AfterEndEnvironment{minted}{\end{tcolorbox}}%
 #+LaTeX_HEADER:\setbeamertemplate{navigation symbols}{}%remove navigation symbols
 
-
 # Source code template
 #+BEGIN_COMMENT
 This is a source code example.
@@ -1647,6 +1646,4 @@ for a plethora of scripting examples:
 -  Custom Drawing
 -  Incanter
 -  Simple plots
-#+END_COMMENT 
-
 
