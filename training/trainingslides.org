@@ -1633,7 +1633,6 @@ Alternately, just look at the source code.
 ** Practical Example: marathon.demo
 ** Practical Example: Multiple Runs (batching)
 ** Practical Example: Programmatic Experiments
-#+BEGIN_COMMENT  
 ** Practical Example: Implement Requirements Analysis
 * Simple Scripting
 ** Scripting Bonanza
