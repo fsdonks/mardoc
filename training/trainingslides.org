@@ -494,14 +494,122 @@ Portfolio Analysis is higher-order form of analysis
      [[./images/portfolioalgo.png]]
 
 * Using MARATHON
+** MARATHON Input 
+** Project Structure
+- Supply  
+- Demand 
+- Policy 
+** SupplyRecords
+*** 								      :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+  - Type :text 
+  - Enabled :boolean 
+  - Quantity :int 
+  - SRC :text 
+  - Component :text 
+  - OITitle :text 
+  - Name :text 
+  - Behavior :text 
+  - CycleTime :int 
+  - Policy :text 
+*** 								      :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+  - Tags :clojure 
+  - SpawnTime :int 
+  - Location :text 
+  - Position :text 
+  - Original :boolean 
+  - Command :text 
+  - Origin :text 
+  - Duration :int?
+** DemandRecords 
+*** 								      :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+  - Type :text 
+  - Enabled :boolean 
+  - Priority :int 
+  - Quantity :int 
+  - DemandIndex :int 
+  - StartDay :int 
+  - Duration :int 
+  - Overlap :int 
+  - SRC :text 
+  - SourceFirst :text 
+  - DemandGroup :text 
+  - Vignette :text 
+*** 								      :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+  - Operation :text 
+  - Category :text 
+  - Priority :int 
+  - Command :text 
+  - Location :text 
+  - DemandType :text 
+  - Theater :text 
+  - BOG :boolean 
+  - StartState :text 
+  - EndState :text 
+  - MissionLength :int? 
+** PolicyRecords
+*** 								      :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+  - TimeStamp :text 
+  - Type :text 
+  - TimeInterval :text 
+  - PolicyName :text 
+  - Template :text 
+  - MaxDwell :int 
+  - MinDwell :int 
+  - MaxBOG :int
+*** 								      :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+  - StartDeployable :int 
+  - StopDeployable :int 
+  - Overlap :int 
+  - Recovery :int 
+  - BOGBudget :text 
+  - Deltas :text 
+  - Remarks :text 
+
+** PolicyTemplates
+*** 								      :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+  - Behavior :keyword 
+  - Name :text 
+  - Quantity :int 
+  - Component :text 
+  - SRC :text 
+  - Type :text 
+  - CycleTime :int 
+  - Location :text 
+*** 								      :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+  - OITitle :text 
+  - Tags :text 
+  - Policy :text 
+  - Enabled :boolean 
+  - Position :text 
+  - SpawnTime :int 
+  - Original :boolean 
 ** MARATHON Interface 
 ** Menus 
 ** REPL 
-** MARATHON Input 
-** Project Structure
-- Supply 
-- Demand 
-- Policy 
 ** MARATHON Output 
 ** Default Outputs
 * Practical Example: Notional Capacity
