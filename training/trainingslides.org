@@ -500,6 +500,9 @@ Portfolio Analysis is higher-order form of analysis
 ** REPL 
 ** MARATHON Input 
 ** Project Structure
+- Supply 
+- Demand 
+- Policy 
 ** MARATHON Output 
 ** Default Outputs
 * Practical Example: Notional Capacity
@@ -510,7 +513,7 @@ Portfolio Analysis is higher-order form of analysis
 ** Notional Capacity Analysis
 ** Analyze Results
 
-* Practical Example: Notional Requirements
+* Practical Example: Notional Requirements (Possibly Day 3)
 ** Notional Supply 
 ** Notional Demand 
 ** Notional Policy 
@@ -1029,7 +1032,7 @@ Navigation
 Cleanup
 - (clean)
 - (home)
-* Walking
+* Rudimentals - Walking
 ** Day 2 Walking
 Our goal is to quickly explore useful functions 
 clojure provides, namely for working with sequences.
@@ -1478,30 +1481,100 @@ examples
 #+END_SRC
 
 ** IO (Input/Output)
+IO in clojure parlance typically refers 
+reading (input) or writing (output) data to
+a "stream".
+- typical streams include files, network sockets
+- There are two defined streams: 
+  - =*in*=  the stream the REPL's process draws from
+  - =*out*= the stream the REPL prints to
+  - notice the asteriks around *in* and *out*
+    - naming convention (earmuffs) to indicate that the Vars are 
+      "dynamically scoped"
+    - more to come...
+Clojure provides some useful functions for reading and 
+writing files.
+- =spit=, =slurp=, =line-seq=
+** Simple File Operations
+=spit= and =slurp= are sufficient for quick and 
+dirty file operations
+#+BEGIN_SRC clojure
+;;use spit to spit a string to a file.
+(spit "output.clj" (str "Howdy!"))
+;;use slurp to return the contents of a file 
+;;as a string 
+(println (slurp "output.clj"))                           
+#+END_SRC 
+** Simple Tab-Delimited Files 
+#+BEGIN_SRC clojure
+;;spit structured data to a tab-delimited file.
+(let [tabify #(clojure.string/join "\t" %)]
+   (->> (concat [(tabify ["X" "Y"])]
+        (->> (range 10)
+             (map (fn [idx] [idx (rand)]))
+             (map tabify)))
+       (clojure.string/join \newline)
+       (spit "outlines.txt")))
+;;read the data back in....
+(let [untabify #(clojure.string/split % #"\t")]
+   (->> (slurp "outlines.txt")
+        (clojure.string/split-lines)
+        (map untabify)
+        (map #(into [] (map read-string) %))))
+#+END_SRC 
+** Lazy Tab-Delimited Files 
+Find the first entry with a y-value > 0.5
+- without reading in the entire file.
+#+BEGIN_SRC clojure
+(with-open [rdr (clojure.java.io/reader 
+                   "outlines.txt")]
+  (let [untabify #(clojure.string/split % #"\t")]
+     (->> (line-seq rdr)
+          (map untabify)
+          (map #(into [] (map read-string) %))
+          (drop 1) ;ignore headers 
+          (filter (fn [[x y]] 
+                  (> y 0.5)))
+          (first))))       
+#+END_SRC 
+** Printing Clojure Data to files
+We can =read= and =print= clojure 
+data
+- It stands to reason we should be able to change
+  the targets
+- =read= and =print= to files?
+- naive method for "saving" or "serializing" data
+#+BEGIN_SRC clojure
+;;save 
+(->> (with-out-str (print {:a 2}))
+     (spit "hash-map.clj"))
+;;recover 
+(->> (slurp "hash-map.clj")
+     (clojure.edn/read-string))
+;;{:a 2}
+#+END_SRC 
+** IO In Practice 
+The preceding examples are great for small things
+- for varying definitions of "small"
+In practice, we may choose to offload these types of 
+IO routines to special-purpose libraries.
+- Typically optimized for size and space
+- May offer compression, encryption, other conveniences.
+Still, we can get a lot of mileage with our pre-defined 
+IO
 ** Practical Example: Turtles Redux
 We'll revisit the turtles project in training/turtles/example.clj
 - This time, we have some additional commands
-  - (trace-path xys),  (face [x y]), ...
+  - (trace-path xys),  (look-at [x y]), ...
   - Instead of using commands, the turtle now can interpret 
-    sequences of instructions.
+    sequences of instructions, or points to follow.
   - Use the sequence functions to have the turtle perform 
     more complex behavior.
+  - Think in terms of sequences of points, and operations you 
+    can perform on them.
 ** Practical Example: Simple statistics
-** Practical Example: Project Euler
-   
-* Simple Scripting
-** Leveraging Libraries
-** SPORK (Spoon's Operations Research Kit)
-** Tables 
-** Parsing 
-** Copy and Paste Easily
-** Working With Excel
-** Practical Example: Excel IO
-
-** Custom Drawing
-** Incanter
-** Simple plots
-* Day 3 - Extending MARATHON using Clojure
+** Practical Example: Project Euler (Possibly)
+* Day 3 - Extending MARATHON using Clojure (WIP)
 ** Day 3 - Extending MARATHON using Clojure
 * Git Workflow / Version Control
 ** Git and Version Control
@@ -1539,12 +1612,42 @@ We'll revisit the turtles project in training/turtles/example.clj
 - git commit -a -m "Useful commit message here"
 - Repeat
 * Hacking MARATHON
-** Introductory Scripting
-** Useful Namespaces
-** marathon.analysis 
-** marathon.demo 
+** Learning About MARATHON
+MARATHONomicon 
+- Complete documentation of the entire codebase
+- Literate programming (self documenting)
+Alternately, just look at the source code.
+  - starting points:
+    - marathon.analysis, marathon.demo, 
+      marathon.ces.testing 
+** Data Hooks 
+*** History is a sequence of [t state] pairs
+- We have easy functions for getting history sequences 
+  - marathon.analysis 
+  - =project->history-seq=
+*** Marathon inputs are table-based
+  - tables can viewed as sequences of records
+    - spork.util.table
+  - We can programmatically manipulate tables 
+    prior to computing a history.
 ** Practical Example: marathon.demo
-** Practical Example: multiple runs
-** Practical Example: programmatic experiments
-** Practical Example: new policies
+** Practical Example: Multiple Runs (batching)
+** Practical Example: Programmatic Experiments
+#+BEGIN_COMMENT  
+** Practical Example: Implement Requirements Analysis
+* Simple Scripting
+** Scripting Bonanza
+We'll walk through the training/bonanza.clj 
+for a plethora of scripting examples:
+-  SPORK (Spoon's Operations Research Kit)
+-  Tables 
+-  Parsing 
+-  Copy and Paste Easily
+-  Working With Excel
+-  Excel IO
+-  Custom Drawing
+-  Incanter
+-  Simple plots
+#+END_COMMENT 
+
 
