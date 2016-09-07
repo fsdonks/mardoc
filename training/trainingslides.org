@@ -66,7 +66,7 @@ Use this as a template for pasting code around.
 * Overview  
 ** Purpose  
   This is a prepatory outline of MARATHON training, specifically 
-  coverage of a 3-day timeline.  
+  coverage of a 3-day time-line.  
 
   The goal is to provide users with:
   - a conceptual understanding of MARATHON and rotational analysis
@@ -99,7 +99,7 @@ Use this as a template for pasting code around.
   - Expect to type and interact.  
   - Questions are generally welcome at any time, unless otherwise stated.    
 
-** Pre-Requisites 
+** Prerequisites 
 This course is intended to provide a comprehensive overview of MARATHON, including 
 its history (i.e. reason for existence), functionality, applicability, and means of 
 extension.  No pre-requisite knowledge is required.
@@ -110,7 +110,7 @@ materials based on interest, with the desire of
 - Rudimentary familiarity with Microsoft Excel 
   - Creating and modifying workbooks, filtering, etc.
 
-** Pre-Requisites Ctd.
+** Prerequisites Ctd.
 - Rudimentary familiarity with the Clojure programming language
   - Familiarity with NightCode as a development environment (very very simple).
   - Basic syntax
@@ -326,6 +326,19 @@ theoretical capacity =RotationalDiscount * total rotational supply
   - unit transformation periods
   - changes to rotational policy
   - lifecycle sequencing
+** Practical Exercise: Theoeratical Capacity
+We have 30 AC BCTs following
+  - a 24-month lifecycle
+  - 12 months of availability 
+  - 9 months of possible BOG 
+  - 45 day RIP/TOA 
+And 30 NG BCTS following 
+  - a 60-month lifecycle
+  - 12 months of mobility 
+  - 9 months possible BOG 
+  - 3 months accounting for MOB/DeMOB 
+  - 45 day RIP/TOA 
+Can we supply a 15 BCT steady-state demand? 
 ** Static Analysis Summary 
 - Closed Form (Typically Algebraic)
 - Ignores dynamics (i.e. temporal effects).
@@ -434,7 +447,7 @@ Units also have a variable behavior
 -  interprets policy to implement the desired supply-side and deployed actions.  
 
 Decoupling behavior and policy allows for 
- - homogenous sets of units that appear to behave identically
+ - homogeneous sets of units that appear to behave identically
  - diasporas of independent singletons that can apply similar behavior to different policies 
  - or interpret the same policies (via different behavior) 
  - simulating radically different populations with precise control
@@ -492,13 +505,32 @@ Portfolio Analysis is higher-order form of analysis
 #+CAPTION: Capacity Analysis
 #+NAME:   fig:SED-HR4049
      [[./images/portfolioalgo.png]]
-
+     
 * Using MARATHON
 ** MARATHON Input 
-** Project Structure
-- Supply  
-- Demand 
-- Policy 
+*** Generic
+- Parameters 
+  - Key / Value pairs of simple data.
+  - Define simple toggles, facts, defaults.
+*** Supply  
+- SupplyRecords
+  - Define individual or batches of unit entities.
+*** Demand
+- DemandRecords 
+  - Define demand entities.
+** MARATHON Input ctd.
+*** Policy
+- PolicyRecords
+  - Parametric sets of policies compiled at runtime
+- CompositePolicyRecords 
+  - Data-driven compositions of policies defined by PolicyRecords
+- RelationRecords 
+  - Weighted substitution relationships.
+- SRCTagRecords
+  - Defines "alternate" policy defaults for specific SRCs.
+- PeriodRecords 
+  - Defines named simulation epochs, by time interval.
+  - Periods may be linked to changes in composite policies.
 ** SupplyRecords
 *** 								      :BMCOL:
     :PROPERTIES:
@@ -583,51 +615,62 @@ Portfolio Analysis is higher-order form of analysis
   - Deltas :text 
   - Remarks :text 
 
-** PolicyTemplates
-*** 								      :BMCOL:
-    :PROPERTIES:
-    :BEAMER_col: 0.5
-    :END:
-  - Behavior :keyword 
-  - Name :text 
-  - Quantity :int 
-  - Component :text 
-  - SRC :text 
+** CompositePolicyRecords
+- Type :text 
+- CompositeName :text 
+- CompositionType :text 
+- Period :text 
+- Policy :text 
+** RelationRecords
+- Type :text 
+- Relation :text 
+- Donor :text 
+- Recepient :text 
+- Cost :float 
+- Enabled :boolean 
+** Remaining 
+*** PeriodRecords
   - Type :text 
-  - CycleTime :int 
-  - Location :text 
-*** 								      :BMCOL:
-    :PROPERTIES:
-    :BEAMER_col: 0.5
-    :END:
-  - OITitle :text 
-  - Tags :text 
-  - Policy :text 
-  - Enabled :boolean 
-  - Position :text 
-  - SpawnTime :int 
-  - Original :boolean 
-** MARATHON Interface 
-** Menus 
-** REPL 
-** MARATHON Output 
-** Default Outputs
-* Practical Example: Notional Capacity
-** Notional Supply 
-** Notional Demand 
-** Notional Policy 
-** Loading MARATHON 
-** Notional Capacity Analysis
-** Analyze Results
+  - Name :text 
+  - FromDay :int 
+  - ToDay :int 
+*** SRCTagRecords 
+- Type :text 
+- SRC :text 
+- Tag :text 
+*** Parameters
+- ParameterName :text 
+- Value :text 
 
+** MARATHON Output 
+- Deployments 
+  - individual unit deployments
+- DemandTrends 
+  - discrete sampling of changes in demand
+- Deployed 
+  - daily sampling of the deployed population
+- Locations 
+  - daily sampling of evey unit's location.
+- History
+  - compressed stream of simulation history
+  - we can compute more ouput on this later
+- Much more if we use =proc= for post processing...
+** MARATHON Interface 
+*** Menus 
+*** REPL 
+* Practical Example: Notional Capacity
+- Look at "srmbase" project.
+   - Examine Supply, Demand, Policy 
+   - Use the interface to explore the project.  
+- Perform a Capacity Analysis via the Processing menu.
+- Analyze results the "hard" way
+  - Use Excel (and the provided template) to pull in data.
+  - Are we filling demands according to the data?
+  - What do we know about stress on the supply based on dwell?
+  - Any other observations?
 * Practical Example: Notional Requirements (Possibly Day 3)
-** Notional Supply 
-** Notional Demand 
-** Notional Policy 
-** Loading MARATHON 
 ** Notional Requirements Analysis
 ** Analyze Results
-
 * Practical Example: Total Army Analysis 
 ** TAA Example
 ** Analytic Pipeline for TAA
