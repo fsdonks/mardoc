@@ -1,16 +1,16 @@
 # This is a template for pushing out org files that are compatible 
-# with both html and latex export.  Specifically, these files 
+# with both HTML and latex export.  Specifically, these files 
 # Support code highlighting - for clojure code - and typeset 
 # the code to look different from the main sections.  The 
 # design is meant for providing a quick template to inject 
 # clojure source into org docs, and provide an interactive, 
-# repl-friendly presentation.
+# REPL-friendly presentation.
 #+TITLE: MARATHON Training Slides
 #+AUTHOR: T. Spoon
 #+DATE: 31 Aug 2016
 #+VERSION: 1.2
 # specifying the beamer startup gives access to a number of
-# keybindings which make configuring individual slides and components
+# key-bindings which make configuring individual slides and components
 # of slides easier.  See, for instance, C-c C-b on a frame headline.
 #+STARTUP: beamer
 #+STARTUP: oddeven
@@ -65,7 +65,7 @@ Use this as a template for pasting code around.
 
 * Overview  
 ** Purpose  
-  This is a prepatory outline of MARATHON training, specifically 
+  This is a preparatory outline of MARATHON training, specifically 
   coverage of a 3-day time-line.  
 
   The goal is to provide users with:
@@ -237,7 +237,7 @@ Primary policies of note:
 - Sustainable Readiness Model (SRM)
   - Upcoming policy, replacement for ARFORGEN 
 ** Army Force Generation (ARFORGEN)
-AFORGEN is a system for managing =readiness= - the ability for units to deploy to meet contingencies.
+ARFORGEN is a system for managing =readiness= - the ability for units to deploy to meet contingencies.
 - contemporary cyclical force generation process
 - structured progression of increased unit readiness over time
 - results in the periodic availability of trained, ready and cohesive units 
@@ -326,7 +326,7 @@ theoretical capacity =RotationalDiscount * total rotational supply
   - unit transformation periods
   - changes to rotational policy
   - lifecycle sequencing
-** Practical Exercise: Theoeratical Capacity
+** Practical Exercise: Theoretical Capacity
 We have 30 AC BCTs following
   - a 24-month lifecycle
   - 12 months of availability 
@@ -659,10 +659,10 @@ Portfolio Analysis is higher-order form of analysis
 *** Menus 
 *** REPL 
 * Practical Example: Notional Capacity
+** Practicale Example: Notional Capacity
 - Look at "srmbase" project.
-   - Examine Supply, Demand, Policy 
-   - Use the interface to explore the project.  
-- Perform a Capacity Analysis via the Processing menu.
+   - Examine Supply, Demand, Policy    
+- Processing -> Capacity Analysis.
 - Analyze results the "hard" way
   - Use Excel (and the provided template) to pull in data.
   - Are we filling demands according to the data?
@@ -738,7 +738,7 @@ This analytic pipeline serves as a mechanism for composing processes - primarily
 - Holler if you're having problems.
 - Simple interface
   -Syntax highlighting  / parenthesis balancing (really helpful)
-  -Portable (implemeneted in Java/Clojure) 
+  -Portable (implemented in Java/Clojure) 
 *** Not the only way to go
   - Emacs is superior of course    
   - Vim is a heretical alternative
@@ -860,7 +860,7 @@ some value.
 Vectors provide another way to collect things:
 - Denoted by []
 - Provide numerous benefits as a data structure
-Never intepreted as forms, always treated as data.
+Never interpreted as forms, always treated as data.
 - Used instead of quoted lists.
 - Required by core libraries to indicate var bindings.
 #+BEGIN_SRC clojure 
@@ -912,9 +912,9 @@ Functions can have multiple "arities", or argument bindings.
 #+BEGIN_SRC clojure 
 (defn variadic 
   ([x] 
-     (println (str "you called me with one arg, " x)))
+     (println (str "you called me with 1 arg, " x)))
   ([x y] 
-     (println (str "you called me with two args: " [x y])))
+     (println (str "you called me with 2 args: " [x y])))
   ([x y & more] 
      (println (str "you called me with >2 args: " (into [x y] more)))))
 (variadic 1) ;=> you called me with 1 args: 1
@@ -951,7 +951,7 @@ sequence of arguments
 ;(1 2 3 4 5 6)
 #+END_SRC
 ** Logical forms, =and=, =or=, =not=
-Logical operations are "short-circuting"
+Logical operations are "short-circuiting"
 - evaluation will return if any sufficient criteria are met
 - remaining clauses are not evaluated
 #+BEGIN_SRC clojure
@@ -1002,7 +1002,7 @@ bodies to evaluate depending on the truth of the predicate.
        (< x upper)))
 (if (between? 0 20 10)
     (println "all-clear!")
-    (println "launch the missles!"))
+    (println "launch the missiles!"))
 (if (first [nil 1 2])    
     :first-exists
     :first-is-nil)
@@ -1013,7 +1013,7 @@ bodies to evaluate depending on the truth of the predicate.
 ;1
 #+END_SRC
 ** =cond=, =case= 
-=cond= and =case= are usefal variants of =if=
+=cond= and =case= are useful variants of =if=
 - =cond= allows multiple conditions to be sequentially 
   checked, and if true, evaluates the adjacent body.
 - =case= allows us to condition based on a specific value 
@@ -1038,7 +1038,7 @@ Clojure provides us with the loop/recur idiom.
 ;;Count to ten...
 (loop [idx 0]
   (if (= idx 10) [:done idx]
-      (recur (+ id 1))))
+      (recur (+ idx 1))))
 #+END_SRC
 ** Iteration Example
 Loops tend to be primitive, but they 
@@ -1145,18 +1145,15 @@ Given a lower and upper bound
 - Repeatedly tries to guess the number using binary search.  
 - Recursively calls itself
 #+BEGIN_SRC clojure
-(defn pick-number-recursive [lower upper]
-  (let [distance (quot (- upper lower)  2) 
-        guess    (+ lower distance)]
-    (case (read-yes-no  
-              (str "is your number " guess " ?"))
+(defn pick-number
+  [lower upper]
+  (let [half-length (quot (- upper lower)  2) 
+        guess       (+ lower half-length )]
+    (case (read-yes-no  (str "is your number " guess " ?"))
       :yes  (println "Thanks for playing!")
-      :no   
-      (case (read-yes-no 
-              (str "Is your number less than? "
-                 guess))
-         :yes  (pick-number lower (dec guess))
-         (pick-number  (inc guess) upper)))))
+      :no   (case (read-yes-no (str "Is your number less than? " guess))
+              :yes  (pick-number lower (dec guess))
+              (pick-number  (inc guess) upper)))))
 #+END_SRC 
 ** Practical Example: Turtles
 *** The Logo "turtle" 
@@ -1295,7 +1292,7 @@ thread-last, ->>
 #+END_SRC
 
 ** Sequences
-Almost every clojure datastructure that serves as a
+Almost every clojure data structure that serves as a
 collection can be viewed through the Sequence abstraction.
 
 A sequence is a "lazily" computed stream of values
@@ -1303,12 +1300,13 @@ A sequence is a "lazily" computed stream of values
 - Sequences look and act like lists.
   - Except they are "lazy" vs "Eager".
   - We only realize portions of the sequence we need
-- We can work with "infinite" datastructures
+- We can work with "infinite" data structures
 ** Basic Operations on Sequences
 #+BEGIN_SRC clojure
-;;Range generates a lazy sequence of numbers 
-;;from [0..bound), exclusive.
+;;lazy sequence of numbers from [0..bound)
 (def numbers (range 100))
+;count the elements in the sequence
+(count numbers) ;100
 ;;get the first element...
 (first numbers)
 ;;get the remainder of the sequence, dropping
@@ -1345,7 +1343,7 @@ new lazy sequences:
 ;;return a sequence of numbers from (0..9)
 (for [x (range 10)]
   x) 
-;;returns the cartesian product of xs and ys as
+;;returns the Cartesian product of xs and ys as
 ;;a lazy sequence of vector pairs 
 (for [x (range 10)
       y [:a :b :c]]
@@ -1383,8 +1381,8 @@ conjoining elements to collections
 - constructs a "new" collection with the conjoined element
   - original is preserved (unaltered)
 - For uniformity, =nil= is treated as the empty-sequence
-=conj= has different behavior based on the datastructure
-- lists (eg. seqs) conjoin by prepending items to the head 
+=conj= has different behavior based on the data structure
+- lists (eg. seqs) conjoin by pre-pending items to the head 
 - vectors conjoin by appending items to the tail
 =cons= is a sequence-specific alternative to =conj= that 
 constructs new sequences
@@ -1423,7 +1421,7 @@ Use =nth= for indexed access into vectors and sequences
 #+END_SRC
 ** =map=, =filter=, =reduce=
 *** The three musketeers of functional programming.
-- we can build sophisticated, composeable, computational pipelines 
+- we can build sophisticated, composable, computational pipelines 
 - without using goofy loop code 
   - (avoid toilet-bowl programming)
 *** Befriend them
@@ -1604,7 +1602,7 @@ large standard library for working with these data types.
 We'll explore a few more useful functions, then move on to 
 examples
 - where we can apply what we've seen
-** Useful Builtins
+** Useful Built-ins
 #+BEGIN_SRC clojure
 (def xs (range 3))
 (group-by odd? xs) ;{false [0 2], true [1]}
@@ -1616,7 +1614,7 @@ examples
 (map-indexed (fn [idx x] [idx x]) xs)
 ;;([0 0] [1 1] [2 2])
 #+END_SRC
-** More Useful Builtins
+** More Useful Built-ins
 #+BEGIN_SRC clojure
 (def m {:a {:b 1}})
 (assoc-in m [:a :c] 2)  ;{:a {:b 1 :c 2}}
@@ -1638,7 +1636,7 @@ a "stream".
 - There are two defined streams: 
   - =*in*=  the stream the REPL's process draws from
   - =*out*= the stream the REPL prints to
-  - notice the asteriks around *in* and *out*
+  - notice the asterisk around *in* and *out*
     - naming convention (earmuffs) to indicate that the Vars are 
       "dynamically scoped"
     - more to come...
