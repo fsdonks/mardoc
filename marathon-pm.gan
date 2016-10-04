@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="MARATHON Project Management" company="CAA" webLink="http://" view-date="2015-07-01" view-index="0" gantt-divider-location="647" resource-divider-location="528" version="2.8.1" locale="en_US">
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MARATHON Project Management" company="CAA" webLink="http://" view-date="2015-07-01" view-index="0" gantt-divider-location="647" resource-divider-location="528" version="2.8.1" locale="en_US">
     <description><![CDATA[This is an projecet management view of the pending features, tasks, and efforts to develop MARATHON 4.x over the next year.]]></description>
     <view zooming-state="default:11" id="gantt-chart">
         <field id="tpd3" name="Name" width="391" order="0"/>
