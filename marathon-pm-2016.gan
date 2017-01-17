@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?><project name="MARATHON Project Management" company="CAA" webLink="http://" view-date="2015-06-01" view-index="0" gantt-divider-location="647" resource-divider-location="528" version="2.8.1" locale="en_US">
+    <description><![CDATA[This is an projecet management view of the pending features, tasks, and efforts to develop MARATHON 4.x over the next year.]]></description>
+    <view zooming-state="default:11" id="gantt-chart">
+        <field id="tpd3" name="Name" width="391" order="0"/>
+        <field id="tpd4" name="Begin date" width="104" order="1"/>
+        <field id="tpd5" name="End date" width="133" order="2"/>
+    </view>
+    <view id="resource-table">
+        <field id="0" name="Name" width="323" order="0"/>
+        <field id="1" name="Default role" width="201" order="1"/>
+    </view>
+    <!-- -->
+    <calendars>
+        <day-types>
+            <day-type id="0"/>
+            <day-type id="1"/>
+            <default-week id="1" name="default" sun="1" mon="0" tue="0" wed="0" thu="0" fri="0" sat="1"/>
+            <only-show-weekends value="false"/>
+            <overriden-day-types/>
+            <days/>
+        </day-types>
+    </calendars>
+    <tasks empty-milestones="true">
+        <taskproperties>
+            <taskproperty id="tpd0" name="type" type="default" valuetype="icon"/>
+            <taskproperty id="tpd1" name="priority" type="default" valuetype="icon"/>
+            <taskproperty id="tpd2" name="info" type="default" valuetype="icon"/>
+            <taskproperty id="tpd3" name="name" type="default" valuetype="text"/>
+            <taskproperty id="tpd4" name="begindate" type="default" valuetype="date"/>
+            <taskproperty id="tpd5" name="enddate" type="default" valuetype="date"/>
+            <taskproperty id="tpd6" name="duration" type="default" valuetype="int"/>
+            <taskproperty id="tpd7" name="completion" type="default" valuetype="int"/>
+            <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
+            <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
+        </taskproperties>
+        <task id="5099" name="Rotational Analysis Capabilities" meeting="false" start="2015-07-03" duration="591" complete="0" expand="true">
+            <task id="5107" name="Capacity Analysis" color="#8cb6ce" meeting="false" start="2015-07-03" duration="336" complete="0" expand="true">
+                <depend id="5104" type="2" difference="0" hardness="Strong"/>
+                <depend id="5105" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="5105" name="Requirements Analysis" color="#8cb6ce" meeting="false" start="2016-10-17" duration="23" complete="0" expand="true">
+                <depend id="5104" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="5104" name="Portfolio Analysis" color="#8cb6ce" meeting="false" start="2016-11-17" duration="162" complete="0" expand="true"/>
+            <task id="5101" name="Sustainable Readiness Rules" meeting="false" start="2016-01-20" duration="106" complete="0" expand="true">
+                <task id="5102" name="Local Demand Effects" meeting="false" start="2016-04-08" duration="39" complete="0" expand="true"/>
+                <task id="5103" name="Meta Relations" meeting="false" start="2016-01-20" duration="106" complete="0" expand="true"/>
+            </task>
+            <task id="5100" name="Force Structure Design of Experiment" color="#8cb6ce" meeting="false" start="2017-02-13" duration="170" complete="0" expand="true"/>
+        </task>
+        <task id="56" name="Front End" color="#000000" meeting="false" start="2016-08-01" duration="45" complete="0" expand="true">
+            <depend id="1088" type="2" difference="0" hardness="Strong"/>
+            <task id="57" name="Primitive Graphical User Interface" meeting="false" start="2016-08-01" duration="5" complete="0" expand="true"/>
+            <task id="84" name="Integrate &quot;proc&quot; with front end GUI" color="#8cb6ce" meeting="false" start="2016-09-06" duration="19" complete="0" expand="true"/>
+        </task>
+        <task id="85" name="PreProcessing" color="#000000" meeting="false" start="2016-09-19" duration="10" complete="0" expand="true">
+            <depend id="1088" type="2" difference="0" hardness="Strong"/>
+            <task id="86" name="Enable Support For Legacy Schemas" meeting="false" start="2016-09-19" duration="10" complete="0" expand="true"/>
+        </task>
+        <task id="5095" name="Engine" meeting="false" start="2015-05-01" duration="1" complete="0" expand="true"/>
+        <task id="75" name="PostProcessing" color="#000000" meeting="false" start="2016-09-19" duration="10" complete="0" expand="true">
+            <depend id="1088" type="2" difference="0" hardness="Strong"/>
+            <task id="3277" name="Update Proc to Accept new Data Schemas" meeting="false" start="2016-09-19" duration="10" complete="0" expand="true"/>
+            <task id="3278" name="Modify Proc to Read Compressed Marathon Histories" meeting="false" start="2016-09-19" duration="10" complete="0" expand="true"/>
+        </task>
+        <task id="1088" name="Capacity Analysis Verification" color="#000000" meeting="false" start="2016-10-03" duration="10" complete="0" expand="true">
+            <depend id="3" type="2" difference="0" hardness="Strong"/>
+            <depend id="5107" type="3" difference="0" hardness="Strong"/>
+            <task id="1089" name="Max Utilization Policy VNV" meeting="false" start="2016-10-03" duration="5" complete="0" expand="true">
+                <depend id="1090" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="1090" name="Composite Policy VNV" meeting="false" start="2016-10-10" duration="5" complete="0" expand="true"/>
+        </task>
+        <task id="3" name="Requirements Analysis (RA)" color="#8cb6ce" meeting="false" start="2016-10-17" duration="23" complete="0" expand="true">
+            <depend id="11" type="2" difference="0" hardness="Strong"/>
+            <depend id="5105" type="3" difference="0" hardness="Strong"/>
+            <task id="43" name="RA Implementation" color="#8cb6ce" meeting="false" start="2016-10-17" duration="14" complete="0" expand="true"/>
+            <task id="40" name="RA Verification" meeting="false" start="2016-11-07" duration="8" complete="0" expand="true"/>
+        </task>
+        <task id="11" name="Comparative Verification" color="#000000" meeting="false" start="2016-12-01" duration="29" complete="0" expand="true">
+            <depend id="14" type="2" difference="0" hardness="Strong"/>
+            <task id="23" name="Concurrent TAA Verification" color="#000000" meeting="false" start="2016-12-01" duration="29" complete="0" expand="true">
+                <task id="26" name="Max Utilization Case Comparison" color="#8cb6ce" meeting="false" start="2016-12-01" duration="29" complete="0" expand="true"/>
+                <task id="27" name="Requirements Case Comparison" color="#8cb6ce" meeting="false" start="2016-12-01" duration="29" complete="0" expand="true"/>
+            </task>
+        </task>
+        <task id="50" name="Visualization" color="#000000" meeting="false" start="2015-09-02" duration="268" complete="0" expand="true">
+            <depend id="1654" type="2" difference="0" hardness="Strong"/>
+            <task id="4099" name="Java 2D Prototype HUD" meeting="false" start="2015-09-02" duration="63" complete="0" expand="true"/>
+            <task id="2827" name="Dynamic Plot Implementation" color="#000000" meeting="false" start="2015-10-02" duration="95" complete="0" expand="true">
+                <task id="2838" name="Dynamic Scatter Plot" meeting="false" start="2015-10-26" duration="42" complete="0" expand="true"/>
+                <task id="2839" name="Dynamic Area Plot" meeting="false" start="2015-11-30" duration="54" complete="0" expand="true"/>
+                <task id="2840" name="Dynamic &quot;Trail&quot; Plot" meeting="false" start="2015-10-02" duration="70" complete="0" expand="true"/>
+            </task>
+            <task id="2828" name="World Map Implementation" meeting="false" start="2015-12-10" duration="154" complete="0" expand="true">
+                <task id="2832" name="Geographic Locale Definitions" meeting="false" start="2015-12-11" duration="1" complete="0" expand="true"/>
+                <task id="2833" name="Home Station Definitions" meeting="false" start="2015-12-11" duration="1" complete="0" expand="true"/>
+                <task id="2834" name="Nested CONUS Map" meeting="false" start="2015-12-14" duration="2" complete="0" expand="true"/>
+                <task id="2829" name="Animated Entity Tokens" meeting="false" start="2016-01-18" duration="31" complete="0" expand="true"/>
+                <task id="2830" name="Animated Entity Paths" meeting="false" start="2016-02-15" duration="10" complete="0" expand="true"/>
+                <task id="2831" name="Animated Geographic Containers" meeting="false" start="2016-02-22" duration="7" complete="0" expand="true"/>
+                <task id="4609" name="Zoomable User Interface Development" meeting="false" start="2015-12-10" duration="154" complete="0" expand="true"/>
+            </task>
+            <task id="2822" name="Piccolo2d Library Adaptation" meeting="false" start="2015-11-13" duration="31" complete="0" expand="true">
+                <task id="3560" name="clojure API wrappers" meeting="false" start="2015-11-13" duration="31" complete="0" expand="true"/>
+            </task>
+            <task id="3437" name="Patch Chart" meeting="false" start="2015-12-11" duration="156" complete="0" expand="true">
+                <task id="3438" name="Animated Entity State Patches" meeting="false" start="2015-12-11" duration="31" complete="0" expand="true"/>
+                <task id="3439" name="Static HTML Rendering" meeting="false" start="2016-07-11" duration="5" complete="0" expand="true"/>
+            </task>
+            <task id="89" name="Portable Animation Output" color="#000000" meeting="false" start="2016-07-25" duration="35" complete="0" expand="true">
+                <task id="2826" name="MP4 Export Library / FFMPEG Integration" meeting="false" start="2016-07-25" duration="10" complete="0" expand="true"/>
+                <task id="2841" name="JCodec MP4 encoder integration" meeting="false" start="2016-07-25" duration="10" complete="0" expand="true"/>
+                <task id="2837" name="Frame Capture" meeting="false" start="2016-08-08" duration="10" complete="0" expand="true"/>
+                <task id="2836" name="Frame-by-frame rendering" meeting="false" start="2016-08-15" duration="5" complete="0" expand="true"/>
+                <task id="2835" name="Event-stepped Piccolo2d Animation" meeting="false" start="2016-08-22" duration="15" complete="0" expand="true"/>
+            </task>
+        </task>
+        <task id="1654" name="Publication" color="#000000" meeting="false" start="2016-10-03" duration="24" complete="0" expand="true">
+            <task id="2604" name="AORS Submission" meeting="false" start="2016-10-03" duration="1" complete="0" expand="true"/>
+            <task id="1655" name="AORS Presentation" meeting="false" start="2016-11-01" duration="3" complete="0" expand="true"/>
+        </task>
+        <task id="2610" name="Training" color="#000000" meeting="false" start="2016-09-05" duration="45" complete="0" expand="true">
+            <task id="2612" name="On-site MARATHON + Clojure Training" meeting="false" start="2016-09-05" duration="5" complete="0" expand="true"/>
+            <task id="2743" name="Ad-Hoc MARATHON Training" meeting="false" start="2016-10-31" duration="5" complete="0" expand="true"/>
+        </task>
+        <task id="14" name="Research And Development" color="#000000" meeting="false" start="2017-01-11" duration="183" complete="0" expand="true">
+            <task id="2592" name="Analysis RD" meeting="false" start="2017-01-11" duration="109" complete="0" expand="true">
+                <depend id="2588" type="2" difference="0" hardness="Strong"/>
+                <task id="2593" name="Look Ahead" meeting="false" start="2017-01-11" duration="109" complete="0" expand="true"/>
+                <task id="2887" name="Large Scale Experimentation" meeting="false" start="2017-01-11" duration="63" complete="0" expand="true">
+                    <depend id="2899" type="2" difference="0" hardness="Strong"/>
+                    <task id="2893" name="Experiment Definition" meeting="false" start="2017-01-11" duration="23" complete="0" expand="true">
+                        <depend id="2909" type="2" difference="0" hardness="Strong"/>
+                        <depend id="5100" type="2" difference="0" hardness="Strong"/>
+                    </task>
+                    <task id="2909" name="Automated Experimentation" meeting="false" start="2017-02-13" duration="20" complete="0" expand="true">
+                        <depend id="2895" type="2" difference="0" hardness="Strong"/>
+                        <depend id="5100" type="3" difference="0" hardness="Strong"/>
+                    </task>
+                    <task id="2895" name="Experimental Results Reduction" meeting="false" start="2017-03-13" duration="20" complete="0" expand="true"/>
+                </task>
+                <task id="2899" name="Scalable Run Distribution" meeting="false" start="2017-04-10" duration="46" complete="0" expand="true">
+                    <task id="2903" name="Local Machine (simulated cluster)" meeting="false" start="2017-04-10" duration="23" complete="0" expand="true">
+                        <depend id="2900" type="2" difference="0" hardness="Strong"/>
+                        <depend id="2901" type="2" difference="0" hardness="Strong"/>
+                        <depend id="2905" type="2" difference="0" hardness="Strong"/>
+                    </task>
+                    <task id="2900" name="CAA Cluster" meeting="false" start="2017-05-11" duration="23" complete="0" expand="true"/>
+                    <task id="2905" name="NPS Cluster" meeting="false" start="2017-05-11" duration="23" complete="0" expand="true"/>
+                    <task id="2901" name="Army High Performance Computing Labs" meeting="false" start="2017-05-11" duration="23" complete="0" expand="true"/>
+                </task>
+            </task>
+            <task id="2588" name="Front End RD" meeting="false" start="2017-06-13" duration="74" complete="0" expand="true">
+                <task id="2594" name="Project Data Management" meeting="false" start="2017-06-13" duration="74" complete="0" expand="true">
+                    <task id="2595" name="Automated Project Setup" meeting="false" start="2017-06-13" duration="1" complete="0" expand="true"/>
+                    <task id="2596" name="Supply Utilities" color="#000000" meeting="false" start="2017-06-22" duration="20" complete="0" expand="true">
+                        <task id="2597" name="Interactive Supply Creation" meeting="false" start="2017-06-22" duration="10" complete="0" expand="true"/>
+                        <task id="2598" name="Interactive Supply Setup" meeting="false" start="2017-07-06" duration="10" complete="0" expand="true"/>
+                    </task>
+                    <task id="2599" name="Demand Utilities" meeting="false" start="2017-07-20" duration="11" complete="0" expand="true">
+                        <task id="2600" name="Interactive Demand Timeline" meeting="false" start="2017-07-20" duration="11" complete="0" expand="true"/>
+                    </task>
+                    <task id="2601" name="Policy Utilities" meeting="false" start="2017-08-10" duration="32" complete="0" expand="true">
+                        <task id="2602" name="Interactive Policy Creation" meeting="false" start="2017-08-10" duration="10" complete="0" expand="true"/>
+                        <task id="2603" name="Interactive Policy Visualization" meeting="false" start="2017-08-24" duration="10" complete="0" expand="true"/>
+                        <task id="2842" name="Interactive  Behavior Tree Constructor" meeting="false" start="2017-09-07" duration="12" complete="0" expand="true"/>
+                    </task>
+                </task>
+            </task>
+            <task id="2888" name="PreProcessing RD" color="#000000" meeting="false" start="2017-01-11" duration="110" complete="0" expand="true">
+                <task id="2890" name="Project Validation Tests" meeting="false" start="2017-01-11" duration="1" complete="0" expand="true"/>
+                <task id="5113" name="Project Version Control" meeting="false" start="2017-06-13" duration="1" complete="0" expand="true"/>
+            </task>
+        </task>
+        <task id="2608" name="Project Management" color="#8cb6ce" meeting="false" start="2016-09-12" duration="7" complete="0" expand="true">
+            <task id="2927" name="2018 Planning" color="#8cb6ce" meeting="false" start="2016-09-12" duration="7" complete="0" expand="true"/>
+        </task>
+        <task id="2609" name="Documentation" color="#8cb6ce" meeting="false" start="2016-05-04" duration="187" complete="0" expand="true">
+            <task id="2982" name="Whitepaper" meeting="false" start="2016-07-26" duration="10" complete="0" expand="true"/>
+            <task id="2980" name="MARTHONomicon Literate Program" meeting="false" start="2016-05-04" duration="178" complete="0" expand="true"/>
+            <task id="2981" name="Scripting Examples" meeting="false" start="2016-09-12" duration="6" complete="0" expand="true"/>
+            <task id="4610" name="User Guide" meeting="false" start="2016-12-08" duration="31" complete="0" expand="true"/>
+        </task>
+    </tasks>
+    <resources>
+        <resource id="0" name="Tom Spoon" function="1" contacts="" phone=""/>
+        <resource id="1" name="Craig Flewelling" function="2" contacts="" phone=""/>
+        <resource id="2" name="Rick Hanson" function="4" contacts="" phone=""/>
+        <resource id="3" name="Dr. Jordon Adams" function="3" contacts="" phone=""/>
+    </resources>
+    <allocations>
+        <allocation task-id="3" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="14" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="1654" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="2610" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="2608" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="2609" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="50" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="56" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="75" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="85" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="11" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="1088" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
+    </allocations>
+    <vacations/>
+    <previous/>
+    <roles roleset-name="Default"/>
+    <roles>
+        <role id="1" name="Delusional Architect"/>
+        <role id="2" name="Fancy Ditch Digger"/>
+        <role id="3" name="Script Kiddy"/>
+        <role id="4" name="Just Works Here"/>
+    </roles>
+</project>
