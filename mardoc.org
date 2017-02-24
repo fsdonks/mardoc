@@ -5,6 +5,10 @@
 #+STARTUP: showall
 #+LANGUAGE: en
 #+OPTIONS: ':t toc:nil
+#+LATEX_CLASS: amsart
+#+LATEX_CLASS_OPTIONS: [11pt]
+#+LATEX_HEADER: \parindent=0em
+#+LATEX_HEADER: \parskip=1em
 #+LATEX_HEADER: \textwidth=6.5truein
 #+LATEX_HEADER: \oddsidemargin=0truein
 #+LATEX_HEADER: \evensidemargin=0truein
