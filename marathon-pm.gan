@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="MARATHON Project Management" company="CAA" webLink="http://" view-date="2017-01-01" view-index="0" gantt-divider-location="748" resource-divider-location="528" version="2.8.1" locale="en_US">
+<?xml version="1.0" encoding="UTF-8"?><project name="MARATHON Project Management" company="CAA" webLink="http://" view-date="2017-06-01" view-index="0" gantt-divider-location="562" resource-divider-location="601" version="2.8.1" locale="en_US">
     <description><![CDATA[This is an projecet management view of the pending features, tasks, and efforts to develop MARATHON 4.x over the next year.]]></description>
-    <view zooming-state="default:11" id="gantt-chart">
-        <field id="tpd3" name="Name" width="456" order="0"/>
-        <field id="tpd4" name="Begin date" width="83" order="1"/>
-        <field id="tpd5" name="End date" width="190" order="2"/>
+    <view zooming-state="default:10" id="gantt-chart">
+        <field id="tpd3" name="Name" width="336" order="0"/>
+        <field id="tpd4" name="Begin date" width="65" order="1"/>
+        <field id="tpd5" name="End date" width="142" order="2"/>
     </view>
     <view id="resource-table">
-        <field id="0" name="Name" width="323" order="0"/>
-        <field id="1" name="Default role" width="201" order="1"/>
+        <field id="0" name="Name" width="359" order="0"/>
+        <field id="1" name="Default role" width="238" order="1"/>
     </view>
     <!-- -->
     <calendars>
@@ -105,19 +105,19 @@
             </task>
             <task id="9677" name="Browser-based Tutorials" meeting="false" start="2017-06-12" duration="10" complete="0" expand="true"/>
         </task>
-        <task id="9683" name="Research And Development" color="#000000" meeting="false" start="2017-07-05" duration="154" complete="0" expand="true">
-            <task id="9684" name="PreProcessing RD" color="#000000" meeting="false" start="2017-07-05" duration="10" complete="0" expand="true">
+        <task id="9683" name="Research And Development" color="#000000" meeting="false" start="2017-07-05" duration="154" complete="0" expand="false">
+            <task id="9684" name="PreProcessing RD" color="#000000" meeting="false" start="2017-07-05" duration="10" complete="0" expand="false">
                 <depend id="9687" type="2" difference="0" hardness="Strong"/>
                 <task id="9685" name="Project Validation Tests" meeting="false" start="2017-07-05" duration="10" complete="0" expand="true"/>
                 <task id="9686" name="Project Version Control" meeting="false" start="2017-07-05" duration="10" complete="0" expand="true"/>
             </task>
-            <task id="9687" name="Analysis RD" meeting="false" start="2017-07-19" duration="132" complete="0" expand="true">
+            <task id="9687" name="Analysis RD" meeting="false" start="2017-07-19" duration="132" complete="0" expand="false">
                 <depend id="9698" type="2" difference="0" hardness="Strong"/>
-                <task id="9901" name="PostProcessing" color="#000000" meeting="false" start="2017-07-19" duration="10" complete="0" expand="true">
+                <task id="9901" name="PostProcessing" color="#000000" meeting="false" start="2017-07-19" duration="10" complete="0" expand="false">
                     <task id="9903" name="Update Proc to Accept new Data Schemas" color="#8cb6ce" meeting="false" start="2017-07-19" duration="10" complete="0" expand="true"/>
                     <task id="9905" name="Modify Proc to Read Compressed Marathon Histories" meeting="false" start="2017-07-19" duration="10" complete="0" expand="true"/>
                 </task>
-                <task id="9688" name="Large Scale Experimentation" meeting="false" start="2017-07-19" duration="63" complete="0" expand="true">
+                <task id="9688" name="Large Scale Experimentation" meeting="false" start="2017-07-19" duration="63" complete="0" expand="false">
                     <depend id="5100" type="2" difference="0" hardness="Strong"/>
                     <depend id="9692" type="2" difference="0" hardness="Strong"/>
                     <depend id="9720" type="2" difference="0" hardness="Strong"/>
@@ -132,7 +132,7 @@
                     <task id="9691" name="Experimental Results Reduction" meeting="false" start="2017-09-18" duration="20" complete="0" expand="true"/>
                 </task>
                 <task id="9720" name="Client-side Resourcing Panel Support (TADMUDI)" meeting="false" start="2017-10-16" duration="5" complete="0" expand="true"/>
-                <task id="9692" name="Scalable Run Distribution" meeting="false" start="2017-10-16" duration="46" complete="0" expand="true">
+                <task id="9692" name="Scalable Run Distribution" meeting="false" start="2017-10-16" duration="46" complete="0" expand="false">
                     <task id="9693" name="Local Machine (simulated cluster)" meeting="false" start="2017-10-16" duration="23" complete="0" expand="true">
                         <depend id="9694" type="2" difference="0" hardness="Strong"/>
                         <depend id="9695" type="2" difference="0" hardness="Strong"/>
@@ -162,7 +162,7 @@
                 </task>
             </task>
         </task>
-        <task id="9827" name="Completed" color="#000000" meeting="false" start="2015-07-03" duration="396" complete="100" expand="false">
+        <task id="9827" name="Completed" color="#000000" meeting="false" start="2015-07-03" duration="396" complete="100" expand="true">
             <task id="9828" name="Capacity Analysis (2016)" color="#8cb6ce" meeting="false" start="2015-07-03" duration="336" complete="100" expand="true">
                 <depend id="5104" type="2" difference="0" hardness="Rubber"/>
                 <depend id="9829" type="2" difference="0" hardness="Strong"/>
@@ -229,7 +229,7 @@
                     <task id="9875" name="Event-stepped Piccolo2d Animation" color="#8cb6ce" meeting="false" start="2016-08-22" duration="15" complete="100" expand="true"/>
                 </task>
             </task>
-            <task id="9879" name="Publication (2016)" color="#000000" meeting="false" start="2016-09-12" duration="39" complete="100" expand="false">
+            <task id="9879" name="Publication (2016)" color="#000000" meeting="false" start="2016-09-12" duration="39" complete="100" expand="true">
                 <task id="9880" name="AORS Submission" color="#8cb6ce" meeting="false" start="2016-10-03" duration="1" complete="100" expand="true"/>
                 <task id="9881" name="AORS Presentation" color="#8cb6ce" meeting="false" start="2016-11-01" duration="3" complete="100" expand="true"/>
                 <task id="9882" name="Project Management-2016" color="#8cb6ce" meeting="false" start="2016-09-12" duration="7" complete="100" expand="true" cost-manual-value="0.0" cost-calculated="true">
