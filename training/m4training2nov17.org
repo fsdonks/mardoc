@@ -1,0 +1,378 @@
+# -*- mode: org; -*-
+
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/readtheorg/css/htmlize.css"/>
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/readtheorg/css/readtheorg.css"/>
+
+#+HTML_HEAD: <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+#+HTML_HEAD: <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="http://www.pirilampo.org/styles/lib/js/jquery.stickytableheaders.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="http://www.pirilampo.org/styles/readtheorg/js/readtheorg.js"></script>
+
+# This is a template for pushing out org files that are compatible 
+# with both HTML and latex export.  Specifically, these files 
+# Support code highlighting - for clojure code - and typeset 
+# the code to look different from the main sections.  The 
+# design is meant for providing a quick template to inject 
+# clojure source into org docs, and provide an interactive, 
+# REPL-friendly presentation.
+
+#+TITLE: MARATHON 4 Training Brief 2 Nov 2017
+#+AUTHOR: T. Spoon
+#+DATE: 1 Nov 2017
+
+* Introduction 
+** Why are we here? 
+- Learn about MARATHON?
+- Art or Science?
+- Me: Get feedback, probe, find shortest path to competence.
+  - You should already be "functional" based on existing training
+    resources.
+  - How do we make you a more competent analyst when using M4?
+- You: ?
+
+* Digression: Near-term TODOs and Updates (coming in 4.1.3)
+** UI for fill-charts -> pptx  
+  - Just get the option to produce charts in the pipeline somehow...
+  - Add default configs?
+    - Provide a config map?
+
+** UI for processing (right-click popup menu over project file) 
+Done!
+
+** Bugfix for seemingly duplicate policy position names leading to deployability error
+After expanding on Lee's error-throwing RA case, patched the behavioral
+issue where duplicate policy positions caused missed deployment status
+updates after policy changes.
+- Done! Reference commit cbc04a9.
+
+** Bugfix for bogbudget variation due to policy change.
+This was a novel corner case unexposed in MARV, patch is in 
+and pending 4.1.3 release.  Exposed during post-patch testing for preceding
+case (thanks Mike!). 
+- Done! Reference commit cbc04a9.
+
+** Splash screen during loading
+Done!
+
+** Establish deterministic sort criteria fairly independent of supply order
+- Reference commit f340dae
+- Total ordering of supply method (from MARV) had side-effect:
+  - Dependency on order of supplyrecords.
+  - Unintentionl bias exposed when AC records from RA run were 
+    accidentally pulled in last (different from the internal RA runs).
+    - Resulting sanity-check capacity analysis had 1 day missed demand...
+    - Ordering supply records with AC first resolved issue.
+- LCG Implementation in M4
+  - Use PRNG drawn from LCG to create weighted supply
+    - :weight - not :unit-index - is the tie-breaking criteria.
+      - uniformly distributed.
+      - simultaneously:
+        - retains platform-independent consistency between runs.
+        - eliminates bias introduced by supply order being related
+          to :unit-index.        
+    - Should be trivially portable to VBA iff we want to have
+      a commensurate fallback for near-term legacy vnv.
+      - MPI-v84?
+
+* Perceived FS Weaknesses (call me out if I'm wrong)
+To be clear, "ignorant" used hereafter:
+- lacking knowledge, information, or awareness about something in particular.
+
+*** Users Treat M4 (M3 before) Like a "Black Box."
+It's too common/easy to assume an opaque, formless implementation.
+- It makes the sausage.
+- This view carries low cognitive burden and low responsibility, but low effectiveness.
+
+Contrary to other models, we have the luxuries of openess, access to the developer, and
+a theoretical foundation upon which the implementation is based.
+- M4 actually tells you (in output, and interactively) how the sausage was made.
+- If you use the REPL, you get access to a plethora off powerful tools that
+  allow you to interactively explore said process.
+  - Plus the commented source code / documentation.
+
+Users should have a firm grasp of the rotational analysis practices upon which M4 (M3, M2, M1, etc.) stand.
+- Everyone should be able to explain "How" MARATHON works.
+  - What are unit/demand entities?
+  - What makes them "go"? 
+  - What are the causal relationships between supply, demand, policy?
+  - Where are the sensitivities?
+
+The Original 3-day course continues to be at http://marathon.s3-website-us-gov-west-1.amazonaws.com/trainingslides.html .
+All of the course content is still relevant for self-learning and reference.
+- Currently under expansion / slight revision with M4 examples and 
+  added prose (transitioning from slides).
+
+*** Ignorant of Highly Useful Canonical Outputs That Are Fundamental to Understanding Behavior and Deep Diagnostics. 
+- Deployments
+  - Tell us when entities deployed and where....and a bevy of context
+    about the entity prior to deployment.
+    - How much dwell? 
+    - Where's it deploying from?
+    - What policy?
+    - What kind of demand?
+    - How much bogbudget?
+- Event Log
+  - Literally everything that happens of import is logged with readable 
+    event messages.  
+  - Tells the "story" of what happened from initialization to end, and all parts 
+    between.
+    - Actually multiple concurrent "stories" if you filter by entity name.
+- DemandTrends
+  - Sampling of active demands on days when demand changes.
+  - Provides snapshots of the state (read fill) of demand.
+- Location Records.
+  - Granular log of entity movement [from,to].
+
+*** Ignorant of Diagnostic Techniques and Simple Methods for Output Analysis
+- "Something went wrong; I'm helpless..."
+- Is the output right?
+  - "It ran without error" <> "ran as intended..."
+
+*** Lack of Simple Quality Assurance / Sanity Checking...
+- Are you running the file you intended?
+- Is the run setup "correctly" for some defintion of correct?
+- Does the output match your internal expectations?
+  - Do you "have" internal expectations?
+    - Based on what?  Static Analysis?  Other heuristics?
+
+*** End result: Divergent Understanding, Potentially Weak Analysis
+- We need to establish a common, shared understanding of how 
+  MARATHON is supposed to work.
+- Build a mental model from this understanding, and apply it to our 
+  analysis.
+- Transition from passive analysis ["I did the run"], to active analysis:
+  - "The run yielded these insights, some of which did not meet expectations.
+     Digging into the output, we found that the results were noteworthy because.."
+- *Aggressively pursue truth* when expectations diverge from observations.
+  - Why did it happen?
+    - Real, Artifact, or Bug?
+    - If you claim one, =prepare to defend why= it's not the others...
+
+* Sources of Complexity
+** Supply Dynamics
+- Initial conditions (i.e., distribution of supply)
+  matters.  
+- We can create down-stream effects by changing the initial
+  state of an entity or entities.
+  - Sometimes non-obvious until we look at the system in 
+    motion.
+** Demand Dynamics
+- Initial conditions (i.e., scheduling of demand)
+  matters.  
+- We can create down-stream effects by changing the timing, 
+  category, priority, sourcing criteria (SourceFirst).
+  - Sometimes non-obvious until we look at the system in 
+    motion.
+
+** Policy Dynamics
+- Policy changes and period definitions define a temporally
+  varying behavioral script that "some" (most?) entities 
+  will follow.
+  - Some will not follow the script exactly, due to 
+    business rules governing policy changes (how and when).
+- It's possible to inject policy-driven artifacts into the 
+  system accidentally.
+  - Ex. RA from Rochelle.
+
+* Policy
+** What is policy, and what does it mean to change?
+A policy is the structured progression of "policy positions" and 
+associated states that a unit entity will follow.  
+
+We view policies as directed graphs with special properties (namely one cycle only), where
+weights delineate the time an entity spends in policy position (in a state)
+prior to proceeding.  
+
+Policies may be composed to create time (or event) varying policies to
+express more complex behavior.  If a unit follows a composite policy, it 
+may change policies during the simulation.
+
+** ARFORGEN Policy Example (Atomic Policies) 
+#+NAME:   fig:policy
+#+CAPTION: AC 9:15 Policy Lifecycle
+#+ATTR_LATEX: :float wrap :width 0.5\textwidth
+#+attr_html: :width 344px  
+     [[./images/ac9-15.png]]
+#+CAPTION: AC 12:36 Policy Lifecycle
+#+ATTR_LATEX: :float wrap :width 0.7\textwidth 
+#+attr_html: :width 482px
+     [[./images/ac12-36.png]]
+#+CAPTION: RC 12:48 Policy Lifecycle
+#+ATTR_LATEX: :float wrap :width \textwidth 
+#+attr_html: :width 688px
+     [[./images/rc12-48.png]] 
+** Atomic vs. Composite Policies
+#+CAPTION: Atomic policies are composed into composite policies by period.
+#+NAME:   fig:SED-HR4049
+   [[./images/policies.png]]
+** Sustainable Readiness (SR) and Demand Driven Policy
+Sustainable Readiness necessitates a blend of global policy templates, 
+like progressive readiness - along with the ability for demands to arbitrarily
+override policy and entity behavior.  
+- SR extends upon the policy model detailed here.
+- Outside the scope of this brief, but be aware of other ways to manage policy.
+** Determining Policy Changes - Progressive Readiness (not SR)
+Is the unit following an atomic policy? 
+- Never changes (unless some exogenous force makes it, i.e. a special script).
+
+Is the unit following a composite policy?
+- Did a period change occur?
+  - Is there an atomic policy associated with the period under the 
+    unit's composite policy?
+    - Is the unit able to change policy?
+       - Not bogging | non-bogging (occupied).
+       - Has not gone to recovery, re-entered deployable status?
+       - (i.e., trying to expend remaining bogbudget in this cycle)
+       - Apply the policy change.
+    - Defer policy change until unit is able.
+
+Otherwise do nothing.
+** When a Policy Change is Deferred
+In the following cases, the policy change is deferred until the unit
+completes a cycle - as defined by the "start cycle" position of its policy,
+typically a "reset" position.
+- bogging | non-bogging (effectively occupied).
+- Went to recovery earlier, re-entered deployable status.
+  - (i.e., trying to expend remaining bogbudget in this cycle)
+
+Units will defer the policy change until the next cycle.  The next cycle 
+will occur when 
+- A demand occupying the unit ends, sending the unit "home".
+  a) If the unit cannot be used as followon supply for related demands
+  b) cannot feasibly recover and re-enter a deployable state (typically the
+     available pool)
+  c) the unit resets to its start state.
+- A recovered unit trying to spend its remaining bogbudget
+  a) is not used to fill a demand
+  b) exceeds the maximum cyclelength of its current policy
+  c) resets to its start state.
+
+Note: if multiple policy changes are deferred, only the most recent policy 
+change is applied.
+
+** How Policy Changes Are Applied
+Given a change from policy A to B for unit U, 
+1) Compute a normalized coordinate [0...1], k, where 
+   - k = cycletime(U)/cyclelength(A)
+2) Determine cycletime'
+   - cycletime' = k*cyclelength(B)
+3) Derive policy position and state in new policy relative to 
+   cycletime' .
+4) Apply relevant position, state changes. 
+
+** Potential Complexities With Policy Changes
+- The possibility of deferred policy changes means some units
+  may not change when the period changes.
+  - How sensitive are your expectations about performance relative
+    to exact timing of policy changes? 
+- (Old) Transitioning between finite and effectively infinite
+   cyclelengths used to cause artifacts (i.e. every unit goes to 
+   0 cycletime in new policy).
+- It's possible to construct scenarios where changing policies 
+  effectively nullifies your supply, making everything largely 
+  non-deployable under the new policy for an observed period.
+  - Rochelle case.
+** Policy Change Flow Chart
+
+* "Documented" Fills Chart
+** Unsure what "documented means"; assuming "interpreted"
+  - Given a dwell-over-fill chart, can you provide
+    a useful synopsis? 
+
+** What are the inflection points?
+  - Do they match expectations? 
+  - Examples:
+    1) If we have a peak demand that outstrips our supply, we'd
+       reasonably expect a likely red-lining of the supply at some
+       point.
+
+    2) If we have a supply that drastically outstrips our peak
+       demand, we'd reasonably expect higher dwell trends, no
+       red-lining, and good fill.
+     
+** What do general trends say about the phenomena under observation?
+Does dwell take a hit and never recover?
+- Supply is likely insufficient; either add supply, 
+  relax policy, or reduce demand.
+Are there consistent periods of missed demand?
+- Sporadic misses may be temporally driven; consequence
+  of the dynamics of changing supply, policy, and demand.
+  - Entirely common to observe periodicity in missed demand: 
+    - Cyclical policy dynamics in motion create periods of 
+         feast and famine; compounded in the face of a
+         dynamically unstable system.              
+Are units being utilized "as expected"?
+- Lack of utilization could have many causes: 
+  1) No opportunity to deploy due to policy changes / deferral, 
+  2) Initial conditions of supply (namely cycletime distributions)
+     create a relative period of famine.
+  3) Demand timing preceding the period of interest indirectly
+     conditions the supply, upending "normal" expectations.
+     - Could make the supply appear to be more or less efficient, 
+       due to constructive or destructive signals.       
+
+** Is the Supply Sufficiently Capacious?
+- Generate a dwell-over-fill chart and analyze using the previous
+  questions and your knowledge of static analysis.
+
+* Event log / Output Analysis lesson
+** Dynamics are tricky, can lead to counterintuitive yet valid behavior.
+  - We want an auditable system vs. a "black box," with the ability to
+    understand cause and effect. 
+  - Counterintuitive results are fine if they are explainable.
+    - Often leads to insight about business rules, along with 
+      business rule refinement.
+    - Ocassionally identifies errors in MARATHON or input data.
+      - Don't be afraid to question your tools.
+
+** Since we're in a Discrete Event Simulation, events indicate change
+  - Broadcast a meaningful event vocabulary, and get a descriptive
+    record of causility for free.
+  - Changes indicate discrete points at which the system evolved.
+  - History of changes provides causal links.
+    - Useful if the history is rich [it is in M4].
+
+** Second-most powerful tool for understanding causal relationships.
+  - Provides an easily searched, yet complete history of the meaningful
+    events of every entity and system in the simulation.
+  - Tab-delimited format means you can filter it in Excel easily...
+  - Common Idiom:
+    - We're interested in entity 10 for some reason...
+    - We'd like to know why entity 10 never deployed during the surge.
+      - We can examine entity 10's history, via the event log, to 
+        see what it's context would have been prior to a deployment...
+      - The context makes sense (simply a missed opportunity, lacked 
+        bog budget, etc.) or it leads to further investigation (entity
+        was apparently available, able to deploy, but didn't get used....why not?)
+  
+
+* Post-run Diagnostics Flow Charts
+  - Medical RA case study
+  - Lee RA debug ex. 
+
+* Diff tools / Other Tooling in M4
+- Short demo.
+- Extract lesson from Craig REPL log.
+
+** What is the distribution of units prior to the surge?
+  - (More Generally) What is the distribution of units at time (t)?
+  - Prior to filling after changing policy?
+
+* Backup / Unfinished
+
+** "validate model outputs" "communicate results"
+
+** Detailed cap analysis module
+- What detail is lacking?
+
+** Requirements Analysis Formulation
+ - RA formulation:
+ - D      = [AC NG RC] in R3
+ - Init   = [AC NG RC] in R3
+ - supply = xD + init 
+ - Min z s.t. 
+ - Misses(supply) = [(tmin,n) | (t,n) <- unfilled_demands(supply)]
+ - Sum(t, (t,n)) <- misses, = 0
+
+
+   
