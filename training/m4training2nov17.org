@@ -30,50 +30,6 @@
   - How do we make you a more competent analyst when using M4?
 - You: ?
 
-* Digression: Near-term TODOs and Updates (coming in 4.1.3)
-** UI for fill-charts -> pptx  
-  - Just get the option to produce charts in the pipeline somehow...
-  - Add default configs?
-    - Provide a config map?
-
-** UI for processing (right-click popup menu over project file) 
-Done!
-
-** Bugfix for seemingly duplicate policy position names leading to deployability error
-After expanding on Lee's error-throwing RA case, patched the behavioral
-issue where duplicate policy positions caused missed deployment status
-updates after policy changes.
-- Done! Reference commit cbc04a9.
-
-** Bugfix for bogbudget variation due to policy change.
-This was a novel corner case unexposed in MARV, patch is in 
-and pending 4.1.3 release.  Exposed during post-patch testing for preceding
-case (thanks Mike!). 
-- Done! Reference commit cbc04a9.
-
-** Splash screen during loading
-Done!
-
-** Establish deterministic sort criteria fairly independent of supply order
-- Reference commit f340dae
-- Total ordering of supply method (from MARV) had side-effect:
-  - Dependency on order of supplyrecords.
-  - Unintentionl bias exposed when AC records from RA run were 
-    accidentally pulled in last (different from the internal RA runs).
-    - Resulting sanity-check capacity analysis had 1 day missed demand...
-    - Ordering supply records with AC first resolved issue.
-- LCG Implementation in M4
-  - Use PRNG drawn from LCG to create weighted supply
-    - :weight - not :unit-index - is the tie-breaking criteria.
-      - uniformly distributed.
-      - simultaneously:
-        - retains platform-independent consistency between runs.
-        - eliminates bias introduced by supply order being related
-          to :unit-index.        
-    - Should be trivially portable to VBA iff we want to have
-      a commensurate fallback for near-term legacy vnv.
-      - MPI-v84?
-
 * Perceived FS Weaknesses (call me out if I'm wrong)
 To be clear, "ignorant" used hereafter:
 - lacking knowledge, information, or awareness about something in particular.
@@ -102,7 +58,7 @@ All of the course content is still relevant for self-learning and reference.
 - Currently under expansion / slight revision with M4 examples and 
   added prose (transitioning from slides).
 
-*** Ignorant of Highly Useful Canonical Outputs That Are Fundamental to Understanding Behavior and Deep Diagnostics. 
+*** Ignorant of Highly Useful Canonical Outputs Fundamental to Understanding Behavior and Diagnostics. 
 - Deployments
   - Tell us when entities deployed and where....and a bevy of context
     about the entity prior to deployment.
@@ -127,6 +83,7 @@ All of the course content is still relevant for self-learning and reference.
 - "Something went wrong; I'm helpless..."
 - Is the output right?
   - "It ran without error" <> "ran as intended..."
+- We'll explore a thorough technique later...
 
 *** Lack of Simple Quality Assurance / Sanity Checking...
 - Are you running the file you intended?
@@ -211,6 +168,13 @@ like progressive readiness - along with the ability for demands to arbitrarily
 override policy and entity behavior.  
 - SR extends upon the policy model detailed here.
 - Outside the scope of this brief, but be aware of other ways to manage policy.
+
+** Policy Change Flow Chart
+#+CAPTION: Applying and Deferring Policy Changes
+#+ATTR_LATEX: :float wrap :width \textwidth 
+#+attr_html: :width 688px
+     [[./images/policychange.png]] 
+
 ** Determining Policy Changes - Progressive Readiness (not SR)
 Is the unit following an atomic policy? 
 - Never changes (unless some exogenous force makes it, i.e. a special script).
@@ -227,6 +191,7 @@ Is the unit following a composite policy?
     - Defer policy change until unit is able.
 
 Otherwise do nothing.
+
 ** When a Policy Change is Deferred
 In the following cases, the policy change is deferred until the unit
 completes a cycle - as defined by the "start cycle" position of its policy,
@@ -272,7 +237,7 @@ Given a change from policy A to B for unit U,
   effectively nullifies your supply, making everything largely 
   non-deployable under the new policy for an observed period.
   - Rochelle case.
-** Policy Change Flow Chart
+
 
 * "Documented" Fills Chart
 ** Unsure what "documented means"; assuming "interpreted"
@@ -411,6 +376,50 @@ case free of confounding factors.
 ** What is the distribution of units prior to the surge?
   - (More Generally) What is the distribution of units at time (t)?
   - Prior to filling after changing policy?
+
+* Digression: Near-term TODOs and Updates (coming in 4.1.3)
+** UI for fill-charts -> pptx  
+  - Just get the option to produce charts in the pipeline somehow...
+  - Add default configs?
+    - Provide a config map?
+
+** UI for processing (right-click popup menu over project file) 
+Done!
+
+** Bugfix for seemingly duplicate policy position names leading to deployability error
+After expanding on Lee's error-throwing RA case, patched the behavioral
+issue where duplicate policy positions caused missed deployment status
+updates after policy changes.
+- Done! Reference commit cbc04a9.
+
+** Bugfix for bogbudget variation due to policy change.
+This was a novel corner case unexposed in MARV, patch is in 
+and pending 4.1.3 release.  Exposed during post-patch testing for preceding
+case (thanks Mike!). 
+- Done! Reference commit cbc04a9.
+
+** Splash screen during loading
+Done!
+
+** Establish deterministic sort criteria fairly independent of supply order
+- Reference commit f340dae
+- Total ordering of supply method (from MARV) had side-effect:
+  - Dependency on order of supplyrecords.
+  - Unintentionl bias exposed when AC records from RA run were 
+    accidentally pulled in last (different from the internal RA runs).
+    - Resulting sanity-check capacity analysis had 1 day missed demand...
+    - Ordering supply records with AC first resolved issue.
+- LCG Implementation in M4
+  - Use PRNG drawn from LCG to create weighted supply
+    - :weight - not :unit-index - is the tie-breaking criteria.
+      - uniformly distributed.
+      - simultaneously:
+        - retains platform-independent consistency between runs.
+        - eliminates bias introduced by supply order being related
+          to :unit-index.        
+    - Should be trivially portable to VBA iff we want to have
+      a commensurate fallback for near-term legacy vnv.
+      - MPI-v84?
 
 * Backup / Unfinished
 
