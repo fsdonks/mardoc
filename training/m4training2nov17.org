@@ -112,7 +112,7 @@ All of the course content is still relevant for self-learning and reference.
     - What kind of demand?
     - How much bogbudget?
 - Event Log
-  - Literally everything that happens of import is logged with readable 
+  - Literally everything of import that happens is logged with readable 
     event messages.  
   - Tells the "story" of what happened from initialization to end, and all parts 
     between.
@@ -127,6 +127,52 @@ All of the course content is still relevant for self-learning and reference.
 - "Something went wrong; I'm helpless..."
 - Is the output right?
   - "It ran without error" <> "ran as intended..."
+
+My method (dealing with errors and counterintuitive output), 
+centers on successive refinement to find the smallest possible
+case free of confounding factors.
+
+- What happened? 
+  - Error messages typically provide context for why things bombed.
+    - "Unit 22 is not deployable!"
+      - Natural question is "What happened to Unit 22 prior and during?"
+- When?
+  - Error message or output will tell us when things went south.
+- To whom?
+  - Either error message calls out the bad entity, or we triangulate
+    using time to find a suitable candidate(s).
+- Can I isolate a single entity or SRC?
+   - Even if there's a sweeping phenomena, it's much easier to find 
+     an instance, and work from there.
+- What's the smallest population I can use that reproduces the phenomenon?
+   - Use 'enabled' fields to turn off what you don't need.    
+   - Faster to run and analyze.
+- Can I explain the behavior given the entity's history? 
+  - Filter deployments for the entity of interest, is there a consistent
+    story here?
+    - Ex. Entity deployed, did a bunch of followon deployments, policy 
+      changed, then phenomena occured during next deployment.
+    - Ex. Entity never deployed, despite being a prime candidate.
+  - Filter the event-log using string contains, looking for the entity's 
+    name.  
+      - This provides an exhaustive history of what the entity
+        did, from initialzation to the time of interest.
+      - Work backwards from time of interest, looking at "close" 
+        history to see if anything doesn't add up.
+- Is the behavior sensitive to other inputs? 
+  - ex. If I run with an atomic policy, what's different?
+  - ex. If I run with more supply, do I get more fill / dwell?
+  - ex. If I run with less supply, do I get less fill / dwell?
+- Are there other cases where this does not occur? 
+  - ex. I just did a run with a different policy, no problems.
+  - What's different?
+- Does static analysis support the phenomena? 
+  - ex. I can expect ~%30 of my supply to be available under the policy 
+    based on static analysis, leaving me 6 deployable under idealized
+    conditions.
+    - Given the peak demand is 7, I know I'll either have a shortfall
+      or some stress in dwell (for regular demands), but mostly should
+      meet demand.
 
 *** Lack of Simple Quality Assurance / Sanity Checking...
 - Are you running the file you intended?
@@ -345,7 +391,6 @@ Are units being utilized "as expected"?
         bog budget, etc.) or it leads to further investigation (entity
         was apparently available, able to deploy, but didn't get used....why not?)
   
-
 * Post-run Diagnostics Flow Charts
   - Medical RA case study
   - Lee RA debug ex. 
@@ -368,11 +413,12 @@ Are units being utilized "as expected"?
 ** Requirements Analysis Formulation
  - RA formulation:
  - D      = [AC NG RC] in R3
+   - D.I = 1
  - Init   = [AC NG RC] in R3
  - supply = xD + init 
  - Min z s.t. 
- - Misses(supply) = [(tmin,n) | (t,n) <- unfilled_demands(supply)]
- - Sum(t, (t,n)) <- misses, = 0
+ - Misses(supply) = sum(t, [(t,n) <- unfilled_demands(supply)])
+ - Misses(supply) = 0
 
 
    
