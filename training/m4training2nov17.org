@@ -434,7 +434,8 @@ Done!
    - D.I = 1
  - Init   = [AC NG RC] in R3
  - supply = xD + init 
- - Min z s.t. 
+ - Min x s.t. 
+ - x >= 0
  - Misses(supply) = sum(t, [(t,n) <- unfilled_demands(supply)])
  - Misses(supply) = 0
 
