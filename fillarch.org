@@ -20,3 +20,48 @@ for this.
 - restricted categories needs to be better documented and explained.
 - ~derive-category~ needs to be better documented and explained.
 
+
+
+* Refactoring Rules Notes
+
+** Types
+Alias filter = |unit-filter | [unit filter] 
+Alias buckets = {cat {unit-id unit}}
+Alias suppler = env -> ctx -> buckets
+Alias unit-filter = unit -> bool
+Alias unit-ordering = unit -> unit -> 0 | 1 | -1
+Alias ordering = unit-ordering | [unit-ordering]
+Alias env = {:src string
+             :cat demand-category
+             :name string
+             :order-by ordering
+             :where    filter
+             :required int}
+
+** Functions
+*** marathon.ces.query
+computed-categories :: {k supplier}
+compute-nonbog :: supplier
+computed :: k->maybe(supplier)
+*** marathon.ces.fill
+restricted-categories :: {k demand-category}
+derive-category :: demand -> supply-category -> :default | restricted-category
+demand-filters :: {category unit-filter}
+resolve-source-first :: k -> ordering
+demand->rule :: demand->env 
+*** marathon.ces.query
+stock-queries :: atom {k->ordering}
+
+** How does my demand partition and order supply?
+- 1 _SRC_  which deployable supply buckets should I look at?
+- 2 ~SRC~ What SRC should I prefer?
+- 3 _CAT_ which units in deployable supply buckets can I include?
+  - 4     which additional supply can I include? (computed)
+  - 5     which supply categories can I use? (restricted)
+- 6 _where_ which units can I use from the (restricted U deployable U computed)
+            supply?
+- 7 ~order-by~ How should I order the supply (restricted U deployable U computed)?
+
+         
+
+
