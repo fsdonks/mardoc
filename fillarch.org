@@ -1,0 +1,67 @@
+* Notes on M4 Fill Architecture and Extensions
+
+** Flow of Filling Demand
+
+- Default supply is in Deployable-Buckets under :default
+- ~compute-supply~ maps _category_ to additional _supply_ computed beyond 
+  default deployable assumptions (indicated by presence in a deployable bucket).
+- ~find-feasible-supply~ maps one or more _categories of supply_ {cat units} through
+  a map of _src_ preferences (via _src-map_, which denotes substituts), constrained by a
+  _category_ (optional), to collect a seq of units weighted by _substitution path length_.
+- This _ordered supply_ (ordered by substitution weight, implicitly filtered by
+  substitutible units), is then filtered by _where_ and sorted by _order-by_.
+- We control _computed-supply_, _deployable supply_, _preference_, _feasibility_, by 
+  ~demand->rule~ and substition (_src-map_)
+
+There is a reference in fillarch.graphml that depicts the functional dependencies
+for this.
+
+** Documentation RFIs
+- restricted categories needs to be better documented and explained.
+- ~derive-category~ needs to be better documented and explained.
+
+
+
+* Refactoring Rules Notes
+
+** Types
+Alias filter = |unit-filter | [unit filter] 
+Alias buckets = {cat {unit-id unit}}
+Alias suppler = env -> ctx -> buckets
+Alias unit-filter = unit -> bool
+Alias unit-ordering = unit -> unit -> 0 | 1 | -1
+Alias ordering = unit-ordering | [unit-ordering]
+Alias env = {:src string
+             :cat demand-category
+             :name string
+             :order-by ordering
+             :where    filter
+             :required int}
+
+** Functions
+*** marathon.ces.query
+computed-categories :: {k supplier}
+compute-nonbog :: supplier
+computed :: k->maybe(supplier)
+*** marathon.ces.fill
+restricted-categories :: {k demand-category}
+derive-category :: demand -> supply-category -> :default | restricted-category
+demand-filters :: {category unit-filter}
+resolve-source-first :: k -> ordering
+demand->rule :: demand->env 
+*** marathon.ces.query
+stock-queries :: atom {k->ordering}
+
+** How does my demand partition and order supply?
+- 1 _SRC_  which deployable supply buckets should I look at?
+- 2 ~SRC~ What SRC should I prefer?
+- 3 _CAT_ which units in deployable supply buckets can I include?
+  - 4     which additional supply can I include? (computed)
+  - 5     which supply categories can I use? (restricted)
+- 6 _where_ which units can I use from the (restricted U deployable U computed)
+            supply?
+- 7 ~order-by~ How should I order the supply (restricted U deployable U computed)?
+
+         
+
+
