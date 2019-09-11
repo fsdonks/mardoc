@@ -1,3 +1,89 @@
+* Problem
+We have a composition of rules that define how to match supply to demand (for fill).
+Initially, this rule set was governed fairly simple concepts and expressed by matching
+user-supplied data from the inputs to a pre-determined set of internal rules.
+
+Over the years, the implementation has ended up covering down on additional corner
+cases that affect both the scope and preference of supply.  We unintentionally
+blurred the meaning (or perhaps overloaded it) of outwardly simple rules,
+and ended up with a system that's (in some cases) harder to maintain and
+understand.  
+
+- For maintenance purposes, this should allow a one-time investment
+  in collating the existing querying infrastructure.  
+- For usability purposes, we should have a general means to define complex
+  fill rules without their current opacity or overloaded terms.
+
+** High level overview
+
+At the simplest level, we have a triple of inputs that determines how a 
+given demand should be filled:
+
+[src sourcefirst category] :: DemandRule
+
+We'll annotate this triple as a DemandRule.
+
+These legacy fields dictate the capability being asked for (src),
+some notion of the preferred type of unit (aside from capability)
+attributes (sourcefirst), and the class of units that are considered
+feasible (category).
+
+In the limit, we have the total supply available as potential fills.
+In practice, we interpret this triple into one or more functions
+that project the total supply in available supply.
+
+The projection of available supply is then projected onto an
+ordered supply (again, determined by an ordering interpreted
+by the triple).
+
+** Deriving a querying environment
+
+In order to engage our querying infrastructure, we need to
+interpret the DemandRule into a querying environment to
+use against our entity store to execute a query.
+
+For reference, the information necessary to express the query
+rules is contained in a QueryEnvironment :: env :
+
+Alias env = {:src string
+             :cat demand-category
+             :name string
+             :order-by ordering
+             :where    filter
+             :required int}
+
+So in general, we interpret a DemandRule into a 
+QueryEnvironment, which then determines how to
+project the entitystore onto an ordered set of
+feasible entities that can fill the demand.
+
+The interpretation of the DemandRule to a QueryEnvironment
+asks these questions (denoted by _filtering_ and ~ordering~):
+
+*** How does my demand partition and order supply?
+- 1 _SRC_  which deployable supply buckets should I look at?
+- 2 ~SRC~ What SRC should I prefer?
+- 3 _CAT_ which units in deployable supply buckets can I include?
+  - 4     which additional supply can I include? (computed)
+  - 5     which supply categories can I use? (restricted)
+- 6 _where_ which units can I use from the (restricted U deployable U computed)
+            supply?
+- 7 ~order-by~ How should I order the supply (restricted U deployable U computed)?
+
+We already have an overloading of terms for interpretation.
+- SRC [capability] determins both feasibility and order via different mechanisms.
+- CAT [category]   projects existing supply as well as computes potentially novel
+      or undetermined supply from the store.
+- _where_ serves as a "global" filter and may be decoupled from the considerations
+  in any of the preceding rules.  This provides a final hook into filtering.
+- ~order-by~ similarly provides a final hook in to ordering the supply.
+
+Both the :where and :order-by keys are optional, and if not present, have no effect
+on the resulting query, instead delegating to the default interpreted query results
+implied by [SRC] and [CAT].
+
+** Why is this a 
+
 * Notes on M4 Fill Architecture and Extensions
 
 ** Flow of Filling Demand
@@ -40,28 +126,63 @@ Alias env = {:src string
 
 ** Functions
 *** marathon.ces.query
-computed-categories :: {k supplier}
-compute-nonbog :: supplier
-computed :: k->maybe(supplier)
+**** computed-categories :: {k supplier}
+**** compute-nonbog :: supplier
+**** computed :: k->maybe(supplier)
+
 *** marathon.ces.fill
-restricted-categories :: {k demand-category}
-derive-category :: demand -> supply-category -> :default | restricted-category
-demand-filters :: {category unit-filter}
-resolve-source-first :: k -> ordering
-demand->rule :: demand->env 
+**** restricted-categories :: {k demand-category}
+
+restricted-categories is a sratch map that caches information
+about which categories are considered "restricted" and should
+use a specific, non-default category when looking up supply.
+
+**** derive-category :: demand -> supply-category -> :default | restricted-category
+
+derive-category is overloaded to interpret a supply-category as either a vector
+of [src #{demandgroup1 demandgroup2 ...}] or as a simple atomic value (typically
+a string).
+
+1) If the input is a vector, the "implicit" process of deriving the category for
+demand d is to see if the demandgroup for d is present in the set of groups
+provided in [src groups]. If so, we return d's demandgroup. This is an
+implementation specific to followon (and later SRM) demands, in that we want to
+define a narrow, non-default set of supply to look at, which is associated
+explicitly by some key (typically but not exclusively :demandgroup). It's
+basically a re-routing or alternate projection of the supply for querying
+("where"), which allows unique considerations of "feasible" supply when filling,
+and allows highly variable fill rules.
+
+2) If the input is "not" a vector, we branch off into interpreting
+the category by looking to see if d has an associated category (we ignore the
+supply-category since it doesn't matter).
+  - if the demand has no category we use the :default deployable
+    category.  This will later imply that we should use
+    units from the default deployable buckets, with SRCs
+    that are capability substitutes for the demand's SRC.
+  - If the proposed category is "restricted", where it exists in
+    a map of {restricted actual} categories, we return the
+    restricted category.  This implies that there is a
+    special consideration of supply for "this" demand,
+    which must be drawn from units in said "restricted"
+    category, vs. a potentially wider swath of categories (to include
+    the :default).  We implemented this interpretation to express
+    deviations from the normal order of fill, such as NonBOG.
+  - If the demand category is not restricted, we assume it's
+    effectively meaningless annotated information, and
+    fill with the :default category.
+
+-  *Can we accomplish "restriction" in a more general, declarative way instead
+    of having a single global map that caches this information?*
+
+
+**** demand-filters :: {category unit-filter}
+**** resolve-source-first :: k -> ordering
+**** demand->rule :: demand->env 
 *** marathon.ces.query
-stock-queries :: atom {k->ordering}
+**** stock-queries :: atom {k->ordering}
 
-** How does my demand partition and order supply?
-- 1 _SRC_  which deployable supply buckets should I look at?
-- 2 ~SRC~ What SRC should I prefer?
-- 3 _CAT_ which units in deployable supply buckets can I include?
-  - 4     which additional supply can I include? (computed)
-  - 5     which supply categories can I use? (restricted)
-- 6 _where_ which units can I use from the (restricted U deployable U computed)
-            supply?
-- 7 ~order-by~ How should I order the supply (restricted U deployable U computed)?
 
-         
+
 
 
