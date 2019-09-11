@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="MARATHON Project Management" company="CAA" webLink="http://" view-date="2019-08-01" view-index="0" gantt-divider-location="1330" resource-divider-location="601" version="2.8.5" locale="en_US">
+<?xml version="1.0" encoding="UTF-8"?><project name="MARATHON Project Management" company="CAA" webLink="http://" view-date="2020-05-10" view-index="0" gantt-divider-location="625" resource-divider-location="601" version="2.8.6" locale="en_US">
     <description><![CDATA[This is an projecet management view of the pending features, tasks, and efforts to develop MARATHON 4.x over the next year.]]></description>
-    <view zooming-state="default:8" id="gantt-chart">
-        <field id="tpd3" name="Name" width="648" order="0"/>
-        <field id="tpd4" name="Begin date" width="258" order="1"/>
-        <field id="tpd5" name="End date" width="420" order="2"/>
+    <view zooming-state="default:6" id="gantt-chart">
+        <field id="tpd3" name="Name" width="388" order="0"/>
+        <field id="tpd4" name="Begin date" width="86" order="1"/>
+        <field id="tpd5" name="End date" width="147" order="2"/>
     </view>
     <view id="resource-table">
         <field id="0" name="Name" width="359" order="0"/>
@@ -37,91 +37,106 @@
             <task id="8702" name="Unclass Large File Hosting via Amazon S3" meeting="false" start="2019-09-04" duration="10" complete="0" expand="true"/>
             <task id="8703" name="Unclass Web Server via Amazon EC2" meeting="false" start="2019-09-18" duration="10" complete="0" expand="true"/>
         </task>
-        <task id="5099" name="Rotational Analysis Capabilities" color="#000000" meeting="false" start="2019-11-04" duration="236" complete="0" expand="true">
-            <task id="5104" name="Portfolio Analysis" color="#8cb6ce" meeting="false" start="2019-11-04" duration="10" complete="0" expand="true">
-                <depend id="9683" type="2" difference="0" hardness="Rubber"/>
+        <task id="5099" name="Force Generation Analysis Capabilities" color="#000000" meeting="false" start="2019-11-04" duration="156" complete="0" expand="true">
+            <task id="5104" name="Portfolio Analysis Refresh" color="#8cb6ce" meeting="false" start="2019-11-04" duration="10" complete="0" expand="true">
                 <task id="9711" name="Stochastic Demand Futures Integration (Helmet)" meeting="false" start="2019-11-04" duration="5" complete="0" expand="true">
                     <depend id="9712" type="2" difference="0" hardness="Strong"/>
                 </task>
                 <task id="9712" name="Force Mix Composition Analysis Integration (Stoke)" meeting="false" start="2019-11-11" duration="5" complete="0" expand="true"/>
             </task>
-            <task id="5100" name="Force Structure Design of Experiment" color="#8cb6ce" meeting="false" start="2020-09-22" duration="5" complete="0" expand="true">
-                <task id="9717" name="Force Structure Optimization (TMAS)" meeting="false" start="2020-09-22" duration="5" complete="0" expand="true"/>
+            <task id="10018" name="Large Scale Experimentation" meeting="false" start="2019-11-04" duration="63" complete="0" expand="false">
+                <depend id="5100" type="2" difference="0" hardness="Strong"/>
+                <depend id="9697" type="2" difference="0" hardness="Strong"/>
+                <depend id="9720" type="2" difference="0" hardness="Strong"/>
+                <task id="10019" name="Experiment Definition" meeting="false" start="2019-11-04" duration="23" complete="0" expand="true">
+                    <depend id="10020" type="2" difference="0" hardness="Strong"/>
+                </task>
+                <task id="10020" name="Automated Experimentation" meeting="false" start="2019-12-05" duration="20" complete="0" expand="true">
+                    <depend id="10021" type="2" difference="0" hardness="Strong"/>
+                </task>
+                <task id="10021" name="Experimental Results Reduction" meeting="false" start="2020-01-02" duration="20" complete="0" expand="true"/>
+            </task>
+            <task id="9909" name="Scalable Run Distribution" meeting="false" start="2020-01-31" duration="92" complete="0" expand="false">
+                <task id="9910" name="Local Machine (simulated cluster)" meeting="false" start="2020-01-31" duration="23" complete="0" expand="true">
+                    <depend id="9911" type="2" difference="0" hardness="Strong"/>
+                    <depend id="9912" type="2" difference="0" hardness="Strong"/>
+                    <depend id="9913" type="2" difference="0" hardness="Strong"/>
+                </task>
+                <task id="9911" name="CAA Cluster" meeting="false" start="2020-03-04" duration="23" complete="0" expand="true">
+                    <depend id="9912" type="2" difference="0" hardness="Strong"/>
+                </task>
+                <task id="9912" name="NPS Cluster" meeting="false" start="2020-04-06" duration="23" complete="0" expand="true">
+                    <depend id="9913" type="2" difference="0" hardness="Strong"/>
+                </task>
+                <task id="9913" name="Army High Performance Computing Labs" meeting="false" start="2020-05-07" duration="23" complete="0" expand="true"/>
+            </task>
+            <task id="5100" name="Force Structure Design of Experiment" color="#8cb6ce" meeting="false" start="2020-01-30" duration="92" complete="0" expand="false">
+                <task id="9717" name="Force Structure Optimization (TMAS)" meeting="false" start="2020-01-30" duration="92" complete="0" expand="true"/>
             </task>
         </task>
-        <task id="9683" name="Research And Development" color="#000000" meeting="false" start="2020-05-28" duration="231" complete="1" thirdDate="2018-03-19" thirdDate-constraint="0" expand="false">
-            <task id="9684" name="PreProcessing RD" color="#000000" meeting="false" start="2020-05-28" duration="20" complete="0" expand="true">
-                <depend id="9687" type="2" difference="0" hardness="Strong"/>
-                <task id="9685" name="Project Validation Tests" meeting="false" start="2020-05-28" duration="10" complete="0" expand="true">
-                    <depend id="9686" type="2" difference="0" hardness="Strong"/>
+        <task id="9684" name="PreProcessing RD" color="#000000" meeting="false" start="2020-05-11" duration="11" complete="0" expand="true">
+            <task id="9685" name="Project Validation Tests" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true">
+                <depend id="9686" type="2" difference="0" hardness="Strong"/>
+                <task id="10703" name="Stronger Project Validation Via Specs" meeting="false" start="2020-05-11" duration="1" complete="0" expand="false">
+                    <task id="10699" name="Define Clojure Specs for All Inputs" meeting="false" start="2020-05-11" duration="1" complete="0" expand="false">
+                        <task id="10709" name="Policy" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
+                        <task id="10711" name="Supply" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
+                        <task id="10712" name="Demand" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
+                    </task>
+                    <task id="10705" name="Stand-alone Project Validation Function" meeting="false" start="2020-05-11" duration="1" complete="0" expand="false">
+                        <task id="10706" name="Provide User Feedback Proximate to Erroroneous Input" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
+                    </task>
+                    <task id="10707" name="Integrate Validation With Legacy M4 Processing" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
+                    <task id="10704" name="Update M4 UI" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
                 </task>
-                <task id="9686" name="Project Version Control" meeting="false" start="2020-06-11" duration="10" complete="0" expand="true"/>
             </task>
-            <task id="9687" name="Analysis RD" meeting="false" start="2020-06-25" duration="155" complete="0" expand="true">
-                <depend id="9698" type="2" difference="0" hardness="Strong"/>
-                <task id="9901" name="PostProcessing" color="#000000" meeting="false" start="2020-06-25" duration="10" complete="0" expand="true">
-                    <task id="9903" name="Update Proc to Accept new Data Schemas" color="#8cb6ce" meeting="false" start="2020-06-25" duration="10" complete="0" expand="true"/>
-                    <task id="9905" name="Modify Proc to Read Compressed Marathon Histories" meeting="false" start="2020-06-25" duration="10" complete="0" expand="true"/>
+            <task id="9686" name="Project Version Control" meeting="false" start="2020-05-12" duration="10" complete="0" expand="true"/>
+        </task>
+        <task id="9729" name="Interactive Real-Time Visualization (TBD)" color="#8cb6ce" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true">
+            <task id="10718" name="Refactor Legacy Visualization" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
+            <task id="10719" name="Generalize Visualization to Other Backends" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
+            <task id="10720" name="Develop Interactive GIS Visual With Cesium / CLJS" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
+        </task>
+        <task id="9698" name="Front End RD" meeting="false" start="2021-01-28" duration="56" complete="8" expand="false">
+            <task id="9699" name="Project Data Management" meeting="false" start="2021-01-28" duration="56" complete="8" expand="true">
+                <task id="9700" name="Automated Project Setup" meeting="false" start="2021-01-28" duration="1" complete="0" expand="true"/>
+                <task id="9701" name="Supply Utilities" color="#000000" meeting="false" start="2021-01-28" duration="20" complete="0" expand="true">
+                    <depend id="9704" type="2" difference="0" hardness="Strong"/>
+                    <task id="9702" name="Interactive Supply Creation" meeting="false" start="2021-01-28" duration="10" complete="0" expand="true">
+                        <depend id="9703" type="2" difference="0" hardness="Strong"/>
+                    </task>
+                    <task id="9703" name="Interactive Supply Setup" meeting="false" start="2021-02-11" duration="10" complete="0" expand="true"/>
                 </task>
-                <task id="9688" name="Large Scale Experimentation" meeting="false" start="2020-06-25" duration="63" complete="0" expand="true">
-                    <depend id="5100" type="2" difference="0" hardness="Strong"/>
-                    <depend id="9692" type="2" difference="0" hardness="Strong"/>
-                    <depend id="9697" type="2" difference="0" hardness="Strong"/>
-                    <depend id="9720" type="2" difference="0" hardness="Strong"/>
-                    <task id="9689" name="Experiment Definition" meeting="false" start="2020-06-25" duration="23" complete="0" expand="true">
-                        <depend id="5100" type="2" difference="0" hardness="Rubber"/>
-                        <depend id="9690" type="2" difference="0" hardness="Strong"/>
-                    </task>
-                    <task id="9690" name="Automated Experimentation" meeting="false" start="2020-07-28" duration="20" complete="0" expand="true">
-                        <depend id="5100" type="3" difference="0" hardness="Rubber"/>
-                        <depend id="9691" type="2" difference="0" hardness="Strong"/>
-                    </task>
-                    <task id="9691" name="Experimental Results Reduction" meeting="false" start="2020-08-25" duration="20" complete="0" expand="true"/>
+                <task id="9704" name="Demand Utilities" meeting="false" start="2021-02-25" duration="11" complete="0" expand="true">
+                    <depend id="9706" type="2" difference="0" hardness="Strong"/>
+                    <task id="9705" name="Interactive Demand Timeline" meeting="false" start="2021-02-25" duration="11" complete="0" expand="true"/>
                 </task>
-                <task id="9720" name="Client-side Resourcing Panel Support (TADMUDI)" meeting="false" start="2020-09-22" duration="5" complete="0" expand="true"/>
-                <task id="9692" name="Scalable Run Distribution" meeting="false" start="2020-09-22" duration="92" complete="0" expand="true">
-                    <task id="9693" name="Local Machine (simulated cluster)" meeting="false" start="2020-09-22" duration="23" complete="0" expand="true">
-                        <depend id="9694" type="2" difference="0" hardness="Strong"/>
-                        <depend id="9695" type="2" difference="0" hardness="Strong"/>
-                        <depend id="9696" type="2" difference="0" hardness="Strong"/>
+                <task id="9706" name="Policy Utilities" meeting="false" start="2021-03-12" duration="25" complete="20" expand="true">
+                    <task id="9707" name="Interactive Policy Creation" meeting="false" start="2021-03-12" duration="10" complete="0" expand="true">
+                        <depend id="9708" type="2" difference="0" hardness="Strong"/>
                     </task>
-                    <task id="9694" name="CAA Cluster" meeting="false" start="2020-10-23" duration="23" complete="0" expand="true">
-                        <depend id="9695" type="2" difference="0" hardness="Strong"/>
+                    <task id="9708" name="Interactive Policy Visualization" meeting="false" start="2021-03-26" duration="10" complete="0" expand="true">
+                        <depend id="9709" type="2" difference="0" hardness="Strong"/>
                     </task>
-                    <task id="9695" name="NPS Cluster" meeting="false" start="2020-11-25" duration="23" complete="0" expand="true">
-                        <depend id="9696" type="2" difference="0" hardness="Strong"/>
-                    </task>
-                    <task id="9696" name="Army High Performance Computing Labs" meeting="false" start="2020-12-28" duration="23" complete="0" expand="true"/>
-                </task>
-                <task id="9697" name="Look Ahead (Global Optimization)" meeting="false" start="2020-09-22" duration="10" complete="0" expand="true"/>
-            </task>
-            <task id="9698" name="Front End RD" meeting="false" start="2021-01-28" duration="56" complete="8" expand="true">
-                <task id="9699" name="Project Data Management" meeting="false" start="2021-01-28" duration="56" complete="8" expand="true">
-                    <task id="9700" name="Automated Project Setup" meeting="false" start="2021-01-28" duration="1" complete="0" expand="true"/>
-                    <task id="9701" name="Supply Utilities" color="#000000" meeting="false" start="2021-01-28" duration="20" complete="0" expand="true">
-                        <depend id="9704" type="2" difference="0" hardness="Strong"/>
-                        <task id="9702" name="Interactive Supply Creation" meeting="false" start="2021-01-28" duration="10" complete="0" expand="true">
-                            <depend id="9703" type="2" difference="0" hardness="Strong"/>
-                        </task>
-                        <task id="9703" name="Interactive Supply Setup" meeting="false" start="2021-02-11" duration="10" complete="0" expand="true"/>
-                    </task>
-                    <task id="9704" name="Demand Utilities" meeting="false" start="2021-02-25" duration="11" complete="0" expand="true">
-                        <depend id="9706" type="2" difference="0" hardness="Strong"/>
-                        <task id="9705" name="Interactive Demand Timeline" meeting="false" start="2021-02-25" duration="11" complete="0" expand="true"/>
-                    </task>
-                    <task id="9706" name="Policy Utilities" meeting="false" start="2021-03-12" duration="25" complete="20" expand="true">
-                        <task id="9707" name="Interactive Policy Creation" meeting="false" start="2021-03-12" duration="10" complete="0" expand="true">
-                            <depend id="9708" type="2" difference="0" hardness="Strong"/>
-                        </task>
-                        <task id="9708" name="Interactive Policy Visualization" meeting="false" start="2021-03-26" duration="10" complete="0" expand="true">
-                            <depend id="9709" type="2" difference="0" hardness="Strong"/>
-                        </task>
-                        <task id="9709" name="Interactive  Behavior Tree Constructor" meeting="false" start="2021-04-09" duration="5" complete="100" expand="true"/>
-                    </task>
+                    <task id="9709" name="Interactive  Behavior Tree Constructor" meeting="false" start="2021-04-09" duration="5" complete="100" expand="true"/>
                 </task>
             </task>
         </task>
-        <task id="9729" name="Interactive Real-Time Visualization (TBD)" color="#8cb6ce" meeting="false" start="2019-11-08" duration="102" complete="0" expand="true"/>
+        <task id="10697" name="Persistent Distributed Run Storage" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true">
+            <task id="10698" name="Develop Schema for Storing M4 HisDevelop Schema for Storing M4 History in Datomic Distributed Database tory in Datomic Distributed Database" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
+            <task id="10715" name="Develop Standard Queries" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
+            <task id="10716" name="Integrate Proc" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
+        </task>
+        <task id="9901" name="PostProcessing" color="#000000" meeting="false" start="2020-06-25" duration="10" complete="0" expand="false">
+            <task id="10633" name="Incorporate TACMM visuals into Proc Pipeline" meeting="false" start="2020-06-25" duration="10" complete="0" expand="true">
+                <task id="10670" name="Migrate Plotting to CLJPlot or FastR/Renjin" meeting="false" start="2020-06-25" duration="3" complete="0" expand="true"/>
+                <task id="10672" name="Replicate Plotting From TACMM" meeting="false" start="2020-06-30" duration="3" complete="0" expand="true"/>
+                <task id="10674" name="Update UI to Allow Visuals" meeting="false" start="2020-07-06" duration="3" complete="0" expand="true"/>
+            </task>
+            <task id="9905" name="Modify Proc to Read Compressed Marathon Histories" meeting="false" start="2020-06-25" duration="10" complete="0" expand="true"/>
+        </task>
+        <task id="9720" name="Client-side Resourcing Panel Support (TADMUDI)" meeting="false" start="2020-01-30" duration="5" complete="0" expand="true"/>
+        <task id="9697" name="Look Ahead (Global Optimization)" meeting="false" start="2020-01-30" duration="10" complete="0" expand="true"/>
     </tasks>
     <resources>
         <resource id="0" name="Tom Spoon" function="1" contacts="" phone=""/>
@@ -129,7 +144,6 @@
         <resource id="2" name="Rick Hanson" function="4" contacts="" phone=""/>
     </resources>
     <allocations>
-        <allocation task-id="9683" resource-id="0" function="1" responsible="true" load="100.0"/>
         <allocation task-id="9729" resource-id="0" function="1" responsible="true" load="100.0"/>
         <allocation task-id="8657" resource-id="0" function="1" responsible="true" load="100.0"/>
         <allocation task-id="5099" resource-id="0" function="1" responsible="true" load="100.0"/>
