@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="MARATHON Project Management" company="CAA" webLink="http://" view-date="2020-05-10" view-index="0" gantt-divider-location="625" resource-divider-location="601" version="2.8.6" locale="en_US">
+<?xml version="1.0" encoding="UTF-8"?><project name="MARATHON Project Management" company="CAA" webLink="http://" view-date="2018-11-01" view-index="0" gantt-divider-location="609" resource-divider-location="601" version="2.8.5" locale="en_US">
     <description><![CDATA[This is an projecet management view of the pending features, tasks, and efforts to develop MARATHON 4.x over the next year.]]></description>
-    <view zooming-state="default:6" id="gantt-chart">
-        <field id="tpd3" name="Name" width="388" order="0"/>
-        <field id="tpd4" name="Begin date" width="86" order="1"/>
-        <field id="tpd5" name="End date" width="147" order="2"/>
+    <view zooming-state="default:11" id="gantt-chart">
+        <field id="tpd3" name="Name" width="376" order="0"/>
+        <field id="tpd4" name="Begin date" width="144" order="1"/>
+        <field id="tpd5" name="End date" width="70" order="2"/>
     </view>
     <view id="resource-table">
         <field id="0" name="Name" width="359" order="0"/>
@@ -33,21 +33,65 @@
             <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
-        <task id="8657" name="GovCloud Hosting" color="#000000" meeting="false" start="2019-09-04" duration="20" complete="0" expand="true">
-            <task id="8702" name="Unclass Large File Hosting via Amazon S3" meeting="false" start="2019-09-04" duration="10" complete="0" expand="true"/>
-            <task id="8703" name="Unclass Web Server via Amazon EC2" meeting="false" start="2019-09-18" duration="10" complete="0" expand="true"/>
+        <task id="10801" name="Study Support" color="#000000" meeting="false" start="2018-12-03" duration="391" complete="0" expand="true">
+            <task id="10822" name="TAA 22-26 Support" meeting="false" start="2019-04-01" duration="46" complete="0" expand="true">
+                <task id="10825" name="Finite Cycle Length Goal With Unbounded Dwell" color="#8cb6ce" meeting="false" start="2019-04-01" duration="15" complete="0" expand="true"/>
+                <task id="10823" name="Variable RC Surge Policy Expression" meeting="false" start="2019-04-19" duration="16" complete="0" expand="true"/>
+                <task id="10826" name="Runs and Results" color="#8cb6ce" meeting="false" start="2019-04-22" duration="31" complete="0" expand="true"/>
+            </task>
+            <task id="10805" name="TACMM Support" meeting="false" start="2018-12-03" duration="262" complete="0" expand="false">
+                <task id="10819" name="Substitution-based modernization implementation" color="#8cb6ce" meeting="false" start="2018-12-03" duration="24" complete="0" expand="true"/>
+                <task id="10815" name="Initial white-paper" meeting="false" start="2019-01-03" duration="22" complete="0" expand="true"/>
+                <task id="10816" name="Implemented TACMM Script for Modernization / Policy Experiments" meeting="false" start="2019-03-01" duration="22" complete="0" expand="true"/>
+                <task id="10817" name="DFM Engagement" meeting="false" start="2019-04-15" duration="1" complete="0" expand="true"/>
+                <task id="10809" name="Dynamic Unit Modernization Business Rules" meeting="false" start="2019-05-01" duration="44" complete="0" expand="true"/>
+                <task id="10811" name="Demand Modernization Preference Business Rules" meeting="false" start="2019-06-03" duration="44" complete="0" expand="true"/>
+                <task id="10806" name="Deputy FM Initial Products" meeting="false" start="2019-08-08" duration="1" complete="0" expand="true"/>
+                <task id="10818" name="Customized M4 TACMM output to support emergent visualizations" meeting="false" start="2019-08-12" duration="7" complete="0" expand="true"/>
+                <task id="10814" name="Deputy FM follow up" meeting="false" start="2019-08-28" duration="1" complete="0" expand="true"/>
+                <task id="10820" name="DFM Results Brief" meeting="false" start="2019-09-11" duration="1" complete="0" expand="true"/>
+                <task id="10821" name="Future TACMM Work (TBD)" color="#8cb6ce" meeting="false" start="2019-09-11" duration="60" complete="0" expand="true"/>
+            </task>
+            <task id="10803" name="TAA 23-27  Support" meeting="false" start="2019-02-04" duration="346" complete="0" expand="false">
+                <task id="10875" name="Expected Fill Methodology Conception" color="#8cb6ce" meeting="false" start="2019-02-04" duration="5" complete="0" expand="true"/>
+                <task id="10874" name="Expected Fill Methodology Brief" meeting="false" start="2019-07-05" duration="1" complete="0" expand="true"/>
+                <task id="10878" name="Implementation" color="#8cb6ce" meeting="false" start="2019-08-01" duration="42" complete="0" expand="true"/>
+                <task id="10802" name="Methodology Prospectus / Demo" meeting="false" start="2019-09-27" duration="1" complete="0" expand="true"/>
+                <task id="10807" name="Study Support" color="#8cb6ce" meeting="false" start="2019-12-02" duration="110" complete="0" expand="true"/>
+                <task id="10812" name="Resourcing Panel Support" meeting="false" start="2020-04-01" duration="11" complete="0" expand="true"/>
+                <task id="10808" name="Sensitivity Analysis" meeting="false" start="2020-03-02" duration="66" complete="0" expand="true"/>
+            </task>
+            <task id="10804" name="CRE Study Support" meeting="false" start="2019-10-07" duration="40" complete="0" expand="false">
+                <task id="10828" name="Implement PTDO business rules and sourcing priority" color="#8cb6ce" meeting="false" start="2019-10-07" duration="20" complete="0" expand="true"/>
+                <task id="10885" name="Study Support / Runs" meeting="false" start="2019-11-01" duration="21" complete="0" expand="true"/>
+            </task>
         </task>
-        <task id="5099" name="Force Generation Analysis Capabilities" color="#000000" meeting="false" start="2019-11-04" duration="156" complete="0" expand="true">
-            <task id="5104" name="Portfolio Analysis Refresh" color="#8cb6ce" meeting="false" start="2019-11-04" duration="10" complete="0" expand="true">
-                <task id="9711" name="Stochastic Demand Futures Integration (Helmet)" meeting="false" start="2019-11-04" duration="5" complete="0" expand="true">
+        <task id="5099" name="Force Generation Analysis Capabilities" color="#000000" meeting="false" start="2019-11-04" duration="155" complete="0" expand="true">
+            <task id="5104" name="Portfolio Analysis Refresh" color="#8cb6ce" meeting="false" start="2019-11-04" duration="20" complete="0" expand="false">
+                <task id="9711" name="Stochastic Demand Futures Integration (Helmet)" color="#8cb6ce" meeting="false" start="2019-11-04" duration="10" complete="0" expand="true">
                     <depend id="9712" type="2" difference="0" hardness="Strong"/>
                 </task>
-                <task id="9712" name="Force Mix Composition Analysis Integration (Stoke)" meeting="false" start="2019-11-11" duration="5" complete="0" expand="true"/>
+                <task id="9712" name="Force Mix Composition Analysis Integration (Stoke)" color="#8cb6ce" meeting="false" start="2019-11-18" duration="10" complete="0" expand="true"/>
             </task>
-            <task id="10018" name="Large Scale Experimentation" meeting="false" start="2019-11-04" duration="63" complete="0" expand="false">
+            <task id="5100" name="Force Structure Design of Experiment" color="#8cb6ce" meeting="false" start="2020-01-30" duration="92" complete="0" expand="false">
+                <task id="9717" name="Force Structure Optimization (TMAS)" meeting="false" start="2020-01-30" duration="92" complete="0" expand="true"/>
+            </task>
+            <task id="9909" name="Scalable Run Distribution" meeting="false" start="2020-01-31" duration="62" complete="0" expand="false">
+                <task id="9910" name="Local Machine (simulated cluster)" meeting="false" start="2020-01-31" duration="23" complete="0" expand="true">
+                    <depend id="9913" type="2" difference="0" hardness="Strong"/>
+                </task>
+                <task id="9913" name="AWS Cluster" meeting="false" start="2020-03-04" duration="23" complete="0" expand="true"/>
+                <task id="10747" name="Adapt Algorithms" meeting="false" start="2020-04-27" duration="1" complete="0" expand="true">
+                    <task id="10748" name="Parallel N-Section Search (Requirements Analyis)" meeting="false" start="2020-04-27" duration="1" complete="0" expand="true"/>
+                    <task id="10749" name="Parallel Entity Updates (Capacity Analysis)" meeting="false" start="2020-04-27" duration="1" complete="0" expand="true"/>
+                </task>
+                <task id="10751" name="Scaleable Output Collection and Reduction" meeting="false" start="2020-04-27" duration="1" complete="0" expand="false">
+                    <task id="10752" name="Datomic / S3" meeting="false" start="2020-04-27" duration="1" complete="0" expand="true"/>
+                </task>
+            </task>
+            <task id="10018" name="Large Scale Experimentation API" meeting="false" start="2019-11-04" duration="63" complete="0" expand="false">
                 <depend id="5100" type="2" difference="0" hardness="Strong"/>
                 <depend id="9697" type="2" difference="0" hardness="Strong"/>
-                <depend id="9720" type="2" difference="0" hardness="Strong"/>
                 <task id="10019" name="Experiment Definition" meeting="false" start="2019-11-04" duration="23" complete="0" expand="true">
                     <depend id="10020" type="2" difference="0" hardness="Strong"/>
                 </task>
@@ -56,97 +100,285 @@
                 </task>
                 <task id="10021" name="Experimental Results Reduction" meeting="false" start="2020-01-02" duration="20" complete="0" expand="true"/>
             </task>
-            <task id="9909" name="Scalable Run Distribution" meeting="false" start="2020-01-31" duration="92" complete="0" expand="false">
-                <task id="9910" name="Local Machine (simulated cluster)" meeting="false" start="2020-01-31" duration="23" complete="0" expand="true">
-                    <depend id="9911" type="2" difference="0" hardness="Strong"/>
-                    <depend id="9912" type="2" difference="0" hardness="Strong"/>
-                    <depend id="9913" type="2" difference="0" hardness="Strong"/>
-                </task>
-                <task id="9911" name="CAA Cluster" meeting="false" start="2020-03-04" duration="23" complete="0" expand="true">
-                    <depend id="9912" type="2" difference="0" hardness="Strong"/>
-                </task>
-                <task id="9912" name="NPS Cluster" meeting="false" start="2020-04-06" duration="23" complete="0" expand="true">
-                    <depend id="9913" type="2" difference="0" hardness="Strong"/>
-                </task>
-                <task id="9913" name="Army High Performance Computing Labs" meeting="false" start="2020-05-07" duration="23" complete="0" expand="true"/>
-            </task>
-            <task id="5100" name="Force Structure Design of Experiment" color="#8cb6ce" meeting="false" start="2020-01-30" duration="92" complete="0" expand="false">
-                <task id="9717" name="Force Structure Optimization (TMAS)" meeting="false" start="2020-01-30" duration="92" complete="0" expand="true"/>
-            </task>
+            <task id="9697" name="Look Ahead (Global Optimization / Classical Search)" meeting="false" start="2020-01-30" duration="10" complete="0" expand="true"/>
         </task>
-        <task id="9684" name="PreProcessing RD" color="#000000" meeting="false" start="2020-05-11" duration="11" complete="0" expand="true">
-            <task id="9685" name="Project Validation Tests" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true">
-                <depend id="9686" type="2" difference="0" hardness="Strong"/>
-                <task id="10703" name="Stronger Project Validation Via Specs" meeting="false" start="2020-05-11" duration="1" complete="0" expand="false">
-                    <task id="10699" name="Define Clojure Specs for All Inputs" meeting="false" start="2020-05-11" duration="1" complete="0" expand="false">
-                        <task id="10709" name="Policy" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
-                        <task id="10711" name="Supply" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
-                        <task id="10712" name="Demand" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
-                    </task>
-                    <task id="10705" name="Stand-alone Project Validation Function" meeting="false" start="2020-05-11" duration="1" complete="0" expand="false">
-                        <task id="10706" name="Provide User Feedback Proximate to Erroroneous Input" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
-                    </task>
-                    <task id="10707" name="Integrate Validation With Legacy M4 Processing" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
-                    <task id="10704" name="Update M4 UI" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
-                </task>
-            </task>
-            <task id="9686" name="Project Version Control" meeting="false" start="2020-05-12" duration="10" complete="0" expand="true"/>
-        </task>
-        <task id="9729" name="Interactive Real-Time Visualization (TBD)" color="#8cb6ce" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true">
-            <task id="10718" name="Refactor Legacy Visualization" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
-            <task id="10719" name="Generalize Visualization to Other Backends" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
-            <task id="10720" name="Develop Interactive GIS Visual With Cesium / CLJS" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
-        </task>
-        <task id="9698" name="Front End RD" meeting="false" start="2021-01-28" duration="56" complete="8" expand="false">
-            <task id="9699" name="Project Data Management" meeting="false" start="2021-01-28" duration="56" complete="8" expand="true">
-                <task id="9700" name="Automated Project Setup" meeting="false" start="2021-01-28" duration="1" complete="0" expand="true"/>
-                <task id="9701" name="Supply Utilities" color="#000000" meeting="false" start="2021-01-28" duration="20" complete="0" expand="true">
-                    <depend id="9704" type="2" difference="0" hardness="Strong"/>
-                    <task id="9702" name="Interactive Supply Creation" meeting="false" start="2021-01-28" duration="10" complete="0" expand="true">
-                        <depend id="9703" type="2" difference="0" hardness="Strong"/>
-                    </task>
-                    <task id="9703" name="Interactive Supply Setup" meeting="false" start="2021-02-11" duration="10" complete="0" expand="true"/>
-                </task>
-                <task id="9704" name="Demand Utilities" meeting="false" start="2021-02-25" duration="11" complete="0" expand="true">
-                    <depend id="9706" type="2" difference="0" hardness="Strong"/>
-                    <task id="9705" name="Interactive Demand Timeline" meeting="false" start="2021-02-25" duration="11" complete="0" expand="true"/>
-                </task>
-                <task id="9706" name="Policy Utilities" meeting="false" start="2021-03-12" duration="25" complete="20" expand="true">
-                    <task id="9707" name="Interactive Policy Creation" meeting="false" start="2021-03-12" duration="10" complete="0" expand="true">
-                        <depend id="9708" type="2" difference="0" hardness="Strong"/>
-                    </task>
-                    <task id="9708" name="Interactive Policy Visualization" meeting="false" start="2021-03-26" duration="10" complete="0" expand="true">
-                        <depend id="9709" type="2" difference="0" hardness="Strong"/>
-                    </task>
-                    <task id="9709" name="Interactive  Behavior Tree Constructor" meeting="false" start="2021-04-09" duration="5" complete="100" expand="true"/>
-                </task>
-            </task>
-        </task>
-        <task id="10697" name="Persistent Distributed Run Storage" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true">
-            <task id="10698" name="Develop Schema for Storing M4 HisDevelop Schema for Storing M4 History in Datomic Distributed Database tory in Datomic Distributed Database" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
-            <task id="10715" name="Develop Standard Queries" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
-            <task id="10716" name="Integrate Proc" meeting="false" start="2020-05-11" duration="1" complete="0" expand="true"/>
-        </task>
-        <task id="9901" name="PostProcessing" color="#000000" meeting="false" start="2020-06-25" duration="10" complete="0" expand="false">
-            <task id="10633" name="Incorporate TACMM visuals into Proc Pipeline" meeting="false" start="2020-06-25" duration="10" complete="0" expand="true">
+        <task id="9901" name="PostProcessing" color="#000000" meeting="false" start="2020-06-25" duration="10" complete="0" expand="true">
+            <task id="10633" name="Incorporate TACMM visuals into Proc Pipeline" meeting="false" start="2020-06-25" duration="10" complete="0" expand="false">
                 <task id="10670" name="Migrate Plotting to CLJPlot or FastR/Renjin" meeting="false" start="2020-06-25" duration="3" complete="0" expand="true"/>
                 <task id="10672" name="Replicate Plotting From TACMM" meeting="false" start="2020-06-30" duration="3" complete="0" expand="true"/>
                 <task id="10674" name="Update UI to Allow Visuals" meeting="false" start="2020-07-06" duration="3" complete="0" expand="true"/>
             </task>
-            <task id="9905" name="Modify Proc to Read Compressed Marathon Histories" meeting="false" start="2020-06-25" duration="10" complete="0" expand="true"/>
+            <task id="9905" name="Extend Proc to Read Compressed Marathon Histories" meeting="false" start="2020-06-25" duration="10" complete="0" expand="true"/>
         </task>
-        <task id="9720" name="Client-side Resourcing Panel Support (TADMUDI)" meeting="false" start="2020-01-30" duration="5" complete="0" expand="true"/>
-        <task id="9697" name="Look Ahead (Global Optimization)" meeting="false" start="2020-01-30" duration="10" complete="0" expand="true"/>
+        <task id="10797" name="Refactoring" color="#000000" meeting="false" start="2019-09-11" duration="44" complete="0" expand="true">
+            <task id="10798" name="Eliminate legacy M3 source code from comments" meeting="false" start="2019-09-11" duration="8" complete="0" expand="true"/>
+            <task id="10800" name="Prune vestigial source files from M3 / Early M4" color="#8cb6ce" meeting="false" start="2019-09-20" duration="2" complete="0" expand="true"/>
+            <task id="10799" name="Revise inline documentation" meeting="false" start="2019-09-11" duration="44" complete="0" expand="true"/>
+        </task>
+        <task id="10703" name="Clojure Spec-based Automated Project Validation" color="#000000" meeting="false" start="2020-05-11" duration="36" complete="0" expand="true">
+            <task id="10699" name="Define Clojure Specs for All Inputs" meeting="false" start="2020-05-11" duration="21" complete="0" expand="false">
+                <depend id="10705" type="2" difference="0" hardness="Strong"/>
+                <task id="10709" name="Policy" color="#8cb6ce" meeting="false" start="2020-05-11" duration="7" complete="0" expand="true">
+                    <depend id="10711" type="2" difference="0" hardness="Strong"/>
+                </task>
+                <task id="10711" name="Supply" color="#8cb6ce" meeting="false" start="2020-05-20" duration="7" complete="0" expand="true">
+                    <depend id="10712" type="2" difference="0" hardness="Strong"/>
+                </task>
+                <task id="10712" name="Demand" color="#8cb6ce" meeting="false" start="2020-05-29" duration="7" complete="0" expand="true"/>
+            </task>
+            <task id="10705" name="Stand-alone Project Validation Function" meeting="false" start="2020-06-09" duration="15" complete="0" expand="false">
+                <depend id="10830" type="2" difference="0" hardness="Strong"/>
+                <task id="10706" name="Provide User Feedback Proximate to Erroroneous Input" color="#8cb6ce" meeting="false" start="2020-06-09" duration="5" complete="0" expand="true">
+                    <depend id="10707" type="2" difference="0" hardness="Strong"/>
+                </task>
+                <task id="10707" name="Integrate Validation With Legacy M4 Processing" meeting="false" start="2020-06-16" duration="5" complete="0" expand="true">
+                    <depend id="10704" type="2" difference="0" hardness="Strong"/>
+                </task>
+                <task id="10704" name="Update M4 UI" meeting="false" start="2020-06-23" duration="5" complete="0" expand="true"/>
+            </task>
+        </task>
+        <task id="10830" name="Testing / Deployment" color="#000000" meeting="false" start="2020-06-30" duration="10" complete="0" expand="true">
+            <depend id="9686" type="2" difference="0" hardness="Strong"/>
+            <task id="8703" name="Expand Continous Integration Process to Include Generative Testing" meeting="false" start="2020-06-30" duration="10" complete="0" expand="true"/>
+        </task>
+        <task id="9686" name="Project Version Control" color="#000000" meeting="false" start="2020-07-14" duration="18" complete="0" expand="true">
+            <task id="10755" name="Compute Differences Between Inputs" color="#8cb6ce" meeting="false" start="2020-07-14" duration="5" complete="0" expand="true">
+                <depend id="10757" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="10757" name="Explore  Distibuted Version Control of M4 Projects" meeting="false" start="2020-07-21" duration="10" complete="0" expand="false">
+                <depend id="10756" type="2" difference="0" hardness="Strong"/>
+                <task id="10758" name="Git" color="#8cb6ce" meeting="false" start="2020-07-21" duration="2" complete="0" expand="true"/>
+                <task id="10759" name="Datomic" color="#8cb6ce" meeting="false" start="2020-07-21" duration="10" complete="0" expand="true"/>
+            </task>
+            <task id="10756" name="Provide M4 UI Options to Compare Projects" color="#8cb6ce" meeting="false" start="2020-08-04" duration="3" complete="0" expand="true"/>
+        </task>
+        <task id="10697" name="Persistent Distributed Run Storage" color="#000000" meeting="false" start="2020-04-27" duration="30" complete="0" expand="true">
+            <task id="10728" name="Datomic Distributed Database Schemas for M4" color="#8cb6ce" meeting="false" start="2020-04-27" duration="10" complete="0" expand="true">
+                <depend id="10698" type="2" difference="0" hardness="Strong"/>
+                <depend id="10729" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="10729" name="Deploy Locally and on AWS" color="#8cb6ce" meeting="false" start="2020-05-11" duration="5" complete="0" expand="true"/>
+            <task id="10698" name="Storing M4 History in Datomic" color="#8cb6ce" meeting="false" start="2020-05-11" duration="5" complete="0" expand="true">
+                <depend id="10715" type="2" difference="0" hardness="Strong"/>
+                <depend id="10730" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="10715" name="Develop Standard Queries Over M4 History" color="#8cb6ce" meeting="false" start="2020-05-18" duration="15" complete="0" expand="true"/>
+            <task id="10730" name="Integrate Proc With Datomic" color="#8cb6ce" meeting="false" start="2020-05-18" duration="5" complete="0" expand="true"/>
+        </task>
+        <task id="9729" name="Interactive Real-Time Visualization (TBD)" color="#8cb6ce" meeting="false" start="2019-12-30" duration="25" complete="0" expand="true">
+            <task id="10718" name="Refactor Legacy Visualization" color="#8cb6ce" meeting="false" start="2019-12-30" duration="3" complete="16" expand="true">
+                <depend id="10719" type="2" difference="0" hardness="Strong"/>
+                <depend id="10720" type="2" difference="0" hardness="Strong"/>
+                <depend id="10726" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="10719" name="Generalize Visualization to Other Backends" meeting="false" start="2020-01-02" duration="22" complete="0" expand="true">
+                <task id="10721" name="JavaFx / WebGL / Processing" color="#8cb6ce" meeting="false" start="2020-01-02" duration="22" complete="0" expand="true"/>
+            </task>
+            <task id="10726" name="Leverage Extant Dynamic Plotting Libraries" meeting="false" start="2020-01-02" duration="22" complete="0" expand="true">
+                <task id="10727" name="Vega / Oz / Saite" color="#8cb6ce" meeting="false" start="2020-01-02" duration="22" complete="0" expand="true"/>
+            </task>
+            <task id="10720" name="Port To Interactive GIS Visual With Cesium / CLJS" meeting="false" start="2020-01-02" duration="22" complete="0" expand="true">
+                <task id="10722" name="Bind to Cesium via CLJS" color="#8cb6ce" meeting="false" start="2020-01-02" duration="22" complete="0" expand="true"/>
+                <task id="10723" name="Develop Static Offline Map Tiles With QGis" color="#8cb6ce" meeting="false" start="2020-01-02" duration="22" complete="0" expand="true"/>
+            </task>
+        </task>
+        <task id="10761" name="Knowledge Managment" color="#000000" meeting="false" start="2019-10-01" duration="54" complete="0" expand="true">
+            <task id="10762" name="Refresh Documentation" meeting="false" start="2019-10-01" duration="45" complete="0" expand="true">
+                <task id="10765" name="Design Document Refactor" color="#8cb6ce" meeting="false" start="2019-10-01" duration="45" complete="0" expand="true"/>
+                <task id="10766" name="Literate Programming Documentation Refactor" color="#8cb6ce" meeting="false" start="2019-10-01" duration="45" complete="0" expand="true"/>
+                <task id="10767" name="Add API Documentation Generation to Build Process" color="#8cb6ce" meeting="false" start="2019-11-01" duration="3" complete="0" expand="true"/>
+            </task>
+            <task id="10763" name="Develop &quot;Blog-post&quot; Tutorials for Power Users / Programmers" color="#8cb6ce" meeting="false" start="2019-11-25" duration="5" complete="0" expand="true"/>
+            <task id="10742" name="M4 &quot;notebook&quot; style tutorials for scripting and analysis" color="#8cb6ce" meeting="false" start="2019-12-09" duration="5" complete="0" expand="true"/>
+        </task>
+        <task id="10773" name="Training" meeting="false" start="2019-08-21" duration="98" complete="0" expand="true">
+            <task id="10774" name="On-Ramp MacFarlane" color="#000000" meeting="false" start="2019-08-21" duration="94" complete="0" expand="false">
+                <task id="10831" name="Setup AWS Development Environment" meeting="false" start="2019-08-21" duration="11" complete="0" expand="false">
+                    <task id="10832" name="AWS Credentials" color="#8cb6ce" meeting="false" start="2019-08-21" duration="3" complete="0" expand="true">
+                        <depend id="10833" type="2" difference="0" hardness="Strong"/>
+                    </task>
+                    <task id="10833" name="EC2 Instance With Elastic IP" color="#8cb6ce" meeting="false" start="2019-08-26" duration="2" complete="0" expand="true">
+                        <depend id="10834" type="2" difference="0" hardness="Strong"/>
+                    </task>
+                    <task id="10834" name="Install Git for Windows on Desktop" color="#8cb6ce" meeting="false" start="2019-08-28" duration="2" complete="0" expand="true">
+                        <depend id="10835" type="2" difference="0" hardness="Strong"/>
+                    </task>
+                    <task id="10835" name="Setup VNCServer on AWS" color="#8cb6ce" meeting="false" start="2019-08-30" duration="2" complete="0" expand="true">
+                        <depend id="10836" type="2" difference="0" hardness="Strong"/>
+                    </task>
+                    <task id="10836" name="Clojure Environment" meeting="false" start="2019-09-03" duration="2" complete="0" expand="false">
+                        <task id="10837" name="Spacemacs" color="#8cb6ce" meeting="false" start="2019-09-03" duration="2" complete="0" expand="true"/>
+                        <task id="10838" name="OpenJDK" color="#8cb6ce" meeting="false" start="2019-09-03" duration="2" complete="0" expand="true"/>
+                        <task id="10839" name="leiningen" color="#8cb6ce" meeting="false" start="2019-09-03" duration="2" complete="0" expand="true"/>
+                    </task>
+                </task>
+                <task id="10841" name="Internal Training Course" meeting="false" start="2019-09-03" duration="4" complete="0" expand="false">
+                    <depend id="10843" type="2" difference="0" hardness="Strong"/>
+                    <task id="10844" name="Clone training repository" color="#8cb6ce" meeting="false" start="2019-09-03" duration="2" complete="0" expand="true"/>
+                    <task id="10842" name="Develop Basic Familiarity With Clojure Syntax and Semantics" color="#8cb6ce" meeting="false" start="2019-09-05" duration="2" complete="0" expand="true"/>
+                </task>
+                <task id="10843" name="Bootstrapping Exercises" meeting="false" start="2019-09-09" duration="27" complete="0" expand="false">
+                    <task id="10845" name="Project Euler Problems 1-5" color="#8cb6ce" meeting="false" start="2019-09-09" duration="3" complete="0" expand="true">
+                        <depend id="10846" type="2" difference="0" hardness="Strong"/>
+                    </task>
+                    <task id="10846" name="&quot;Causes&quot; Social Network Analysis" color="#8cb6ce" meeting="false" start="2019-09-12" duration="7" complete="0" expand="true">
+                        <depend id="10847" type="2" difference="0" hardness="Strong"/>
+                    </task>
+                    <task id="10847" name="&quot;Bridge and Torch&quot; Optimization Problem" color="#8cb6ce" meeting="false" start="2019-09-23" duration="7" complete="0" expand="true">
+                        <depend id="10848" type="2" difference="0" hardness="Strong"/>
+                    </task>
+                    <task id="10848" name="Euler 102 Triangle Containment" color="#8cb6ce" meeting="false" start="2019-10-02" duration="5" complete="0" expand="true">
+                        <depend id="10849" type="2" difference="0" hardness="Strong"/>
+                    </task>
+                    <task id="10849" name="Euler 107 Network Minimization" color="#8cb6ce" meeting="false" start="2019-10-09" duration="5" complete="0" expand="true"/>
+                </task>
+                <task id="10850" name="M4 User Training" meeting="false" start="2019-10-07" duration="5" complete="0" expand="true"/>
+                <task id="10852" name="DCS / Telecon / Git Collaboration / Pair Programming" meeting="false" start="2019-08-22" duration="93" complete="0" expand="true"/>
+            </task>
+            <task id="10856" name="M4 Developer Tour" color="#000000" meeting="false" start="2019-10-07" duration="65" complete="0" expand="false">
+                <task id="10859" name="Architecture overview" meeting="false" start="2019-10-07" duration="40" complete="0" expand="false">
+                    <depend id="10857" type="2" difference="0" hardness="Strong"/>
+                    <task id="10860" name="Simulation Engine" color="#8cb6ce" meeting="false" start="2019-10-07" duration="5" complete="0" expand="true">
+                        <depend id="10862" type="2" difference="0" hardness="Strong"/>
+                    </task>
+                    <task id="10862" name="Simulation Systems" color="#8cb6ce" meeting="false" start="2019-10-14" duration="5" complete="0" expand="true">
+                        <depend id="10861" type="2" difference="0" hardness="Strong"/>
+                    </task>
+                    <task id="10861" name="Entity Representation" meeting="false" start="2019-10-21" duration="5" complete="0" expand="true">
+                        <depend id="10863" type="2" difference="0" hardness="Strong"/>
+                    </task>
+                    <task id="10863" name="Entity Behavior" meeting="false" start="2019-10-28" duration="5" complete="0" expand="true">
+                        <depend id="10864" type="2" difference="0" hardness="Strong"/>
+                    </task>
+                    <task id="10864" name="Interactive Analysis Tooling" meeting="false" start="2019-11-04" duration="5" complete="0" expand="true">
+                        <depend id="10865" type="2" difference="0" hardness="Strong"/>
+                    </task>
+                    <task id="10865" name="Capacity Analysis" meeting="false" start="2019-11-11" duration="5" complete="0" expand="true">
+                        <depend id="10866" type="2" difference="0" hardness="Strong"/>
+                    </task>
+                    <task id="10866" name="Requirements Analysis" meeting="false" start="2019-11-18" duration="5" complete="0" expand="true">
+                        <depend id="10867" type="2" difference="0" hardness="Strong"/>
+                    </task>
+                    <task id="10867" name="Post Processing (Proc)" meeting="false" start="2019-11-25" duration="5" complete="0" expand="true">
+                        <depend id="10857" type="2" difference="0" hardness="Strong"/>
+                    </task>
+                </task>
+                <task id="10857" name="marathon.analysis API" meeting="false" start="2019-12-02" duration="5" complete="0" expand="true">
+                    <depend id="10858" type="2" difference="0" hardness="Strong"/>
+                </task>
+                <task id="10858" name="Case studies" meeting="false" start="2019-12-09" duration="20" complete="0" expand="false">
+                    <task id="10871" name="Regression Tests" meeting="false" start="2019-12-09" duration="5" complete="0" expand="true">
+                        <depend id="10868" type="2" difference="0" hardness="Strong"/>
+                    </task>
+                    <task id="10868" name="Requirements Analysis Implementation" meeting="false" start="2019-12-16" duration="5" complete="0" expand="true">
+                        <depend id="10869" type="2" difference="0" hardness="Strong"/>
+                    </task>
+                    <task id="10869" name="TACMM Scripting Implementation" meeting="false" start="2019-12-23" duration="5" complete="0" expand="true">
+                        <depend id="10870" type="2" difference="0" hardness="Strong"/>
+                    </task>
+                    <task id="10870" name="Trivial Sensitivity Analysis" meeting="false" start="2019-12-30" duration="5" complete="0" expand="true"/>
+                </task>
+            </task>
+            <task id="10780" name="Update M4 Online Training" color="#000000" meeting="false" start="2019-10-01" duration="1" complete="0" expand="false">
+                <task id="10781" name="Custom Fill Rules" color="#8cb6ce" meeting="false" start="2019-10-01" duration="1" complete="0" expand="true"/>
+                <task id="10779" name="Modernization" meeting="false" start="2019-10-01" duration="1" complete="0" expand="true"/>
+                <task id="10782" name="Sustainable Readiness" meeting="false" start="2019-10-01" duration="1" complete="0" expand="true"/>
+                <task id="10784" name="User-level Scripting and Automation" meeting="false" start="2019-10-01" duration="1" complete="0" expand="true"/>
+            </task>
+            <task id="10777" name="October FS M4 Training (Select)" color="#8cb6ce" meeting="false" start="2019-10-15" duration="3" complete="0" expand="true"/>
+            <task id="10872" name="MARATHON Brown Bag" color="#8cb6ce" meeting="false" start="2019-10-14" duration="1" complete="0" expand="true"/>
+            <task id="13140" name="Datomic Training" color="#8cb6ce" meeting="false" start="2019-11-27" duration="1" complete="0" expand="true">
+                <depend id="10776" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="10776" name="2019 Clojure Conj" color="#8cb6ce" meeting="false" start="2019-11-28" duration="3" complete="0" expand="true"/>
+        </task>
+        <task id="9699" name="Project Data Management UI" meeting="false" start="2020-08-21" duration="60" complete="8" expand="true">
+            <task id="9700" name="Automated Project Setup" meeting="false" start="2020-08-21" duration="1" complete="0" expand="true"/>
+            <task id="9701" name="Supply Utilities" color="#000000" meeting="false" start="2020-08-21" duration="20" complete="0" expand="false">
+                <depend id="9704" type="2" difference="0" hardness="Strong"/>
+                <task id="9702" name="Interactive Supply Creation" meeting="false" start="2020-08-21" duration="10" complete="0" expand="true">
+                    <depend id="9703" type="2" difference="0" hardness="Strong"/>
+                </task>
+                <task id="9703" name="Interactive Supply Setup" meeting="false" start="2020-09-04" duration="10" complete="0" expand="true"/>
+            </task>
+            <task id="9704" name="Demand Utilities" meeting="false" start="2020-09-18" duration="11" complete="0" expand="false">
+                <depend id="9706" type="2" difference="0" hardness="Strong"/>
+                <task id="9705" name="Interactive Demand Timeline" meeting="false" start="2020-09-18" duration="11" complete="0" expand="true"/>
+            </task>
+            <task id="9706" name="Policy Utilities" meeting="false" start="2020-10-09" duration="25" complete="20" expand="false">
+                <task id="9707" name="Interactive Policy Creation" meeting="false" start="2020-10-09" duration="10" complete="0" expand="true">
+                    <depend id="9708" type="2" difference="0" hardness="Strong"/>
+                </task>
+                <task id="9708" name="Interactive Policy Visualization" meeting="false" start="2020-10-23" duration="10" complete="0" expand="true">
+                    <depend id="9709" type="2" difference="0" hardness="Strong"/>
+                </task>
+                <task id="9709" name="Interactive  Behavior Tree Constructor" meeting="false" start="2020-11-06" duration="5" complete="100" expand="true"/>
+            </task>
+        </task>
+        <task id="10731" name="Prototype Online Hosted M4 Suite" meeting="false" start="2020-11-13" duration="100" complete="0" expand="true">
+            <task id="10734" name="Stand-alone client-side CLJS M4 Application" meeting="false" start="2020-11-13" duration="37" complete="0" expand="false">
+                <depend id="10732" type="2" difference="0" hardness="Strong"/>
+                <task id="13149" name="M4 CLJS Port" color="#8cb6ce" meeting="false" start="2020-11-13" duration="30" complete="0" expand="true">
+                    <depend id="10736" type="2" difference="0" hardness="Strong"/>
+                </task>
+                <task id="10736" name="IndexedDB Integration for Local Storage" color="#8cb6ce" meeting="false" start="2020-12-25" duration="7" complete="0" expand="true"/>
+            </task>
+            <task id="10732" name="Server-side M4 Unclass Prototype Application" meeting="false" start="2021-01-08" duration="30" complete="0" expand="false">
+                <depend id="10739" type="2" difference="0" hardness="Strong"/>
+                <task id="10733" name="Client-side CLJS Browser Frontend" color="#8cb6ce" meeting="false" start="2021-01-08" duration="10" complete="0" expand="true">
+                    <depend id="10735" type="2" difference="0" hardness="Strong"/>
+                </task>
+                <task id="10735" name="Integrated With Datomic Ions" color="#8cb6ce" meeting="false" start="2021-01-22" duration="10" complete="0" expand="true">
+                    <depend id="10737" type="2" difference="0" hardness="Strong"/>
+                </task>
+                <task id="10737" name="Distributed Across Scalable AWS Cluster" color="#8cb6ce" meeting="false" start="2021-02-05" duration="10" complete="0" expand="true"/>
+            </task>
+            <task id="10739" name="Explore porting to higher security networks" color="#8cb6ce" meeting="false" start="2021-02-19" duration="30" complete="0" expand="true"/>
+        </task>
+        <task id="10769" name="Explore ML/Deep Learning Applications" meeting="false" start="2020-07-16" duration="60" complete="0" expand="true">
+            <depend id="10788" type="2" difference="0" hardness="Strong"/>
+            <task id="10770" name="Leverage M4 Samples to Train a Cheap Approximating Function" color="#8cb6ce" meeting="false" start="2020-07-16" duration="60" complete="0" expand="true"/>
+            <task id="10772" name="&quot;Learn&quot; valid demand signals from historical signals" meeting="false" start="2020-07-16" duration="60" complete="0" expand="true"/>
+        </task>
+        <task id="10788" name="Publication (TBD)" meeting="false" start="2020-10-22" duration="120" complete="0" expand="true">
+            <task id="10789" name="Discrete Event Simulation in a Dynamic Functional Programming Language" color="#8cb6ce" meeting="false" start="2020-10-22" duration="120" complete="0" expand="true"/>
+            <task id="10790" name="Force Structure Optimization" meeting="false" start="2020-10-22" duration="120" complete="0" expand="true"/>
+            <task id="10791" name="Simulation Optimization for Army Force Structure" meeting="false" start="2020-10-22" duration="120" complete="0" expand="true"/>
+            <task id="10793" name="Persistent Entity Component Systems for Versatile Simulation History" meeting="false" start="2020-10-22" duration="120" complete="0" expand="true"/>
+            <task id="10794" name="Applications of ML to Force Generation Analysis" meeting="false" start="2020-10-22" duration="120" complete="0" expand="true"/>
+        </task>
     </tasks>
     <resources>
         <resource id="0" name="Tom Spoon" function="1" contacts="" phone=""/>
         <resource id="1" name="Craig Flewelling" function="2" contacts="" phone=""/>
         <resource id="2" name="Rick Hanson" function="4" contacts="" phone=""/>
+        <resource id="3" name="Keith MacFarlane" function="2" contacts="" phone=""/>
     </resources>
     <allocations>
         <allocation task-id="9729" resource-id="0" function="1" responsible="true" load="100.0"/>
-        <allocation task-id="8657" resource-id="0" function="1" responsible="true" load="100.0"/>
         <allocation task-id="5099" resource-id="0" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="10774" resource-id="0" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="10856" resource-id="0" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="10780" resource-id="0" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="10777" resource-id="0" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="10872" resource-id="0" function="1" responsible="false" load="100.0"/>
+        <allocation task-id="13140" resource-id="0" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="10776" resource-id="0" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="10801" resource-id="0" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="10797" resource-id="0" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="10703" resource-id="0" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="10830" resource-id="0" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="9686" resource-id="0" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="10697" resource-id="0" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="10761" resource-id="0" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="10774" resource-id="1" function="2" responsible="false" load="100.0"/>
+        <allocation task-id="10856" resource-id="1" function="2" responsible="false" load="100.0"/>
+        <allocation task-id="10872" resource-id="1" function="2" responsible="true" load="100.0"/>
+        <allocation task-id="10801" resource-id="1" function="2" responsible="false" load="100.0"/>
+        <allocation task-id="10774" resource-id="3" function="2" responsible="false" load="100.0"/>
+        <allocation task-id="10856" resource-id="3" function="2" responsible="false" load="100.0"/>
+        <allocation task-id="10776" resource-id="3" function="2" responsible="false" load="100.0"/>
+        <allocation task-id="10801" resource-id="3" function="2" responsible="false" load="100.0"/>
     </allocations>
     <vacations/>
     <previous/>
