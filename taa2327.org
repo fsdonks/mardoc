@@ -79,6 +79,10 @@ stationed deployments (modeled as NonBOG), coupled with an SRC with a relative
 paucity of AC units. So an interesting intersection of factors leading to a rare
 case where previous assumptions are tested and exceptions are thrown to warn us.
 
+Resolved this problem by ensuring that units go through Reset to start a new
+cycle if they don't have a feasible BOGBudget under a new policy change, so that
+they will not sit around unable to deploy.
+
 ** Infinite BOG Policy -> Unintentionally Always Available
 This is a tricky situation stemming from the new BOGForever policy (and similar
 RCSurge policies). We have - under the preexisting prescriptions and rules - a
@@ -90,10 +94,10 @@ inventory) for this to happen with enough units to effectively eliminate any
 rotation or other movement in the final period / phase. Everything basically
 freezes (in this case).
 
-Fixed with a change the BOGForever policy to one which has infinite recovery
-as well as infinite BOGBudget.  This allows units to extend BOG for as long as
+Fixed with a change to the BOGForever policy to one which has infinite recovery
+as well as infinite BOGBudget. This allows units to extend BOG for as long as
 necessary for the Surge, but upon deactivation of the demand, they cannot go
-back to available via recovery and re-entry (thus bypassing reset).  Instead,
+back to available via recovery and re-entry (thus bypassing reset). Instead,
 they must go to reset, at which point pending policy changes are applied.
 
 ** Policy Record Recovery Unused 
@@ -104,7 +108,7 @@ allowed us to supply infinite recovery times to provide valid Infinite BOG
 policies for AC and RC.
 
 * Post Processing
-** Improper Accounting for RC_NonBOG-War (cannibalization)
+** Improper Accounting for =RC_NonBOG-War= (cannibalization)
 Near-final results showed difference for certain units with RC populations that
 deviated from the expected accounting for the full supply of units. It appeared
 some units were missing or unaccounted for during surge periods. This was an
@@ -149,7 +153,7 @@ profiler, this led to a number of optimizations for clojure methods invoked
 alond the program's "hot path." 
 
 The largest improvement came from correctly enabling a previously implemented
-(and unintentinoally crippled) performance optimization related to storing
+(and unintentionally hobbled) performance optimization related to storing
 entity data.  After removing the unintented obstacle and enabling the intended
 optimization, M4 runtime decreased by 50 in stress tests%.  
 
