@@ -1,0 +1,164 @@
+#+TITLE: Notes on M4 Problems, Solutions, and Enhancements for TAA23-27
+#+AUTHOR: T. Spoon
+#+DATE:   13 Feb 2020
+#+VERSION: 1.2
+#+STARTUP: showall
+#+LANGUAGE: en
+#+OPTIONS: ':t toc:nil
+
+* Multiple Runs
+** Reproducibility
+Initial random run proof of concept was brittle by design and focused on
+a single  type of supply variation along with using the shared global
+pseudo random number generator.  The consequence was if there were
+runtime errors or anomolies, we could not directly reproduce them 
+from the inputs, and had to generate more random runs in a batch 
+to find a failure case.  
+
+The fix refactored and extended the random project generation method,
+as well as introduced a means for seeding the PRNG and recording the 
+seed in the output.  This will allow strict reproducibility of runs
+as well as any future failure cases.
+** Resiliency
+Initial multiple random run script intentionally threw exceptions at
+runtime if any problems occurred in any random run.  This was useful for
+verification early on, but for overnight batch runs proved problematic.
+
+The random run script now establishes user-defined number of retries in case a
+random replication throws a runtime exception, and documents failure cases for
+the input SRC and supply level, but will keep trying to process other supply
+variation replications. This should prevent one possible rare corner case run
+from corrupting the entire batch and wasting a night, while allowing follow-up
+reproduction and verification of any results that required retries or failed.
+
+** Experiment Variation
+Original proof of concept only focused on one assumed policy for each component, 
+with a hard-coded cyclelegth upon which random initial conditions were drawn.
+Additionally, the levels of supply for the experiment were fixed, forcing 
+all runs to be exhastive in nature when sparse runs may be more desirable.
+
+New design allows arbitrary transformations of supply, and a high level API for
+supplying things like compo-specific cyclelengths for initial condition
+generation, and supply variation levels for sparse experimental designs. This
+provides leverage via scripting, so that many different project-specific
+experiment inputs can be managed and handled as data or scripts outside the
+model infrastructure.
+
+** API
+
+Defined a simple, high-level API on top of the legacy random run
+infrastructure.  The design enables easy scripting of potentially
+complex experiments.
+
+* New Policies
+** Invalid Deployer Exception
+There's basically a corner case introduced by Craig's new Bog forever policy
+(novel to this TAA), where an AC unit can end up with 0 bog budget after bogging
+for a long time and changing policies. 
+
+Under the new policy during return to competition, its BOG exceeded what would
+be allowed for the policy's BOG Budget, so BOGBudget is zeroed out. It shouldn't
+be eligible to deploy - per normal criteria - although this doesn't hold for
+NonBOG. 
+
+The pre-deployment validity check gets triggered, because the unit is selected
+for NonBOG (it meets the readiness criteria or lack thereof), but it doesn't
+have any BOG Budget (and we don't allow units with 0 BOG to "deploy" anywhere).
+
+From a business rule perspective, the unit should go to reset if it can't be
+used in the next policy, and start a new cycle (where its bogbudget would be
+reset). 
+
+This phenomenon never occured because, even with max utilization policies in the
+past, we had some notion of cyclical deployments (even with 0 dwell before
+deployment, BOG was typically limited), which would force periodic resets and
+renewal of BOG Budget. 
+
+We also have the case where the (new) demand rule prefers AC units for fwd
+stationed deployments (modeled as NonBOG), coupled with an SRC with a relative
+paucity of AC units. So an interesting intersection of factors leading to a rare
+case where previous assumptions are tested and exceptions are thrown to warn us.
+
+** Infinite BOG Policy -> Unintentionally Always Available
+This is a tricky situation stemming from the new BOGForever policy (and similar
+RCSurge policies). We have - under the preexisting prescriptions and rules - a
+situation where the unit is entirely legally able to avoid ever going to reset
+due to the arbitrary contiguity of demands and policy change timings. 
+
+It's possible (apparently for a significant portion of the runs with low AC
+inventory) for this to happen with enough units to effectively eliminate any
+rotation or other movement in the final period / phase. Everything basically
+freezes (in this case).
+
+Fixed with a change the BOGForever policy to one which has infinite recovery
+as well as infinite BOGBudget.  This allows units to extend BOG for as long as
+necessary for the Surge, but upon deactivation of the demand, they cannot go
+back to available via recovery and re-entry (thus bypassing reset).  Instead,
+they must go to reset, at which point pending policy changes are applied.
+
+** Policy Record Recovery Unused 
+Necessary to counteract new Infinite BOG problem. Due to lack of use in existing
+policies, tying user-defined policies to the Recovery field specified in the
+input (although minor) had never been implemented. This was a minor fix that
+allowed us to supply infinite recovery times to provide valid Infinite BOG
+policies for AC and RC.
+
+* Post Processing
+** Improper Accounting for RC_NonBOG-War (cannibalization)
+Near-final results showed difference for certain units with RC populations that
+deviated from the expected accounting for the full supply of units. It appeared
+some units were missing or unaccounted for during surge periods. This was an
+unintentional consequence of intentionally removing "cannibalization" demands
+when computing fill statistics, in an attempt to not bias fill results with
+units that were meant to be broken/unusable due to their resources being spent
+on other unit readiness.
+
+The fix here was to change the accounting. Rather then exclude these pseudo
+fills, we repurposed their fills to add to "not-ready" trends, and thus provide
+consistent accounting for all units.
+
+* General
+** Early termination / truncation of final simulation history
+There was a very subtle bug that only occurred when the simulation end time
+implicitly defined by the last demand deactivation was shorter than the
+arbitrary default end-time of 5001. In these cases, the final simulation frame
+in the simulation history was elided, leading to unexpected results for the
+final phse of simulation history. 
+
+Discovered the cause in spork.sim.history and patched to prevent future
+occurances.
+
+** Runtime speed / Throughput
+*** Multicore Scaling
+Explored naive parallelism and the limits existing algorithms and hardware
+yielded. M4 will not perfectly scale on a single compute node, despite the
+presence of multiple cores (no progam will, in fact). This is due to a
+combination of implicitly shared system resources, from memory, to processor
+caches, to the JVM heap and garbage collector. As more workloads are spun out to
+individual threads, there is an implicit contention for resources that builds.
+Empirically, one can expect about 2-4x speed up on current hardware with 4-8
+logical cores (as opposed to hyperthreaded cores). On larger machines, such as
+an AWS 72-core cluster, the scaling effect is productive up to around 14x, but
+obviously not 1:1 propotioned with workload. This effect would scale
+horizontally with more individual compute nodes (e.g. separate machines).
+
+*** Single Core Optimization
+Absent the ability to scale perfectly per-core, the remaining option was to
+profile and agressively optimize single-core performance. Using the visualVM
+profiler, this led to a number of optimizations for clojure methods invoked
+alond the program's "hot path." 
+
+The largest improvement came from correctly enabling a previously implemented
+(and unintentinoally crippled) performance optimization related to storing
+entity data.  After removing the unintented obstacle and enabling the intended
+optimization, M4 runtime decreased by 50 in stress tests%.  
+
+Optimizations applied to M4 were relegated to those having no effect on the 
+semantics of the model; e.g. they should not alter the output given the same 
+input.  After speeding up M4, the automated comparative verification techniques
+from the MARV (MARATHON Verification) study demonstrated identical output between
+the two versions.
+
+More invasive optimizations (such as the use of mutation and destructive memory
+operations) would likely yield more performance, at the cost of "safe" correctness
+and additional verification effort.  Additional "safe" optimizations are pending.
