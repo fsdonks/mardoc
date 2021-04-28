@@ -1,0 +1,176 @@
+#+OPTIONS: tex:t
+#+Title: Formulating Existing Force Structure Optimization
+#+HTML_MATHJAX: align: left indent: 5em tagside: left font: Neo-Euler
+#+HTML_MATHJAX: cancel.js noErrors.js
+
+* Introduction
+
+A formulation for a MIP goal program to formalize force structure optimization.
+
+* Sets
+$SRCS$ \\ 
+$phases$ 
+
+* Parameters
+
+- ~weight(phase)~ The priority weighting by phase, summing to unity.
+- ~excess(SRC,phase,n)~ The excess fill by src, in a phase, if supply level n is chosen.
+- ~demandmet(SRC,phase,n)~ The demand met by src, in a phase, if supply level n is chosen.
+- ~strength(SRC,n)~  The total strength associated with src, is supply level n is chosen.
+- ~lower(SRC)~  The lower bound for supply level n for src.
+- ~upper(SRC)~  The upper bound for supply level n for src.
+- ~bounds(SRC)~  $\{lower(SRC) ... upper(SRC)\}$  The integer range of supply levels for src.
+- ~targetstrength~ The targeted end strength for our goal program.
+ 
+* Variables
+We define a few free variables.
+
+~selected~ is a binary variable determining if a level of supply for an SRC was chosen:
+
+$\underset{\forall SRC \in SRCS \\ \forall n \in bounds(SRC)}{selected(SRC,n)} \in \{0,1\}$
+
+Since we have end-strength goals, we introduce necessary variables to implement absolute
+value relations and constraints: 
+
+$posdev \in R_+$ the "chosen" positive deviation for end strength\\  
+$negdev \in R_+$ the "chosen" negative deviation for end strength\\
+
+$strdev \in R$ surrogate for the relating positive and negative deviation 
+
+* Constraints
+** Fills
+\forall SRC \in SRCS
+
+\begin{equation}
+wfill(SRC) = \sum_{n \in bounds(SRC) \\ \forall phase \in phases}weight(phase)*demandmet(SRC,phase,n)*selected(SRC,n)
+\end{equation}
+
+\begin{equation}
+wexcess(SRC) = \sum_{n \in bounds(SRC) \\ \forall phase \in phases}weight(phase)*excess(SRC,phase,n)*selected(SRC,n)
+\end{equation}
+
+\begin{equation}
+\sum_{n \in bounds(SRC)}selected(SRC,n) = 1
+\end{equation}
+
+** Total Weighted Fill
+\begin{equation}
+totalfill = \sum_{SRC \in SRCS}wfill(SRC)
+\end{equation}
+
+** Total Excess Fill
+\begin{equation}
+totalexcess = \sum_{SRC \in SRCS}wexcess(SRC)
+\end{equation}
+
+** End Strength
+\begin{equation}
+endstrength = \sum_{\forall SRC \in SRCS \\ \forall n \in bounds(SRC)}{strength(SRC,n)*selected(SRC,n)}
+\end{equation}
+
+*** Deviation
+End strength is a goal, which may deviate absolutely. We provide a fill
+deviation variable that captures deviation from the expectation.
+
+Strength deviation is the measure of observed strength less the target. It may
+be positive or negative.
+
+\begin{equation}
+	strengthdev = posdev - negdev
+\end{equation}
+
+Absolute strength deviation is the sum of our two positive variables, this
+represents $\mid strengthdev \mid$, which will contribute to the objective.
+
+\begin{equation}
+	absstrengthdev = posdev + negdev
+\end{equation}
+
+Codify our endstrength goal.
+
+\begin{equation}
+  endstrength + strengthdev = target
+\end{equation}
+
+
+** Objectives
+In the legacy example, we have 2 objectives that are
+maximized hierarchically.
+
+We want to select a force structure where 
+
+- we minimize deviation from the force structure target
+- maximize (or preserve) weighted fill
+- maximize (or preserve) weighted excess
+
+\begin{equation}
+
+\min absstrengthdev \\
+\max totalfill      \\
+\max totalexcess    \\
+
+\end{equation}
+
+We could formulate this as a composite weighted objective function
+using the Big M method or similar (weights may need adjusting):
+
+\begin{equation}
+
+\max z = -10000*absstrengthdev + 1000*totalfill + totalexcess   
+
+\end{equation}
+
+* Additional Goals
+** Deviation From Original Supply
+We can also codify a desire to retain the original balance of 
+structure as much as possible by choosing to deviate as little as possible
+from some baseline for each SRC.
+
+** Additional Parameters
+$baseline(SRC) \in bounds(SRC)$
+
+** Additional Variables
+
+$posSRCdev(SRC)$ \in R_+ "chosen" positive deviation in SRC structure\\
+$negSRCdev(SRC)$ \in R_+ "chosen" negative deviation in SRC structure\\
+$SRCdev(SRC)$ \in R surrogate for relating positive and negative structure deviation
+
+** Additional Constraints 
+
+\begin{equation}
+	SRCdev(SRC) = posSRCdev(SRC) - negSRCdev(SRC)
+\end{equation}
+
+\begin{equation}
+	absSRCdev(SRC) = posSRCdev(SRC) + negSRCdev(SRC)
+\end{equation}
+
+Codify our structure deviation goal:
+
+$\forall SRC \in SRCs$
+\begin{equation}
+  \sum_{n \in bounds(SRC)}selected(SRC,n) + SRCdev = baseline(SRC)
+\end{equation}
+
+\begin{equation}
+totalSRCdev = \sum_{SRC in SRCS}absSRCdev(SRC)
+\end{equation}
+
+* Revised Objective
+\begin{equation}
+
+\min absstrengthdev \\
+\max totalfill      \\
+\max totalexcess    \\
+\min totalSRCdev    \\
+
+\end{equation}
+
+We could formulate this as a composite weighted objective function
+using the Big M method or similar (weights may need adjusting):
+
+\begin{equation}
+
+\max z = -10000*absstrengthdev + 1000*totalfill + totalexcess -  0.01*totalSRCdev
+
+\end{equation}
