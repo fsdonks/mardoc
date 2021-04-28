@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-04-28 Wed 18:25 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Formulating Existing Force Structure Optimization</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="tom" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "left",
+        displayIndent: "5em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "Neo-Euler"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "Neo-Euler"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "left",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Formulating Existing Force Structure Optimization</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgbee5cbe">1. Introduction</a></li>
+<li><a href="#org90dfa2c">2. Sets</a></li>
+<li><a href="#org0291615">3. Parameters</a></li>
+<li><a href="#org641a886">4. Variables</a></li>
+<li><a href="#orgc38cbb8">5. Constraints</a>
+<ul>
+<li><a href="#orgf7f7423">5.1. Fills</a></li>
+<li><a href="#org91b11ba">5.2. Total Weighted Fill</a></li>
+<li><a href="#org2ea420f">5.3. Total Excess Fill</a></li>
+<li><a href="#org6c16b17">5.4. End Strength</a>
+<ul>
+<li><a href="#org15f5738">5.4.1. Deviation</a></li>
+</ul>
+</li>
+<li><a href="#org854574f">5.5. Objectives</a></li>
+</ul>
+</li>
+<li><a href="#org776b96c">6. Additional Goals</a>
+<ul>
+<li><a href="#org28787e5">6.1. Deviation From Original Supply</a></li>
+<li><a href="#org25c8f4c">6.2. Additional Parameters</a></li>
+<li><a href="#org48f2d4a">6.3. Additional Variables</a></li>
+<li><a href="#orgaa9928f">6.4. Additional Constraints</a></li>
+</ul>
+</li>
+<li><a href="#org98ff646">7. Revised Objective</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgbee5cbe" class="outline-2">
+<h2 id="orgbee5cbe"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+A formulation for a MIP goal program to formalize force structure optimization.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org90dfa2c" class="outline-2">
+<h2 id="org90dfa2c"><span class="section-number-2">2</span> Sets</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+\(SRCS\) <br />
+\(phases\) 
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0291615" class="outline-2">
+<h2 id="org0291615"><span class="section-number-2">3</span> Parameters</h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li><code>weight(phase)</code> The priority weighting by phase, summing to unity.</li>
+<li><code>excess(SRC,phase,n)</code> The excess fill by src, in a phase, if supply level n is chosen.</li>
+<li><code>demandmet(SRC,phase,n)</code> The demand met by src, in a phase, if supply level n is chosen.</li>
+<li><code>strength(SRC,n)</code>  The total strength associated with src, is supply level n is chosen.</li>
+<li><code>lower(SRC)</code>  The lower bound for supply level n for src.</li>
+<li><code>upper(SRC)</code>  The upper bound for supply level n for src.</li>
+<li><code>bounds(SRC)</code>  \(\{lower(SRC) ... upper(SRC)\}\)  The integer range of supply levels for src.</li>
+<li><code>targetstrength</code> The targeted end strength for our goal program.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org641a886" class="outline-2">
+<h2 id="org641a886"><span class="section-number-2">4</span> Variables</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+We define a few free variables.
+</p>
+
+<p>
+<code>selected</code> is a binary variable determining if a level of supply for an SRC was chosen:
+</p>
+
+<p>
+\(\underset{\forall SRC \in SRCS \\ \forall n \in bounds(SRC)}{selected(SRC,n)} \in \{0,1\}\)
+</p>
+
+<p>
+Since we have end-strength goals, we introduce necessary variables to implement absolute
+value relations and constraints: 
+</p>
+
+<p>
+\(posdev \in R_+\) the "chosen" positive deviation for end strength<br />
+\(negdev \in R_+\) the "chosen" negative deviation for end strength<br />
+</p>
+
+<p>
+\(strdev \in R\) surrogate for the relating positive and negative deviation 
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc38cbb8" class="outline-2">
+<h2 id="orgc38cbb8"><span class="section-number-2">5</span> Constraints</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+<div id="outline-container-orgf7f7423" class="outline-3">
+<h3 id="orgf7f7423"><span class="section-number-3">5.1</span> Fills</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+&forall; SRC &isin; SRCS
+</p>
+
+\begin{equation}
+wfill(SRC) = \sum_{n \in bounds(SRC) \\ \forall phase \in phases}weight(phase)*demandmet(SRC,phase,n)*selected(SRC,n)
+\end{equation}
+
+\begin{equation}
+wexcess(SRC) = \sum_{n \in bounds(SRC) \\ \forall phase \in phases}weight(phase)*excess(SRC,phase,n)*selected(SRC,n)
+\end{equation}
+
+\begin{equation}
+\sum_{n \in bounds(SRC)}selected(SRC,n) = 1
+\end{equation}
+</div>
+</div>
+
+<div id="outline-container-org91b11ba" class="outline-3">
+<h3 id="org91b11ba"><span class="section-number-3">5.2</span> Total Weighted Fill</h3>
+<div class="outline-text-3" id="text-5-2">
+\begin{equation}
+totalfill = \sum_{SRC \in SRCS}wfill(SRC)
+\end{equation}
+</div>
+</div>
+
+<div id="outline-container-org2ea420f" class="outline-3">
+<h3 id="org2ea420f"><span class="section-number-3">5.3</span> Total Excess Fill</h3>
+<div class="outline-text-3" id="text-5-3">
+\begin{equation}
+totalexcess = \sum_{SRC \in SRCS}wexcess(SRC)
+\end{equation}
+</div>
+</div>
+
+<div id="outline-container-org6c16b17" class="outline-3">
+<h3 id="org6c16b17"><span class="section-number-3">5.4</span> End Strength</h3>
+<div class="outline-text-3" id="text-5-4">
+\begin{equation}
+endstrength = \sum_{\forall SRC \in SRCS \\ \forall n \in bounds(SRC)}{strength(SRC,n)*selected(SRC,n)}
+\end{equation}
+</div>
+
+<div id="outline-container-org15f5738" class="outline-4">
+<h4 id="org15f5738"><span class="section-number-4">5.4.1</span> Deviation</h4>
+<div class="outline-text-4" id="text-5-4-1">
+<p>
+End strength is a goal, which may deviate absolutely. We provide a fill
+deviation variable that captures deviation from the expectation.
+</p>
+
+<p>
+Strength deviation is the measure of observed strength less the target. It may
+be positive or negative.
+</p>
+
+\begin{equation}
+	strengthdev = posdev - negdev
+\end{equation}
+
+<p>
+Absolute strength deviation is the sum of our two positive variables, this
+represents \(\mid strengthdev \mid\), which will contribute to the objective.
+</p>
+
+\begin{equation}
+	absstrengthdev = posdev + negdev
+\end{equation}
+
+<p>
+Codify our endstrength goal.
+</p>
+
+\begin{equation}
+  endstrength + strengthdev = target
+\end{equation}
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org854574f" class="outline-3">
+<h3 id="org854574f"><span class="section-number-3">5.5</span> Objectives</h3>
+<div class="outline-text-3" id="text-5-5">
+<p>
+In the legacy example, we have 2 objectives that are
+maximized hierarchically.
+</p>
+
+<p>
+We want to select a force structure where 
+</p>
+
+<ul class="org-ul">
+<li>we minimize deviation from the force structure target</li>
+<li>maximize (or preserve) weighted fill</li>
+<li>maximize (or preserve) weighted excess</li>
+</ul>
+
+\begin{equation}
+
+\min absstrengthdev \\
+\max totalfill      \\
+\max totalexcess    \\
+
+\end{equation}
+
+<p>
+We could formulate this as a composite weighted objective function
+using the Big M method or similar (weights may need adjusting):
+</p>
+
+\begin{equation}
+
+\max z = -10000*absstrengthdev + 1000*totalfill + totalexcess   
+
+\end{equation}
+</div>
+</div>
+</div>
+
+<div id="outline-container-org776b96c" class="outline-2">
+<h2 id="org776b96c"><span class="section-number-2">6</span> Additional Goals</h2>
+<div class="outline-text-2" id="text-6">
+</div>
+<div id="outline-container-org28787e5" class="outline-3">
+<h3 id="org28787e5"><span class="section-number-3">6.1</span> Deviation From Original Supply</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+We can also codify a desire to retain the original balance of 
+structure as much as possible by choosing to deviate as little as possible
+from some baseline for each SRC.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org25c8f4c" class="outline-3">
+<h3 id="org25c8f4c"><span class="section-number-3">6.2</span> Additional Parameters</h3>
+<div class="outline-text-3" id="text-6-2">
+<p>
+\(baseline(SRC) \in bounds(SRC)\)
+</p>
+</div>
+</div>
+
+<div id="outline-container-org48f2d4a" class="outline-3">
+<h3 id="org48f2d4a"><span class="section-number-3">6.3</span> Additional Variables</h3>
+<div class="outline-text-3" id="text-6-3">
+<p>
+\(posSRCdev(SRC)\) &isin; R_+ "chosen" positive deviation in SRC structure<br />
+\(negSRCdev(SRC)\) &isin; R_+ "chosen" negative deviation in SRC structure<br />
+\(SRCdev(SRC)\) &isin; R surrogate for relating positive and negative structure deviation
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgaa9928f" class="outline-3">
+<h3 id="orgaa9928f"><span class="section-number-3">6.4</span> Additional Constraints</h3>
+<div class="outline-text-3" id="text-6-4">
+\begin{equation}
+	SRCdev(SRC) = posSRCdev(SRC) - negSRCdev(SRC)
+\end{equation}
+
+\begin{equation}
+	absSRCdev(SRC) = posSRCdev(SRC) + negSRCdev(SRC)
+\end{equation}
+
+<p>
+Codify our structure deviation goal:
+</p>
+
+<p>
+\(\forall SRC \in SRCs\)
+</p>
+\begin{equation}
+  \sum_{n \in bounds(SRC)}selected(SRC,n) + SRCdev = baseline(SRC)
+\end{equation}
+
+\begin{equation}
+totalSRCdev = \sum_{SRC in SRCS}absSRCdev(SRC)
+\end{equation}
+</div>
+</div>
+</div>
+
+<div id="outline-container-org98ff646" class="outline-2">
+<h2 id="org98ff646"><span class="section-number-2">7</span> Revised Objective</h2>
+<div class="outline-text-2" id="text-7">
+\begin{equation}
+
+\min absstrengthdev \\
+\max totalfill      \\
+\max totalexcess    \\
+\min totalSRCdev    \\
+
+\end{equation}
+
+<p>
+We could formulate this as a composite weighted objective function
+using the Big M method or similar (weights may need adjusting):
+</p>
+
+\begin{equation}
+
+\max z = -10000*absstrengthdev + 1000*totalfill + totalexcess -  0.01*totalSRCdev
+
+\end{equation}
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: tom</p>
+<p class="date">Created: 2021-04-28 Wed 18:25</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
