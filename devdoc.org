@@ -1,0 +1,165 @@
+#+TITLE: MARATHON Developer Documentation
+#+LANGUAGE: en
+#+OPTIONS: \n:t num:nil
+This document provides useful notes and code examples on different
+parts of MARATHON.  This is intended to be used as an additional resource
+for a developer learning more about the innards of MARATHON on top of
+what's already documented within the source code.
+* Existing Documentation
+The following are additional sources of information found in this
+repository:
+** Marathon Primer v3.2.docx
+For a non-technical read digestible for all, the MARATHON
+Primer describes why MARATHON was built.
+** mardoc.org
+With a bit more technical detail designed for an analyst to read, this
+document describes the basic front and back end portions of MARATHON,
+a brief overview of how MARATHON operates, and some examples of the
+problems MARATHON has been used for.
+** fillarch.org
+For a developer, this has some technical notes on filling demands and
+how DemandRules are created based on demand fields :SourceFirst and
+:Category and mapped to a QueryEnvironment for querying units and
+returning an ordered list of units for filling the demand.
+* Tools for Working with MARATHON
+These tools are used for working with MARATHON and these are some
+basic commands to get started.
+** Emacs
+ C-SPACE Set the mark for copying and pasting.
+ C-e Move to end of the line.
+ M-q Insert reasonable newlines at the end of each line in the
+ highlighted block.
+
+ Replace newlines with a space
+ 1) M-x replace-string
+ 2) C-q C-j :: C-j is newline and we need to quote it with C-q
+ 3) RET
+ 4)  :: Enter a blank space here.
+*** Org Mode
+Assuming no experience with Org mode, this section provides basic
+commands to get started without reading the Org mode documentation.
+Examples of in-line commands are shown in this document.
+
+M-RET Insert a new heading in the current level.  
+M-L Demote the current heading by one level.  
+TAB Expand the level under the cursor.  
+SHIFT-TAB Hide a level under the cursor.  
+Images can be linked from the relative path when surrounding
+the relative path with double brackets.
+**** Startup Options
+[backslash]n:t Preserve newlines
+H:nil Don't number levels that are 3 or greater.
+**** Ordered (1) ) and unordered (-) lists can be used as levels, too.
+To describe an item in a list, use ' :: ' after the item.
+*** Converting .org Files
+**** .org to odt (best)
+Other issues below are fixed but it looks like each line length in the
+odt is shorter than it needs to be.  This is an artifact of my
+fill-column being set to 70 with auto-fill-mode enabled.  Apparently,
+70 shoul be more readable than a longer value anyways, and setting it
+to a longer value for an existing doc is probably complicated.
+
+Call this from Emacs.
+org-odt-export-to-odt
+**** .org to pdf (better)
+This is better, but pandoc doesn't support num option to specify
+whether levels get numbered or not.
+
+With pandoc installed, call this from the terminal.
+pandoc -s devdoc.org -o devdoc.pdf
+**** .org to html (worst)
+When coverting to html this way, the source code examples lack
+formatting.
+
+Call this from Emacs.
+org-html-export-to-html 
+** Leiningen
+* Debugging Unit Behavior
+#+BEGIN_SRC clojure
+(require 'marathon.ces.analysis) 
+(ns marathon.ces.analysis) 
+(def path
+"/home/craig/runs/peak_hold_demonstration/m4-book-with-peak-hold.xlsx")
+(require '[marathon.core :as core]) 
+(core/debug-entity "3_01205K000_RC" (count (marathon-stream path)))
+(+ 2 2)
+#+END_SRC
+We can accomplish the same thing, with additional state change
+information via marathon.analysis/entity-trace.  
+#+BEGIN_SRC clojure
+(require '[marathon.analysis :as a]) 
+(a/entity-trace (a/load-context path) "3_01205K000_RC") 
+#+END_SRC
+Below the behavior debugging info there's a <<<<TRACE>>>> delimiter
+followed by frames of [t Location PolicyPosition state cyclestats
+location-change]
+
+* Policy Change Behavior
+Regular policy change: propotion=current cycle time / cycle time to,
+but the proportion isn't used if cycle time to is infinite.  To finite
+from infinite: proportion= remainder of current cycle time / cycle
+time to, so if the current infinite cycle time is less than the cycle
+time to, this is simply current cycle time.  If current infinite cycle
+time is greater than cycle time to, this becomes the remainder.  If
+recovery time is infinite on the max utilization policy, then the unit
+will go to reset after the policy change.  If recovery time is 0, the
+unit won't change policies and will stay in the infinite policy
+forever.
+* Forward Stationed Supply and Demand Modeling
+** Overview
+ With most SRCs, we have a forward stationed supply of units that are
+ stationed overseas.  These forward stationed units do not fill the
+ rotational demands and they stay in the forward stationed demands in
+ competition until conflict, so for each SRC, it makes sense to
+ separate the forward stationed supply from the rotational supply
+ during competition.  Then for single runs that start with an even
+ distribution of initial conditions, the rotational units will be
+ distributed evenly for the rotational demands.  If we drew units for
+ forward stationed demands after evenly distributing all of the units
+ for an SRC, then we would have some rotational gaps in the
+ distribution of units for the rotational demands.
+** Design
+*** Inputs
+- The user enters metadata into an additional field for the RA supply
+   record like {:bins {:forward 2}} to indicate two units are forward
+   stationed.  We could have multiple bins if we wanted.
+- The user enters metadata for the forward stationed demands like
+  {:bins [:forward]} to indicate that they are forward stationed
+  demands and can only be filled by the supply in the :forward bin.
+*** Supply Process
+- When the supply records are loaded, a separate RA supply record is
+  created for each bin of units with a quantity equal to the quantity
+  indicated in the supply record metadata.
+  - In requirements analysis, we should only grow the
+    non-forward-stationed (rotational) supply (those without a
+    :forward value in the metadata).  If we have more bins in the
+    future, we could specify a proportional growth for each bin, but
+    this isn't necessary now.
+  - For the 1 to n supply runs, first we decrement the rotational
+    supply and then we decrement the forward stationed supply, so we
+    provide a prioritized order of bin reductions like [:rotational
+    :forward]
+  - capacity-analysis should work as is after the supply records are
+    modified upon loading the project.	
+
+*** Demand Process
+Demands with :bins can only be filled by those bins of units indicated
+in the vector in the supply metadata.  For this case, they can only be
+filled by forward stationed units.
+* Requirements Analysis
+** Setup
+How does requirements analysis get set up?
+* Command-Separated Visualization
+Vstats marathon stream to edn to visualize
+* Notes
+Temporarily place for random notes that were jotted down before they
+are organized into other sections.
+
+Can add an :unavailable to the effects demand categories.  
+
+New demand category RC cannibalization.  Put in his sample data.  
+
+If add a new category, need to mark it as deployable or not. Add
+category name to a set.  
+
+
