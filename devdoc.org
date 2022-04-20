@@ -47,11 +47,13 @@ SHIFT-TAB Hide a level under the cursor.
 Images can be linked from the relative path when surrounding
 the relative path with double brackets.
 **** Startup Options
-[backslash]n:t Preserve newlines
+[backslash]n:t Preserve newlines.
 H:nil Don't number levels that are 3 or greater.
 **** Ordered (1) ) and unordered (-) lists can be used as levels, too.
 To describe an item in a list, use ' :: ' after the item.
 *** Converting .org Files
+Probably need to put two spaces at the end of hard newlines for Github
+to display the newlines.
 **** .org to odt (best)
 Other issues below are fixed but it looks like each line length in the
 odt is shorter than it needs to be.  This is an artifact of my
@@ -120,28 +122,50 @@ forever.
  distribution of units for the rotational demands.
 ** Design
 *** Inputs
-- The user enters metadata into an additional field for the RA supply
-   record like {:bins {:forward 2}} to indicate two units are forward
-   stationed.  We could have multiple bins if we wanted.
-- The user enters metadata for the forward stationed demands like
-  {:bins [:forward]} to indicate that they are forward stationed
-  demands and can only be filled by the supply in the :forward bin.
-*** Supply Process
-- When the supply records are loaded, a separate RA supply record is
-  created for each bin of units with a quantity equal to the quantity
-  indicated in the supply record metadata.
-  - In requirements analysis, we should only grow the
-    non-forward-stationed (rotational) supply (those without a
-    :forward value in the metadata).  If we have more bins in the
-    future, we could specify a proportional growth for each bin, but
-    this isn't necessary now.
-  - For the 1 to n supply runs, first we decrement the rotational
-    supply and then we decrement the forward stationed supply, so we
-    provide a prioritized order of bin reductions like [:rotational
-    :forward]
-  - capacity-analysis should work as is after the supply records are
-    modified upon loading the project.	
+**** Supply Records
+The user enters metadata into an additional field for the RA supply
+record like {:bins {:forward 2}} to indicate two units are forward
+stationed.  We could have multiple bins if we wanted.  
 
+Possibly added to :Tags in SupplyRecords.  
+marathon.ces.unit/unit-state gets the current state of the unit.  
+marathon.ces.entityfactory processes tags.  
+The tag should just be a map that will get merged with the supply
+record, so in this case, our :Tag could be {:bins {:forward 2}}.
+**** Demand Records
+The user enters metadata for the forward stationed demands in the
+demand record :Tag {:region :forward} to indicate that they are
+forward stationed demands and can only be filled by the supply in
+the :forward bin. We might want to fill from multiple :aligned
+locations, but that's not required for now and this fits nicely with
+existing infrastructure.  
+
+Where do we filter supply for a certain demand?  
+Checkout the "Fenced" category in marathon.ces.rules.  
+But what if I want to merge a NonBOG category with our Fenced
+category?  
+What does the :restricted value in a category do?
+*** Supply Process
+When the supply records are loaded, a separate RA supply record is
+created for each bin of units with a quantity equal to the quantity
+indicated in the supply record metadata.  
+  
+In order to reuse the "Fenced" category, for each :bin, we create an
+RA supply record with a :Tag of {:fenced? true :aligned :forward}
+**** Requirements Analysis
+In requirements analysis, we should only grow the
+non-forward-stationed (rotational) supply (those without a
+:forward value in the metadata).  If we have more bins in the
+future, we could specify a proportional growth for each bin, but
+this isn't necessary now.
+**** 1-n supply runs
+For the 1 to n supply runs, first we decrement the rotational
+supply and then we decrement the forward stationed supply, so we
+provide a prioritized order of bin reductions like [:rotational
+:forward]
+**** capaity-analysis
+capacity-analysis should work as is after the supply records are
+modified upon loading the project.	
 *** Demand Process
 Demands with :bins can only be filled by those bins of units indicated
 in the vector in the supply metadata.  For this case, they can only be
