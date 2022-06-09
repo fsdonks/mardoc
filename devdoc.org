@@ -185,6 +185,48 @@ marathon.ces.unit/unit-state gets the current state of the unit.
 marathon.ces.entityfactory processes tags.  
 The tag should just be a map that will get merged with the supply
 record, so in this case, our :Tag could be {:bins {:forward 2}}.
+
+We could use multimethods like so, so that we add preprocessing
+functions while we are in any namespace as long as we require the
+namespace with defmulti.
+align-units :: supply-record -> [supply-record]
+#+BEGIN_SRC clojure
+(defn align-units
+[{:keys [Quantity SRC Component Tags] :as supply-rec} bins]
+)
+
+;;in marathon.ces.entity ns....
+;;marathon.ces.entityfactory/pre
+
+(defn resolve-fn
+"Given preprocessing functions in the Tags, use the supplied
+namespace if it exists. Otherwise, try to resolve the function in
+our preprocessing-ns for now."
+[func]
+{:pre [(or (symbol? func) (keyword? func))]
+;;make sure that our symbol resolved to something and isn't nil
+:post [(not (nil? %))]}
+(if (keyword? func)
+pre
+(if (namespace-provided? func)
+(resolve func)
+(ns-resolve preprocessing-ns func))))
+
+(defmulti pre (fn [thing & xs]
+(if (keyword? thing)
+thing
+(throw (ex-info "bad shit" {:in thing})))))
+
+{:preproces [:pre/align-units [blah]
+:pre/randomize-cycles [gaussian 2]]}
+
+(ns blah
+(:require [marathon.processing]))
+
+(defmethod marathon.processing/pre :pre/align-units [{:keys [Quantity
+SRC component Tags]}])
+#+END_SRC
+
 **** Demand Records
 The user enters metadata for the forward stationed demands in the
 demand record :Tag {:preprocessing [align-units [[:forward 2]]} to
@@ -322,6 +364,12 @@ When we compute the initial-supply, we keep the existing supply record
 as is and only create a new supply record
 if we are growing a component for which we have no existing supply
 record.  
+If a supply record has a quantity of 0, we grow from there. If there
+is no supply record for a component that we grow, we initialize the
+quantity at 0 and grow from there. After initializing supply, we do a
+quick bound per the peak demand before we go into the
+bisecting-convergence.
+
 When we modify the supply for each run, we add n units to the
 initial-supply distributed according to GhostProportionsAggregate.
 All of the distance functions create a new marathon-stream for each
