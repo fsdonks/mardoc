@@ -383,6 +383,26 @@ forward station supply records are created.
 I'll work on a formal test to verify that this is the case now.
 * Command-Separated Visualization
 Vstats marathon stream to edn to visualize
+* Cloud Migration
+If we get a virtual desktop like we do now on AWS, things are easier,
+but if have to use cloud native applications, we need to build our
+docker images which go through security scans.  
+Docker images with JDK or JRE do exist.
+Assume that the Army cloud is a hostile evironment and we can't get
+anything there.
+** Pushing a commit through GitLab with a continuous integration process
+ - Push commit
+ - Scan commit
+ - Build jar with lein
+ - Invoke dependencies
+ - Scan what was built
+ - Push jar through application deployment pipeline
+   - Use kubernetes to produce docker image :: If do something on
+     local machine, you can create a recipe to build a docker
+     image. Building this recipe becomes more complicated when adding R or
+     Python but it's still possible.
+   - Image gets scanned
+   - Move image to cluster of computers with web address
 * Notes
 Temporarily place for random notes that were jotted down before they
 are organized into other sections.
