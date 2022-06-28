@@ -154,42 +154,26 @@ forever.
  for an SRC, then we would have some rotational gaps in the
  distribution of units for the rotational demands.
 ** Design
-*** Tom's Notes 04/20/2022
-Complete for now
-Should we create a rule for cycle distribution?  
-This computed supply isn't necessary because it's the default deployable-supply.
-#+BEGIN_SRC clojure
-:computed
-    (fn [{:keys [where] :as env} ctx]
-      (store/get-ine ctx [:SupplyStore   ;;<-iff like-keys exist here
-                          :deployable-buckets
-                          :default]))
-#+END_SRC
-Might want to add a new demand category for forward stationed.  
-Maybe in requirements analysis we detect a forward stationed demand
-    category.
-*** Tom's Notes 04/29/2022
-Complete for now
-assume that the inputs have been scrubbed.  (have enough units)
-better way:define rules that map to pipelines and tags are cleaner
-checkout cycle-init-key grouping
 *** Inputs
 **** Supply Records
 The user enters metadata into an additional field for the RA supply
-record like {:bins [:forward 2]} to indicate two units are forward
+record like {:preprocess [align-units [ [:forward 2] ]} to indicate two units are forward
 stationed.  We could have multiple bins if we wanted.  But the
 priority of binning is the first bin.
 
-Possibly added to :Tags in SupplyRecords.  
-marathon.ces.unit/unit-state gets the current state of the unit.  
-marathon.ces.entityfactory processes tags.  
-The tag should just be a map that will get merged with the supply
-record, so in this case, our :Tag could be {:bins {:forward 2}}.
-
-We could use multimethods like so, so that we add preprocessing
-functions while we are in any namespace as long as we require the
-namespace with defmulti.
+where
 align-units :: supply-record -> [supply-record]
+If no namespace is provided in the tag, align units is the name of a
+function in marathon.ces.entityfactory.
+
+The supply record tag above indicates that we should preprocess the
+supply record with a function
+align-units that splits the supply record into two records, one for
+the forward stationed supply and one for the regular supply.
+forward stationed demands and can only be filled by the supply in
+the :forward bin. We might want to fill from multiple :aligned
+locations, but that's not required for now and this fits nicely with
+existing infrastructure.  
 #+BEGIN_SRC clojure
 (defn align-units
 [{:keys [Quantity SRC Component Tags] :as supply-rec} bins]
@@ -212,6 +196,7 @@ pre
 (resolve func)
 (ns-resolve preprocessing-ns func))))
 
+;;could use multimethods for preprocessing
 (defmulti pre (fn [thing & xs]
 (if (keyword? thing)
 thing
@@ -228,16 +213,46 @@ SRC component Tags]}])
 #+END_SRC
 
 **** Demand Records
-The user enters metadata for the forward stationed demands in the
-demand record :Tag {:preprocessing [align-units [[:forward 2]]} to
-indicate that we should preprocess the supply record with a function
-align-units that splits the supply record into two records, one for
-the forward stationed supply and one for the regular supply.
-forward stationed demands and can only be filled by the supply in
-the :forward bin. We might want to fill from multiple :aligned
-locations, but that's not required for now and this fits nicely with
-existing infrastructure.  
+The forward stationed demand Tag should be {:region :forward}
+with a :Category Forward to indicate that the demand is NonBOG and 
+should only be filled by units in the forward stationed supply bin.
+*** Supply Process
+If we do this at initialization of the sim and create the forward
+stationed units first, we should be good for all methods.  Where can
+we plug in?  Grep for initialization.  Well, for the one to n stuff,
+we want to split the supply records when the project is loaded, but
+for requirements analysis and capacity analysis, we can split during
+initialization, immediately before initialize-cycle-times in
+units-from-records once tags have been merged.  For the 1 to n, we
+merge tags and use the same function after the project is loaded in
+rand-proj after table-records.  
+**** Requirements Analysis
+In requirements analysis, we should only grow the
+non-forward-stationed (rotational) supply (those without a
+:forward value in the metadata).  If we have more bins in the
+future, we could specify a proportional growth for each bin, but
+this isn't necessary now.
+**** 1-n supply runs
+For the 1 to n supply runs, we just decrement RA supply and don't
+need to change the forward stationed bin as long as forward 
+stationed demands are the highest priority.
+**** capacity-analysis
+capacity-analysis should work as is after the supply records are
+modified upon loading the project.	
+*** Demand Process
+Demands with :bins can only be filled by those bins of units indicated
+in the vector in the supply metadata.  For this case, they can only be
+filled by forward stationed units.
 
+* Filling Demands
+** Fill Priorities
+1) Look for follow-on supply that is currently assigned to the
+demandgroup (unless the demandgroup is "Ungrouped")
+2) Choose the default supply
+** Fill Graph
+ The sources of the fill graph are SRC nodes for the demand and sinks
+ are SRC nodes for the supply.  
+** Fill Process
 Where do we filter supply for a certain demand?  
 Checkout the "Fenced" category in marathon.ces.rules.  
 But what if I want to merge a NonBOG category with our Fenced
@@ -278,58 +293,6 @@ marathon.ces.fill/satisfy-demand
 marathon.ces.fill/find-supply  
 Then we end up in marathon.ces.query/find-feasible-supply which starts
 to get lower level.  How do we use the :restricted value in a category?
-*** Supply Process
-When the supply records are loaded (or at initialization), a separate
-RA supply record is created for each bin of units with a quantity
-equal to the quantity indicated in the supply record metadata.  
-
-If we do this at initialization of the sim and create the forward
-stationed units first, we should be good for all methods.  Where can
-we plug in?  Grep for initialization.  Well, for the one to n stuff,
-we want to split the supply records when the project is loaded, but
-for requirements analysis and capacity analysis, we can split during
-initialization, immediately before initialize-cycle-times in
-units-from-records once tags have been merged.  For the 1 to n, we
-merge tags and use the same function after the project is loaded in
-rand-proj after table-records.  
-
-After Tom:  
-We can supply a function from the tags, but we need to do that after
-we merge tags, so pull merge tags out of record->unitdata (grep for
-that)  
-
-Then determine where to keep function (Separate namesapce?)  
-Then can put all supply/ functions after filter-func in units-from.
-
-
-In order to reuse the "Fenced" category, for each :bin, we create an
-RA supply record with a :Tag of {:aligned :forward}
-**** Requirements Analysis
-In requirements analysis, we should only grow the
-non-forward-stationed (rotational) supply (those without a
-:forward value in the metadata).  If we have more bins in the
-future, we could specify a proportional growth for each bin, but
-this isn't necessary now.
-**** 1-n supply runs
-For the 1 to n supply runs, first we decrement the rotational
-supply and then we decrement the forward stationed supply, so we
-provide a prioritized order of bin reductions like [:rotational
-:forward]
-**** capaity-analysis
-capacity-analysis should work as is after the supply records are
-modified upon loading the project.	
-*** Demand Process
-Demands with :bins can only be filled by those bins of units indicated
-in the vector in the supply metadata.  For this case, they can only be
-filled by forward stationed units.
-* Filling Demands
-** Fill Priorities
-1) Look for follow-on supply that is currently assigned to the
-demandgroup (unless the demandgroup is "Ungrouped")
-2) Choose the default supply
-** Fill Graph
- The sources of the fill graph are SRC nodes for the demand and sinks
- are SRC nodes for the supply.  
 * Supply Setup
 If a SupplyRecord has a quantity of 1, then we use the CycleTime
 field as an initial CycleTime, so SupplyRecords with a quantity of one
