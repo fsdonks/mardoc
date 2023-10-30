@@ -1,0 +1,380 @@
+#+TITLE: MARATHON Developer Documentation
+#+LANGUAGE: en
+#+OPTIONS: \n:t num:nil
+This document provides useful notes and code examples on different
+parts of MARATHON.  This is intended to be used as an additional resource
+for a developer learning more about the innards of MARATHON on top of
+what's already documented within the source code.
+* Existing Documentation
+The following are additional sources of information found in this
+repository:
+** Marathon Primer v3.2.docx
+For a non-technical read digestible for all, the MARATHON
+Primer describes why MARATHON was built.
+** mardoc.org
+With a bit more technical detail designed for an analyst to read, this
+document describes the basic front and back end portions of MARATHON,
+a brief overview of how MARATHON operates, and some examples of the
+problems MARATHON has been used for.
+** fillarch.org
+For a developer, this has some technical notes on filling demands and
+how DemandRules are created based on demand fields :SourceFirst and
+:Category and mapped to a QueryEnvironment for querying units and
+returning an ordered list of units for filling the demand.
+* Tools for Working with MARATHON
+These tools are used for working with MARATHON and these are some
+basic commands to get started.
+** Emacs
+ C-SPACE Set the mark for copying and pasting.
+ C-e Move to end of the line.
+ M-q Insert reasonable newlines at the end of each line in the
+ highlighted block.
+
+ Replace newlines with a space
+ 1) M-x replace-string
+ 2) C-q C-j :: C-j is newline and we need to quote it with C-q
+ 3) RET
+ 4)  :: Enter a blank space here.
+*** Org Mode
+Assuming no experience with Org mode, this section provides basic
+commands to get started without reading the Org mode documentation.
+Examples of in-line commands are shown in this document.
+
+M-RET Insert a new heading in the current level.  
+M-L Demote the current heading by one level.  
+TAB Expand the level under the cursor.  
+SHIFT-TAB Hide a level under the cursor.  
+Images can be linked from the relative path when surrounding
+the relative path with double brackets.
+**** Startup Options
+[backslash]n:t Preserve newlines.  
+H:nil Don't number levels that are 3 or greater.
+**** Ordered (1) ) and unordered (-) lists can be used as levels, too.
+To describe an item in a list, use ' :: ' after the item.
+*** Converting .org Files
+Probably need to put two spaces at the end of hard newlines for Github
+to display the newlines.
+**** .org to odt (best)
+Other issues below are fixed but it looks like each line length in the
+odt is shorter than it needs to be.  This is an artifact of my
+fill-column being set to 70 with auto-fill-mode enabled.  Apparently,
+70 shoul be more readable than a longer value anyways, and setting it
+to a longer value for an existing doc is probably complicated.
+
+Call this from Emacs.
+org-odt-export-to-odt
+**** .org to pdf (better)
+This is better, but pandoc doesn't support num option to specify
+whether levels get numbered or not.
+
+With pandoc installed, call this from the terminal.
+pandoc -s devdoc.org -o devdoc.pdf
+**** .org to html (worst)
+When coverting to html this way, the source code examples lack
+formatting.
+
+Call this from Emacs.
+org-html-export-to-html 
+** Leiningen
+* Debugging Unit Behavior
+#+BEGIN_SRC clojure
+(require 'marathon.analysis) 
+(ns marathon.analysis) 
+(def path
+"/home/craig/runs/peak_hold_demonstration/m4-book-with-peak-hold.xlsx")
+(require '[marathon.core :as core]) 
+(core/debug-entity "3_01205K000_RC" (count (marathon-stream path)))
+(+ 2 2)
+#+END_SRC
+We can accomplish the same thing, with additional state change
+information via marathon.analysis/entity-trace.  
+#+BEGIN_SRC clojure
+(require '[marathon.analysis :as a]) 
+(a/entity-trace (a/load-context path) "3_01205K000_RC") 
+#+END_SRC
+Below the behavior debugging info there's a <<<<TRACE>>>> delimiter
+followed by frames of [t Location PolicyPosition state cyclestats
+location-change]
+* Debugging Effects Bug
+#+BEGIN_SRC clojure
+(def ctx (a/load-context p))
+coutn streams  
+(count (marathon-stream ctx))
+(def id "1_SRC_NG")  
+(def good-frames (->> ctx (marathon-stream) (take-while (fn [[t x]]
+(<= t 1462)))))
+;;primary entry point  
+;;order of events for each day
+marathon.ces.engine/sim-step
+;;get entity
+(def e (store/get-entity ctx id))
+;;get policy
+(-> e :policy keys)
+;;which phases
+(-> e :policy :policies keys)
+;;visualize state transition graph
+(-> e :policy :policies (get "Phase4") core/visualize-policy)
+;;changing policies ends up in marathon.ces.behavior and handles
+;;:policy-change
+#+END_SRC
+
+Preprocessing step to do stuff  
+hooks in the input to pickup and process  
+Keep in tags  
+preprocessing step  
+:pre/randomly-distribute 
+set requirements  records to be constant
+:supplytype/constant  
+can add versions  
+:supply.v2/blah
+* Checking Demand Store
+See marathon.ces.testing for forward stationing examples.
+* Policy Change Behavior
+Regular policy change: propotion=current cycle time / cycle time to,
+but the proportion isn't used if cycle time to is infinite.  To finite
+from infinite: proportion= remainder of current cycle time / cycle
+time to, so if the current infinite cycle time is less than the cycle
+time to, this is simply current cycle time.  If current infinite cycle
+time is greater than cycle time to, this becomes the remainder.  If
+recovery time is infinite on the max utilization policy, then the unit
+will go to reset after the policy change.  If recovery time is 0, the
+unit won't change policies and will stay in the infinite policy
+forever.
+* Forward Stationed Supply and Demand Modeling
+** Overview
+ With most SRCs, we have a forward stationed supply of units that are
+ stationed overseas.  These forward stationed units do not fill the
+ rotational demands and they stay in the forward stationed demands in
+ competition until conflict, so for each SRC, it makes sense to
+ separate the forward stationed supply from the rotational supply
+ during competition.  Then for single runs that start with an even
+ distribution of initial conditions, the rotational units will be
+ distributed evenly for the rotational demands.  If we drew units for
+ forward stationed demands after evenly distributing all of the units
+ for an SRC, then we would have some rotational gaps in the
+ distribution of units for the rotational demands.
+** Design
+*** Inputs
+**** Supply Records
+The user enters metadata into an additional field for the RA supply
+record like {:preprocess [align-units [ [:forward 2] ]} to indicate two units are forward
+stationed.  We could have multiple bins if we wanted.  But the
+priority of binning is the first bin.
+
+where
+align-units :: supply-record -> [supply-record]
+If no namespace is provided in the tag, align units is the name of a
+function in marathon.ces.entityfactory.
+
+The supply record tag above indicates that we should preprocess the
+supply record with a function
+align-units that splits the supply record into two records, one for
+the forward stationed supply and one for the regular supply.
+forward stationed demands and can only be filled by the supply in
+the :forward bin. We might want to fill from multiple :aligned
+locations, but that's not required for now and this fits nicely with
+existing infrastructure.  
+#+BEGIN_SRC clojure
+(defn align-units
+[{:keys [Quantity SRC Component Tags] :as supply-rec} bins]
+)
+
+;;in marathon.ces.entity ns....
+;;marathon.ces.entityfactory/pre
+
+(defn resolve-fn
+"Given preprocessing functions in the Tags, use the supplied
+namespace if it exists. Otherwise, try to resolve the function in
+our preprocessing-ns for now."
+[func]
+{:pre [(or (symbol? func) (keyword? func))]
+;;make sure that our symbol resolved to something and isn't nil
+:post [(not (nil? %))]}
+(if (keyword? func)
+pre
+(if (namespace-provided? func)
+(resolve func)
+(ns-resolve preprocessing-ns func))))
+
+;;could use multimethods for preprocessing
+(defmulti pre (fn [thing & xs]
+(if (keyword? thing)
+thing
+(throw (ex-info "bad shit" {:in thing})))))
+
+{:preproces [:pre/align-units [blah]
+:pre/randomize-cycles [gaussian 2]]}
+
+(ns blah
+(:require [marathon.processing]))
+
+(defmethod marathon.processing/pre :pre/align-units [{:keys [Quantity
+SRC component Tags]}])
+#+END_SRC
+
+**** Demand Records
+The forward stationed demand Tag should be {:region :forward}
+with a :Category Forward to indicate that the demand is NonBOG and 
+should only be filled by units in the forward stationed supply bin.
+*** Supply Process
+If we do this at initialization of the sim and create the forward
+stationed units first, we should be good for all methods.  Where can
+we plug in?  Grep for initialization.  Well, for the one to n stuff,
+we want to split the supply records when the project is loaded, but
+for requirements analysis and capacity analysis, we can split during
+initialization, immediately before initialize-cycle-times in
+units-from-records once tags have been merged.  For the 1 to n, we
+merge tags and use the same function after the project is loaded in
+rand-proj after table-records.  
+**** Requirements Analysis
+In requirements analysis, we should only grow the
+non-forward-stationed (rotational) supply (those without a
+:forward value in the metadata).  If we have more bins in the
+future, we could specify a proportional growth for each bin, but
+this isn't necessary now.
+**** 1-n supply runs
+For the 1 to n supply runs, we just decrement RA supply and don't
+need to change the forward stationed bin as long as forward 
+stationed demands are the highest priority.
+**** capacity-analysis
+capacity-analysis should work as is after the supply records are
+modified upon loading the project.	
+*** Demand Process
+Demands with :bins can only be filled by those bins of units indicated
+in the vector in the supply metadata.  For this case, they can only be
+filled by forward stationed units.
+
+* Filling Demands
+** Fill Priorities
+1) Look for follow-on supply that is currently assigned to the
+demandgroup (unless the demandgroup is "Ungrouped")
+2) Choose the default supply
+** Fill Graph
+ The sources of the fill graph are SRC nodes for the demand and sinks
+ are SRC nodes for the supply.  
+** Fill Process
+Where do we filter supply for a certain demand?  
+Checkout the "Fenced" category in marathon.ces.rules.  
+But what if I want to merge a NonBOG category with our Fenced
+category?  
+What does the :restricted value in a category do?  
+I'm not sure exactly.  Doesn't seem to dispatch anywhere.  
+Well, it might do nothing and could be overwritten by
+:compute-supply.  
+Data flow for a restricted category is:  
+Define category.  The category gets registered and stored in the
+categories atom here.  
+If you define a category, you must also put it in
+marathon.ces.deployment/non-bog?  in order to indicate that we can
+deploy a unit that is not deployable to a non-bog demand.   
+SourceFirst defines order-by, Categories define both filters AND
+additional computed supply.  Computed supply has its own implicit
+filters (per legacy implementation).  
+If you wanted to tag a unit with information while it is in a certain
+category, you can add that tag to the :effects :wait-state set.  
+marathon.ces.rules  
+
+Check to see if the category is restricted  
+marathon.ces.query/restricted-categories  
+
+Return the category if it is restricted.  
+We may also return a demandgroup (like for followons or SRM) if the
+supply-category argument is provided and this SRC contains a value in
+it's set of demangroups that matches the demandgroup for this demand.
+Otherwise, this returns :default.  
+marathon.ces.fill/derive-categories
+
+This creates the rule based on the demand and category that we should
+use for filling.  A rule is a simple map shown in  
+marathon.ces.fill/demand->rule
+
+Then we try to  
+marathon.ces.fill/satisfy-demand  
+marathon.ces.fill/find-supply  
+Then we end up in marathon.ces.query/find-feasible-supply which starts
+to get lower level.  How do we use the :restricted value in a category?
+* Supply Setup
+If a SupplyRecord has a quantity of 1, then we use the CycleTime
+field as an initial CycleTime, so SupplyRecords with a quantity of one
+and a "usual value" of CycleTime of 0 start at day 0 in their lifecycle.  This
+is used to for random initial conditions.  Otherwise, we evenly
+distribute the :cycletimes.  
+* Requirements Analysis
+** Setup
+load-project with a requirements schema where the only change is
+that ghost proportions aggregate sheet is included.
+marathon.analysis.requirements/requirements-run
+** Running
+*** Basic Process
+Each project gets filtered for an SRC
+GhostProportions to scale how to grow srcs 
+initial supply + vector addition of scalaing
+Don't use ghosts anymore (that can be removed)
+bisecting-convergence is what we use now.
+old vba code is in there (that can be removed)
+requirements-contour is one for sensitivity analysis
+*** More in depth code review
+marathon.analysis.requirements/tables->requirements-async is main
+workhorse.
+Where we map asynchronously onto the compo distributions.
+We create new supply records for compos that we don't have, but we
+keep the supply records for compos that we do have.
+I just poked around in marathon.analysis.requirements and my best
+guess is that the supply record preprocessing in Tags for
+the forward stationed stuff will work as is with
+requirements-analysis.  
+When we compute the initial-supply, we keep the existing supply record
+as is and only create a new supply record
+if we are growing a component for which we have no existing supply
+record.  
+If a supply record has a quantity of 0, we grow from there. If there
+is no supply record for a component that we grow, we initialize the
+quantity at 0 and grow from there. After initializing supply, we do a
+quick bound per the peak demand before we go into the
+bisecting-convergence.
+
+When we modify the supply for each run, we add n units to the
+initial-supply distributed according to GhostProportionsAggregate.
+All of the distance functions create a new marathon-stream for each
+run.  
+Within marathon.analysis/marathon-stream, we load-context and
+eventually call units-from-records in order to initialize the supply.
+It's within units-from-records where the supply record splitting for
+the forward stationed stuff exists, so the only supply quantity that is
+modified during requirement analysis is the original supply before the
+forward station supply records are created.
+I'll work on a formal test to verify that this is the case now.
+* Command-Separated Visualization
+Vstats marathon stream to edn to visualize
+* Cloud Migration
+If we get a virtual desktop like we do now on AWS, things are easier,
+but if have to use cloud native applications, we need to build our
+docker images which go through security scans.  
+Docker images with JDK or JRE do exist.
+Assume that the Army cloud is a hostile evironment and we can't get
+anything there.
+** Pushing a commit through GitLab with a continuous integration process
+ - Push commit
+ - Scan commit
+ - Build jar with lein
+ - Invoke dependencies
+ - Scan what was built
+ - Push jar through application deployment pipeline
+   - Use kubernetes to produce docker image :: If do something on
+     local machine, you can create a recipe to build a docker
+     image. Building this recipe becomes more complicated when adding R or
+     Python but it's still possible.
+   - Image gets scanned
+   - Move image to cluster of computers with web address
+* Notes
+Temporarily place for random notes that were jotted down before they
+are organized into other sections.
+
+Can add an :unavailable to the effects demand categories.  
+
+New demand category RC cannibalization.  Put in his sample data.  
+
+If add a new category, need to mark it as deployable or not. Add
+category name to a set.  
+
+

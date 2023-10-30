@@ -283,7 +283,6 @@ ability to communicate with -- and for -- sponsors.  Specifically, the
 domain of animated visualizations tied to simulation has been a topic
 of intense interest due to resonance with sponsors.
 
-
 * Back End
 The "back end" (or /back-end/) of MARATHON consists of infrastructure that 
 users typically never face.  Architecting and verifying the 
@@ -389,7 +388,8 @@ Netflix's Chaos Monkey as an example).
 
 Expanding MARATHON's test suite in either of these directions would be
 a boon toward verification and continued development.
-* Documentation 
+* External Documentation 
+The following are sources of documentation external to this document:
 ** Design Document 
    MARATHON has an existing design document, and a high-level primer.  
 ** Literate Program (MARATHONomicon)
