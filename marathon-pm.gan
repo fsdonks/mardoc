@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="MARATHON Project Management" company="CAA" webLink="http://" view-date="2023-11-01" view-index="0" gantt-divider-location="571" resource-divider-location="601" version="2.8.5" locale="en_US">
+<?xml version="1.0" encoding="UTF-8"?><project name="MARATHON Project Management" company="CAA" webLink="http://" view-date="2023-10-01" view-index="0" gantt-divider-location="571" resource-divider-location="601" version="2.8.5" locale="en_US">
     <description><![CDATA[This is an projecet management view of the pending features, tasks, and efforts to develop MARATHON 4.x over the next year.]]></description>
     <view zooming-state="default:9" id="gantt-chart">
-        <field id="tpd3" name="Name" width="351" order="0"/>
-        <field id="tpd4" name="Begin date" width="142" order="1"/>
-        <field id="tpd5" name="End date" width="74" order="2"/>
+        <field id="tpd3" name="Name" width="341" order="0"/>
+        <field id="tpd4" name="Begin date" width="139" order="1"/>
+        <field id="tpd5" name="End date" width="72" order="2"/>
     </view>
     <view id="resource-table">
         <field id="0" name="Name" width="359" order="0"/>
@@ -55,23 +55,27 @@
                 <task id="13941" name="Run Execution" meeting="false" start="2024-01-08" duration="39" complete="0" expand="true"/>
             </task>
         </task>
-        <task id="15849" name="AWS Elastic Compute Exploration" meeting="false" start="2024-08-06" duration="15" complete="0" expand="true">
+        <task id="15849" name="AWS Elastic Compute Exploration" meeting="false" start="2024-08-06" duration="15" complete="0" expand="false">
             <task id="15850" name="Scaled Run Benchmarks With Auto Scaling Group" meeting="false" start="2024-08-06" duration="15" complete="0" expand="true"/>
         </task>
         <task id="10731" name="Prototype Online Hosted M4 Suite / cArmy" meeting="false" start="2024-08-27" duration="50" complete="0" expand="true">
             <task id="16309" name="Azure IL4 Deployment" meeting="false" start="2024-08-27" duration="29" complete="0" expand="true"/>
             <task id="10739" name="Explore porting to higher security networks" color="#8cb6ce" meeting="false" start="2024-09-20" duration="32" complete="0" expand="true"/>
         </task>
-        <task id="16069" name="Training" meeting="false" start="2024-03-04" duration="5" complete="0" expand="true">
+        <task id="16069" name="Training" meeting="false" start="2024-03-04" duration="5" complete="0" expand="false">
             <task id="16070" name="Clojure Conj" meeting="false" start="2024-03-04" duration="5" complete="0" expand="true"/>
         </task>
-        <task id="10761" name="Knowledge Managment" color="#000000" meeting="false" start="2024-03-11" duration="72" complete="0" expand="true">
-            <task id="10742" name="M4 &quot;notebook&quot; style tutorials for scripting and analysis" color="#8cb6ce" meeting="false" start="2024-03-11" duration="5" complete="0" expand="true"/>
-            <task id="10762" name="Refresh Documentation" meeting="false" start="2024-03-26" duration="61" complete="0" expand="true">
-                <task id="10765" name="Design Document Refactor" color="#8cb6ce" meeting="false" start="2024-03-26" duration="61" complete="0" expand="true"/>
-                <task id="10766" name="Literate Programming Documentation Refactor" color="#8cb6ce" meeting="false" start="2024-03-26" duration="60" complete="0" expand="true"/>
+        <task id="16310" name="QA" meeting="false" start="2024-03-11" duration="29" complete="0" expand="true">
+            <task id="16311" name="Add Specs For Automated Project Validation" meeting="false" start="2024-03-11" duration="14" complete="0" expand="true"/>
+            <task id="16312" name="Add synthetic proeprty-based testing pipeline." meeting="false" start="2024-04-01" duration="14" complete="0" expand="true"/>
+        </task>
+        <task id="10761" name="Knowledge Managment" color="#000000" meeting="false" start="2024-04-25" duration="71" complete="0" expand="true">
+            <task id="10742" name="M4 &quot;notebook&quot; style tutorials for scripting and analysis" color="#8cb6ce" meeting="false" start="2024-04-25" duration="5" complete="0" expand="true"/>
+            <task id="10762" name="Refresh Documentation" meeting="false" start="2024-05-09" duration="61" complete="0" expand="false">
+                <task id="10765" name="Design Document Refactor" color="#8cb6ce" meeting="false" start="2024-05-09" duration="61" complete="0" expand="true"/>
+                <task id="10766" name="Literate Programming Documentation Refactor" color="#8cb6ce" meeting="false" start="2024-05-09" duration="60" complete="0" expand="true"/>
             </task>
-            <task id="10763" name="Develop &quot;Blog-post&quot; Tutorials for Power Users / Programmers" color="#8cb6ce" meeting="false" start="2024-03-18" duration="5" complete="0" expand="true"/>
+            <task id="10763" name="Develop &quot;Blog-post&quot; Tutorials for Power Users / Programmers" color="#8cb6ce" meeting="false" start="2024-05-02" duration="5" complete="0" expand="true"/>
         </task>
     </tasks>
     <resources>
